@@ -7,7 +7,7 @@
         $serverPass = "carsa_2019";
 
         try {
-            $conn = new PDO("sqlsrv:server=$servername,$serverPort;Database=$serverDb", $serverUser, $serverPass,
+            $conn = new PDO("sqlsrv:server=$serverName,$serverPort;Database=$serverDb", $serverUser, $serverPass,
                 array(
                     PDO::ATTR_PERSISTENT => true,
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -29,8 +29,9 @@
         $serverPass = "dlFGaCp2v48iPjHK";
         
         try {
-            $conn = new PDO("mysql:host=$servername;port=$serverPort;dbname=$serverDb;charset=utf8", $serverUser, $serverPass,
+            $conn = new PDO("mysql:host=$serverName;port=$serverPort;dbname=$serverDb;charset=utf8", $serverUser, $serverPass,
                 array(
+                    PDO::ATTR_PERSISTENT => true,
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                 )
             );
