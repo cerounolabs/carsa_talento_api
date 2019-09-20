@@ -120,7 +120,7 @@
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$val01, $val01]]); 
+                $stmtMYSQL->execute([$val01, $val01]); 
 
                 while ($rowMYSQL = $stmtMYSQL->fetch()) {
                     if ($rowMYSQL['auditoria_antes_tipo_estado_codigo'] == 'H') {
