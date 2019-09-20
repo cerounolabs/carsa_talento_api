@@ -23,13 +23,13 @@
 
     function getConnectionMYSQL(){
         $serverName = "192.168.16.17";
-        $serverPort = "";
+        $serverPort = "3306";
         $serverDb   = "carsa_talento";
         $serverUser = "talento_admin";
         $serverPass = "dlFGaCp2v48iPjHK";
         
         try {
-            $conn = new PDO("mysql:host=$servername;dbname=$serverDb;charset=utf8", $serverUser, $serverPass,
+            $conn = new PDO("mysql:host=$servername;port=$serverPort;dbname=$serverDb;charset=utf8", $serverUser, $serverPass,
                 array(
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                 )
