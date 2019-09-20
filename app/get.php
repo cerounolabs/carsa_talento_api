@@ -23,7 +23,7 @@
 
             try {
                 $connMYSQL  = getConnectionMYSQL();
-                $stmtMYSQL  = $connMYSQL->query($sql00);
+                $stmtMYSQL  = $connMYSQL->prepare($sql00);
                 $stmtMYSQL->execute([$val01]); 
 
                 while ($rowMYSQL = $stmtMYSQL->fetch()) {
