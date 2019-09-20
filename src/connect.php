@@ -1,13 +1,13 @@
 <?php
     function getConnectionMSSQL(){
-        $serverName = "SRVDESA01";
+        $serverName = "tcp:SRVDESA01.database.windows.net";
         $serverPort = "1433";
         $serverDb   = "DESTRASJUD";
         $serverUser = "czelaya";
         $serverPass = "carsa_2019";
 
         try {
-            $conn = new PDO("sqlsrv:server=$servername,$serverPort;Database=$serverDb;ConnectionPooling=0", $serverUser, $serverPass,
+            $conn = new PDO("sqlsrv:server=$servername,$serverPort;Database=$serverDb", $serverUser, $serverPass,
                 array(
                     PDO::ATTR_PERSISTENT => true,
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
