@@ -1,5 +1,5 @@
 <?php
-    $app->post('/v1/000', function($request) {
+    $app->post('/v1/000/dominio', function($request) {
         require __DIR__.'/../src/connect.php';
 
         $val01      = $request->getParsedBody()['tipo_estado_codigo'];
