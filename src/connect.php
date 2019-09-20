@@ -1,19 +1,44 @@
 <?php
     function getConnectionMSSQL(){
-        $mssqlName = "SRVDESA01, 1433";
-        $mssqlInfo = array("Database"=>"DESTRASJUD", "UID"=>"czelaya", "PWD"=>"carsa_2019", "CharacterSet"=>"UTF-8", "MultipleActiveResultSets"=>"false");
-        $mssqlConn = sqlsrv_connect($mssqlName, $mssqlInfo);
+        $serverName = "SRVDESA01";
+        $serverPort = "1433";
+        $serverDb   = "DESTRASJUD";
+        $serverUser = "czelaya";
+        $serverPass = "carsa_2019";
 
-        return $mssqlConn;
+        try {
+            $conn = new PDO("sqlsrv:server=$servername,$serverPort;Database=$serverDb;ConnectionPooling=0", $serverUser, $serverPass,
+                array(
+                    PDO::ATTR_PERSISTENT => true,
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+                )
+            );
+        } catch (PDOException $e) {
+            echo ("Error connecting to MSSQL: " . $e->getMessage());
+            die();
+        }
+
+        return $conn;
     }
 
     function getConnectionMYSQL(){
-        $mysqlHost = "192.168.16.17";
-        $mysqlUser = "root";
-        $mysqlPass = "prabhupada1A+";
-        $mysqlDb   = "carsa_talento";
-        $mysqlConn = new mysqli($mysqlHost, $mysqlUser, $mysqlPass, $mysqlDb);
-        $mysqlConn->set_charset("utf8");
+        $serverName = "192.168.16.17";
+        $serverPort = "";
+        $serverDb   = "carsa_talento";
+        $serverUser = "root";
+        $serverPass = "prabhupada1A+";
+        
+        try {
+            $conn = new PDO("mysql:host=$servername;dbname=$serverDb;charset=utf8", $serverUser, $serverPass,
+                array(
+                    PDO::ATTR_PERSISTENT => true,
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+                )
+            );
+        } catch (PDOException $e) {
+            echo ("Error connecting to MySQL: " . $e->getMessage());
+            die();
+        }
 
-        return $mysqlConn;
+        return $conn;
     }
