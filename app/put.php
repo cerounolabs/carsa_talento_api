@@ -1,5 +1,5 @@
 <?php
-    $app->put('/v1/000/{codigo}', function($request) {
+    $app->put('/v1/000/dominio/{codigo}', function($request) {
         require __DIR__.'/../src/connect.php';
 
         $val00      = $request->getAttribute('codigo');
