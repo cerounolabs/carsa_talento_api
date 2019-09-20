@@ -31,7 +31,6 @@
         try {
             $conn = new PDO("mysql:host=$servername;dbname=$serverDb;charset=utf8", $serverUser, $serverPass,
                 array(
-                    PDO::ATTR_PERSISTENT => true,
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                 )
             );
