@@ -1,6 +1,5 @@
 {
 	"require": {
-		"slim/slim": "^3.0",
 		"monolog/monolog": "^1.21",
 		"slim/php-view": "^2.2"
 	},
