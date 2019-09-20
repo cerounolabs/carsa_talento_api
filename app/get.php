@@ -157,7 +157,6 @@
                         'auditoria_despues_tipo_equivalente'    => $rowMYSQL['auditoria_despues_tipo_equivalente'],
                         'auditoria_despues_tipo_dominio'        => $rowMYSQL['auditoria_despues_tipo_dominio'],
                         'auditoria_despues_tipo_observacion'    => $rowMYSQL['auditoria_despues_tipo_observacion']
-
                     );
 
                     $result[]   = $detalle;
@@ -173,7 +172,6 @@
                         'auditoria_usuario'                     => '',
                         'auditoria_fecha_hora'                  => '',
                         'auditoria_ip'                          => '',
-
                         'auditoria_antes_tipo_codigo'           => '',
                         'auditoria_antes_tipo_estado_codigo'    => '',
                         'auditoria_antes_tipo_estado_nombre'    => '',
@@ -181,7 +179,6 @@
                         'auditoria_antes_tipo_equivalente'      => '',
                         'auditoria_antes_tipo_dominio'          => '',
                         'auditoria_antes_tipo_observacion'      => '',
-
                         'auditoria_despues_tipo_codigo'         => '',
                         'auditoria_despues_tipo_estado_codigo'  => '',
                         'auditoria_despues_tipo_estado_nombre'  => '',
