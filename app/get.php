@@ -294,3 +294,172 @@
         
         return $json;
     });
+
+    $app->get('/v1/100', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        a.CAMFICCOD                     AS      campanha_codigo,
+        a.CAMFICNOM                     AS      campanha_nombre,
+        a.CAMFICFDE                     AS      campanha_fecha_inicio,
+        a.CAMFICFHA                     AS      campanha_fecha_final,
+        a.CAMFICOBS                     AS      campanha_observacion,
+        a.CAMFICAUS                     AS      campanha_usuario,
+        a.CAMFICAFH                     AS      campanha_fecha_hora,
+        a.CAMFICAIP                     AS      campanha_ip,
+
+        b.DOMFICCOD                     AS      campanha_estado_codigo,
+        b.DOMFICNOM                     AS      campanha_estado_nombre
+        
+        FROM CAMFIC a
+        INNER JOIN DOMFIC b ON a.CAMFICEST = b.DOMFICCOD
+        
+        ORDER BY a.CAMFICFDE DESC";
+
+        try {
+            $connMYSQL  = getConnectionMYSQL();
+            $stmtMYSQL  = $connMYSQL->prepare($sql00);
+            $stmtMYSQL->execute(); 
+
+            while ($rowMYSQL = $stmtMYSQL->fetch()) {
+                $detalle    = array(
+                    'campanha_codigo'           => $rowMYSQL['campanha_codigo'],
+                    'campanha_estado_codigo'    => $rowMYSQL['campanha_estado_codigo'],
+                    'campanha_estado_nombre'    => $rowMYSQL['campanha_estado_nombre'],
+                    'campanha_nombre'           => $rowMYSQL['campanha_nombre'],
+                    'campanha_fecha_inicio'     => $rowMYSQL['campanha_fecha_inicio'],
+                    'campanha_fecha_inicio_2'   => date('d/m/Y', strtotime($rowMYSQL['campanha_fecha_inicio'])),
+                    'campanha_fecha_final'      => $rowMYSQL['campanha_fecha_final'],
+                    'campanha_fecha_final_2'    => date("d/m/Y", strtotime($rowMYSQL['campanha_fecha_final'])),
+                    'campanha_observacion'      => $rowMYSQL['campanha_observacion'],
+                    'campanha_usuario'          => $rowMYSQL['campanha_usuario'],
+                    'campanha_fecha_hora'       => $rowMYSQL['campanha_fecha_hora'],
+                    'campanha_ip'               => $rowMYSQL['campanha_ip']
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'campanha_codigo'           => '',
+                    'campanha_estado_codigo'    => '',
+                    'campanha_estado_nombre'    => '',
+                    'campanha_nombre'           => '',
+                    'campanha_fecha_inicio'     => '',
+                    'campanha_fecha_inicio_2'   => '',
+                    'campanha_fecha_final'      => '',
+                    'campanha_fecha_final_2'    => '',
+                    'campanha_observacion'      => '',
+                    'campanha_usuario'          => '',
+                    'campanha_fecha_hora'       => '',
+                    'campanha_ip'               => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMYSQL->closeCursor();
+            $stmtMYSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
+
+    $app->get('/v1/100/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01      = $request->getAttribute('codigo');
+
+        if (isset($val01)) {
+            $sql00  = "SELECT
+            a.CAMFICCOD                     AS      campanha_codigo,
+            a.CAMFICNOM                     AS      campanha_nombre,
+            a.CAMFICFDE                     AS      campanha_fecha_inicio,
+            a.CAMFICFHA                     AS      campanha_fecha_final,
+            a.CAMFICOBS                     AS      campanha_observacion,
+            a.CAMFICAUS                     AS      campanha_usuario,
+            a.CAMFICAFH                     AS      campanha_fecha_hora,
+            a.CAMFICAIP                     AS      campanha_ip,
+
+            b.DOMFICCOD                     AS      campanha_estado_codigo,
+            b.DOMFICNOM                     AS      campanha_estado_nombre
+            
+            FROM CAMFIC a
+            INNER JOIN DOMFIC b ON a.CAMFICEST = b.DOMFICCOD
+
+            WHERE a.CAMFICCOD = ?
+            
+            ORDER BY a.CAMFICFDE DESC";
+
+            try {
+                $connMYSQL  = getConnectionMYSQL();
+                $stmtMYSQL  = $connMYSQL->prepare($sql00);
+                $stmtMYSQL->execute([$val01]); 
+
+                while ($rowMYSQL = $stmtMYSQL->fetch()) {
+                    $detalle    = array(
+                        'campanha_codigo'           => $rowMYSQL['campanha_codigo'],
+                        'campanha_estado_codigo'    => $rowMYSQL['campanha_estado_codigo'],
+                        'campanha_estado_nombre'    => $rowMYSQL['campanha_estado_nombre'],
+                        'campanha_nombre'           => $rowMYSQL['campanha_nombre'],
+                        'campanha_fecha_inicio'     => $rowMYSQL['campanha_fecha_inicio'],
+                        'campanha_fecha_inicio_2'   => date('d/m/Y', strtotime($rowMYSQL['campanha_fecha_inicio'])),
+                        'campanha_fecha_final'      => $rowMYSQL['campanha_fecha_final'],
+                        'campanha_fecha_final_2'    => date("d/m/Y", strtotime($rowMYSQL['campanha_fecha_final'])),
+                        'campanha_observacion'      => $rowMYSQL['campanha_observacion'],
+                        'campanha_usuario'          => $rowMYSQL['campanha_usuario'],
+                        'campanha_fecha_hora'       => $rowMYSQL['campanha_fecha_hora'],
+                        'campanha_ip'               => $rowMYSQL['campanha_ip']
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle = array(
+                        'campanha_codigo'           => '',
+                        'campanha_estado_codigo'    => '',
+                        'campanha_estado_nombre'    => '',
+                        'campanha_nombre'           => '',
+                        'campanha_fecha_inicio'     => '',
+                        'campanha_fecha_inicio_2'   => '',
+                        'campanha_fecha_final'      => '',
+                        'campanha_fecha_final_2'    => '',
+                        'campanha_observacion'      => '',
+                        'campanha_usuario'          => '',
+                        'campanha_fecha_hora'       => '',
+                        'campanha_ip'               => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtMYSQL->closeCursor();
+                $stmtMYSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
