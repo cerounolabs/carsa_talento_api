@@ -463,3 +463,172 @@
         
         return $json;
     });
+
+    $app->get('/v1/200/estadocivil', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        a.FUNFICECC                     AS      funcionario_estado_civil_codigo,
+        a.FUNFICTSC                     AS      funcionario_sexo_codigo,
+        b.DOMFICNOM                     AS      funcionario_estado_civil_nombre,
+        c.DOMFICNOM                     AS      funcionario_sexo_nombre,
+        COUNT(*)                        AS      funcionario_cantidad
+        
+        FROM FUNFIC a
+        INNER JOIN DOMFIC b ON a.FUNFICECC = b.DOMFICCOD
+        INNER JOIN DOMFIC c ON a.FUNFICTSC = c.DOMFICCOD
+
+        WHERE a.FUNFICEST = 'A'
+        
+        GROUP BY a.FUNFICECC, a.FUNFICTSC
+        ORDER BY a.FUNFICECC, a.FUNFICTSC";
+
+        try {
+            $connMYSQL  = getConnectionMYSQL();
+            $stmtMYSQL  = $connMYSQL->prepare($sql00);
+            $stmtMYSQL->execute(); 
+
+            while ($rowMYSQL = $stmtMYSQL->fetch()) {
+                $detalle    = array(
+                    'funcionario_estado_civil_codigo'   => $rowMYSQL['funcionario_estado_civil_codigo'],
+                    'funcionario_estado_civil_nombre'   => $rowMYSQL['funcionario_estado_civil_nombre'],
+                    'funcionario_sexo_codigo'           => $rowMYSQL['funcionario_sexo_codigo'],
+                    'funcionario_sexo_nombre'           => $rowMYSQL['funcionario_sexo_nombre'],
+                    'funcionario_cantidad'              => $rowMYSQL['funcionario_cantidad']
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'funcionario_estado_civil_codigo'   => '',
+                    'funcionario_estado_civil_nombre'   => '',
+                    'funcionario_sexo_codigo'           => '',
+                    'funcionario_sexo_nombre'           => '',
+                    'funcionario_cantidad'              => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMYSQL->closeCursor();
+            $stmtMYSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
+
+    $app->get('/v1/200/cumpleanho', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        MONTH(a.FUNFICECC)          AS      funcionario_mes_codigo,
+        COUNT(*)                    AS      funcionario_mes_cantidad
+        
+        FROM FUNFIC a
+
+        WHERE a.FUNFICEST = 'A'
+        
+        GROUP BY MONTH(a.FUNFICFHA)
+        ORDER BY MONTH(a.FUNFICFHA)";
+
+        try {
+            $connMYSQL  = getConnectionMYSQL();
+            $stmtMYSQL  = $connMYSQL->prepare($sql00);
+            $stmtMYSQL->execute(); 
+
+            while ($rowMYSQL = $stmtMYSQL->fetch()) {
+                switch ($rowMYSQL['funcionario_mes_codigo']) {
+                    case '1':
+                        $funcionario_mes_nombre = 'Enero';
+                        break;
+
+                    case '2':
+                        $funcionario_mes_nombre = 'Febrero';
+                        break;
+
+                    case '3':
+                        $funcionario_mes_nombre = 'Marzo';
+                        break;
+
+                    case '4':
+                        $funcionario_mes_nombre = 'Abril';
+                        break;
+
+                    case '5':
+                        $funcionario_mes_nombre = 'Mayo';
+                        break;
+
+                    case '6':
+                        $funcionario_mes_nombre = 'Junio';
+                        break;
+
+                    case '7':
+                        $funcionario_mes_nombre = 'Julio';
+                        break;
+
+                    case '8':
+                        $funcionario_mes_nombre = 'Agosto';
+                        break;
+
+                    case '9':
+                        $funcionario_mes_nombre = 'Septiembre';
+                        break;
+
+                    case '10':
+                        $funcionario_mes_nombre = 'Octubre';
+                        break;
+
+                    case '11':
+                        $funcionario_mes_nombre = 'Noviembre';
+                        break;
+
+                    case '12':
+                        $funcionario_mes_nombre = 'Diciembre';
+                        break;
+                }
+
+                $detalle    = array(
+                    'funcionario_mes_codigo'    => $rowMYSQL['funcionario_mes_codigo'],
+                    'funcionario_mes_nombre'    => $funcionario_mes_nombre,
+                    'funcionario_mes_cantidad'  => $rowMYSQL['funcionario_mes_cantidad']
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'funcionario_mes_codigo'    => '',
+                    'funcionario_mes_nombre'    => '',
+                    'funcionario_mes_cantidad'  => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMYSQL->closeCursor();
+            $stmtMYSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
