@@ -632,3 +632,60 @@
         
         return $json;
     });
+
+    $app->get('/v1/300/participacion', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        a.CAMFUCCAC         AS      campanha_codigo,
+        b.CAMFICNOM         AS      campanha_nombre,
+        COUNT(*)            AS      campanha_cantidad
+        
+        FROM CAMFUC a
+        INNER JOIN CAMFIC b ON a.CAMFUCCAC = b.CAMFICCOD
+
+        WHERE b.CAMFICEST IN (4, 5)
+        
+        GROUP BY CAMFUCCAC
+        ORDER BY CAMFUCCAC";
+
+        try {
+            $connMYSQL  = getConnectionMYSQL();
+            $stmtMYSQL  = $connMYSQL->prepare($sql00);
+            $stmtMYSQL->execute(); 
+
+            while ($rowMYSQL = $stmtMYSQL->fetch()) {
+                $detalle    = array(
+                    'campanha_codigo'       => $rowMYSQL['campanha_codigo'],
+                    'campanha_nombre'       => $rowMYSQL['campanha_nombre'],
+                    'campanha_cantidad'     => $rowMYSQL['campanha_cantidad']
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'campanha_codigo'       => '',
+                    'campanha_nombre'       => '',
+                    'campanha_cantidad'     => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMYSQL->closeCursor();
+            $stmtMYSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
