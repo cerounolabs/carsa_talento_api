@@ -1,6 +1,6 @@
 <?php
     function getConnectionMSSQL(){
-        $serverName = "tcp:SRVDESA01.database.windows.net";
+        $serverName = "SRVDESA01";
         $serverPort = "1433";
         $serverDb   = "DESTRASJUD";
         $serverUser = "czelaya";
