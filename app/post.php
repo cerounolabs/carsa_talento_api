@@ -120,6 +120,7 @@
             WHERE a.CAMFUCCAC = ? AND a.CAMFUCFUC = ?";
 
             $sql04  = "INSERT INTO CAMFUC (CAMFUCCAC, CAMFUCFUC, CAMFUCAUS, CAMFUCAFH, CAMFUCAIP) VALUES (?, ?, ?, ?, ?)";
+            $sql05  = "UPDATE CAMFIC SET CAMFICEST = 3, CAMFICAUS = ?, CAMFICAFH = ?, CAMFICAIP = ? WHERE CAMFICCOD = ? AND CAMFICEST = 2";
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
@@ -130,6 +131,7 @@
                 $stmtMYSQL2 = $connMYSQL->prepare($sql02);
                 $stmtMYSQL3 = $connMYSQL->prepare($sql03);
                 $stmtMYSQL4 = $connMYSQL->prepare($sql04);
+                $stmtMYSQL5 = $connMYSQL->prepare($sql05);
 
                 $stmtMSSQL->execute();
                 
@@ -200,17 +202,21 @@
                     }
                 }
 
+                $stmtMYSQL5->execute([$val01, $val02, $val03, $val00]);
+
                 $stmtMSSQL->closeCursor();
                 $stmtMYSQL->closeCursor();
                 $stmtMYSQL2->closeCursor();
                 $stmtMYSQL3->closeCursor();
                 $stmtMYSQL4->closeCursor();
+                $stmtMYSQL5->closeCursor();
                 
                 $stmtMSSQL  = null;
                 $stmtMYSQL  = null;
                 $stmtMYSQL2 = null;
                 $stmtMYSQL3 = null;
                 $stmtMYSQL4 = null;
+                $stmtMYSQL5 = null;
 
                 header("Content-Type: application/json; charset=utf-8");
                 $json   = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success PROCESO', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
