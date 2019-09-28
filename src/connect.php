@@ -14,7 +14,8 @@
                 )
             );
         } catch (PDOException $e) {
-            echo ("Error connecting to MSSQL: " . $e->getMessage());
+            header("Content-Type: application/json; charset=utf-8");
+            $json   = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error Connecting to MSSQL: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
             die();
         }
 
@@ -36,7 +37,8 @@
                 )
             );
         } catch (PDOException $e) {
-            echo ("Error connecting to MySQL: " . $e->getMessage());
+            header("Content-Type: application/json; charset=utf-8");
+            $json   = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error Connecting to MYSQL: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
             die();
         }
 
