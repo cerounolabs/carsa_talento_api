@@ -187,7 +187,7 @@
                         }
 
                         $stmtMYSQL2->execute([$FUNFICEST, $FUNFICTDC, $FUNFICTSC, $FUNFICECC, $row05_mssql, $row03_mssql, $row04_mssql, $row02_mssql, $row06_mssql, $row07_mssql, $val01, $val02, $val03]);
-                        $FUNFICCOD = $connMYSQL->lastInsertId()
+                        $FUNFICCOD = $connMYSQL->lastInsertId();
                     } else {
                         $FUNFICCOD = $row00_mysql['funcionario_codigo'];
                     }
@@ -224,6 +224,7 @@
         }
 
         $connMSSQL  = null;
+        $connMYSQL  = null;
         
         return $json;
     });
