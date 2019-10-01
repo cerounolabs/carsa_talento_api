@@ -7,7 +7,7 @@
         $serverPass = "carsa_2019";
 
         try {
-            $conn = new PDO("sqlsrv:server=$serverName,$serverPort;Database=$serverDb", $serverUser, $serverPass,
+            $conn = new PDO("sqlsrv:Server=$serverName,$serverPort;Database=$serverDb", $serverUser, $serverPass,
                 array(
                     PDO::ATTR_PERSISTENT => true,
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
