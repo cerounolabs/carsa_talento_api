@@ -532,7 +532,7 @@
         require __DIR__.'/../src/connect.php';
 
         $sql00  = "SELECT
-        MONTH(a.FUNFICECC)          AS      funcionario_mes_codigo,
+        MONTH(a.FUNFICFHA)          AS      funcionario_mes_codigo,
         COUNT(*)                    AS      funcionario_mes_cantidad
         
         FROM FUNFIC a
