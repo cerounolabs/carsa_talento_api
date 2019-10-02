@@ -234,3 +234,124 @@
         
         return $json;
     });
+
+    $app->post('/v1/200', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01  = $request->getParsedBody()['funcionario_usuario'];
+        $val02  = $request->getParsedBody()['funcionario_fecha_hora'];
+        $val03  = $request->getParsedBody()['funcionario_ip'];
+        
+        $sql00  = "SELECT
+        a.FuSexo                        AS      funcionario_sexo_codigo,
+        a.ECCod                         AS      funcionario_estado_civil_codigo,
+        a.FuCIC                         AS      funcionario_documento,
+        a.FuNom                         AS      funcionario_nombre_1,
+        a.FNomb2                        AS      funcionario_nombre_2,
+        a.FuApe                         AS      funcionario_apellido_1,
+        a.Apell2                        AS      funcionario_apellido_2,
+        a.FuCod                         AS      funcionario_codigo,
+        CONVERT(date, a.FuFchNac, 23)   AS      funcionario_fecha_nacimiento,
+        a.FuMail                        AS      funcionario_email
+        
+        FROM FUNCIONARI a
+        
+        WHERE a.FEst = 'A'";
+
+        $sql01  = "SELECT
+        a.FUNFICCOD                     AS      funcionario_codigo
+
+        FROM FUNFIC a
+
+        WHERE a.FUNFICCFU = ?";
+
+        $sql02  = "INSERT INTO FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICCFU, FUNFICNOM, FUNFICAPE, FUNFICDOC, FUNFICFHA, FUNFICEMA, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMYSQL  = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            $stmtMSSQL->execute();
+            
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $FUNFICEST   = 'A';
+                $row00_mssql = $rowMSSQL['funcionario_sexo_codigo'];
+                $row01_mssql = $rowMSSQL['funcionario_estado_civil_codigo'];
+                $row02_mssql = trim($rowMSSQL['funcionario_documento']);
+                $row03_mssql = trim($rowMSSQL['funcionario_nombre_1']).' '.trim($rowMSSQL['funcionario_nombre_2']);
+                $row04_mssql = trim($rowMSSQL['funcionario_apellido_1']).' '.trim($rowMSSQL['funcionario_apellido_2']);
+                $row05_mssql = $rowMSSQL['funcionario_codigo'];
+                $row06_mssql = $rowMSSQL['funcionario_fecha_nacimiento'];
+                $row07_mssql = trim($rowMSSQL['funcionario_email']);
+
+                $stmtMYSQL->execute([$row05_mssql]);
+                $row00_mysql = $stmtMYSQL->fetch(PDO::FETCH_ASSOC);
+                
+                if (!$row00_mysql){
+                    $FUNFICTDC = 15;
+
+                    if ($row00_mssql == 'F'){
+                        $FUNFICTSC = 13;
+                    } else {
+                        $FUNFICTSC = 1;
+                    }
+
+                    switch ($row01_mssql) {
+                        case 1:
+                            $FUNFICECC = 7;
+                            break;
+
+                        case 2:
+                            $FUNFICECC = 8;
+                            break;
+
+                        case 3:
+                            $FUNFICECC = 9;
+                            break;
+
+                        case 4:
+                            $FUNFICECC = 10;
+                            break;
+
+                        case 5:
+                            $FUNFICECC = 11;
+                            break;
+
+                        case 6:
+                            $FUNFICECC = 12;
+                            break;
+                        
+                        default:
+                            $FUNFICECC = 14;
+                            break;
+                    }
+
+                    $stmtMYSQL2->execute([$FUNFICEST, $FUNFICTDC, $FUNFICTSC, $FUNFICECC, $row05_mssql, $row03_mssql, $row04_mssql, $row02_mssql, $row06_mssql, $row07_mssql, $val01, $val02, $val03]);
+                    $FUNFICCOD = $connMYSQL->lastInsertId();
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL->closeCursor();
+            $stmtMYSQL2->closeCursor();
+            
+            $stmtMSSQL  = null;
+            $stmtMYSQL  = null;
+            $stmtMYSQL2 = null;
+
+            header("Content-Type: application/json; charset=utf-8");
+            $json   = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success PROCESO', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json   = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+        
+        return $json;
+    });
