@@ -1,4 +1,112 @@
 <?php
+    $app->post('/v1/login', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01      = $request->getParsedBody()['usuario_var01'];
+        $val02      = $request->getParsedBody()['usuario_var02'];
+        $val03      = $request->getParsedBody()['usuario_var03'];
+        $val04      = $request->getParsedBody()['usuario_var04'];
+        $val05      = $request->getParsedBody()['usuario_var05'];
+        $val06      = $request->getParsedBody()['usuario_var06'];
+        $val07      = $request->getParsedBody()['usuario_var07'];
+
+        if (isset($val01) && isset($val02) && isset($val03)) {
+            $sql00  = "SELECT
+            a.ClUsu                 AS      login_usuario,
+            a.ClCon                 AS      login_contrasenha,
+            a.Clfotbmp              AS      login_foto,
+            a.FuCod                 AS      login_funcionario_codigo,
+            a.ClNom                 AS      login_funcionario_nombre,
+
+			b.CARGO                 AS      login_cargo,
+			b.UNIDAD                AS      login_gerencia,
+			b.CORREO_ELECTRONICO    AS      login_email
+
+            FROM FSD050 a
+			INNER JOIN COLABORADOR_BASICOS b ON a.FuCod = b.COD_FUNC
+            
+            ORDER BY a.FuCod";
+
+            $sql01  = "INSERT INTO LOGIN (FUNLOGEST, FUNLOGUSU, FUNLOGPAS, FUNLOGDIR, FUNLOGHOS, FUNLOGAGE, FUNLOGREF, FUNLOGAFH) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+            try {
+                $connMSSQL  = getConnectionMSSQL();
+                $connMYSQL  = getConnectionMYSQL();
+
+                $stmtMSSQL  = $connMSSQL->prepare($sql00);
+                $stmtMYSQL  = $connMYSQL->prepare($sql01);
+
+                $row_mssql  = $stmtMSSQL->fetch(PDO::FETCH_ASSOC);
+
+                if (!$row_mssql){
+                    $val00      = 'E';
+                    $detalle    = array(
+                        'login_usuario'             => '',
+                        'login_foto'                => '',
+                        'login_funcionario_codigo'  => '',
+                        'login_funcionario_nombre'  => '',
+                        'login_cargo'               => '',
+                        'login_gerencia'            => '',
+                        'login_email'               => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json       = json_encode(array('code' => 201, 'status' => 'Error', 'message' => 'Error LOGIN: Usuario No Existe', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                    
+                } else {
+                    if($row_mssql['login_usuario'] == $val01 && $row_mssql['login_contrasenha'] == $val02){
+                        $val00      = 'O';
+                        $detalle    = array(
+                            'login_usuario'             => $row_mssql['login_usuario'],
+                            'login_foto'                => $row_mssql['login_foto'],
+                            'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
+                            'login_funcionario_nombre'  => $row_mssql['login_funcionario_nombre'],
+                            'login_cargo'               => $row_mssql['login_cargo'],
+                            'login_gerencia'            => $row_mssql['login_gerencia'],
+                            'login_email'               => $row_mssql['login_email']
+                        );
+
+                        header("Content-Type: application/json; charset=utf-8");
+                        $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success LOGIN', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                    } else {
+                        $val00      = 'I';
+                        $detalle    = array(
+                            'login_usuario'             => $row_mssql['login_usuario'],
+                            'login_foto'                => $row_mssql['login_foto'],
+                            'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
+                            'login_funcionario_nombre'  => $row_mssql['login_funcionario_nombre'],
+                            'login_cargo'               => $row_mssql['login_cargo'],
+                            'login_gerencia'            => $row_mssql['login_gerencia'],
+                            'login_email'               => $row_mssql['login_email']
+                        );
+
+                        header("Content-Type: application/json; charset=utf-8");
+                        $json       = json_encode(array('code' => 201, 'status' => 'Error', 'message' => 'Error LOGIN: Usuario y/o Contraseña Incorrecto', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                    }
+                }
+
+                $stmtMYSQL->execute([$val00, $val01, $val02, $val03, $val04, $val05, $val06, $val07]); 
+                
+                $stmtMSSQL->closeCursor();
+                $stmtMYSQL->closeCursor();
+
+                $stmtMSSQL = null;
+                $stmtMYSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error LOGIN: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+        
+        return $json;
+    });
+
     $app->post('/v1/000/dominio', function($request) {
         require __DIR__.'/../src/connect.php';
 
