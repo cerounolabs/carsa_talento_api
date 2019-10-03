@@ -24,6 +24,8 @@
 
             FROM FSD050 a
 			INNER JOIN COLABORADOR_BASICOS b ON a.FuCod = b.COD_FUNC
+
+            WHERE a.ClUsu = ?
             
             ORDER BY a.FuCod";
 
@@ -36,6 +38,8 @@
                 $stmtMSSQL  = $connMSSQL->prepare($sql00);
                 $stmtMYSQL  = $connMYSQL->prepare($sql01);
 
+                $stmtMSSQL->execute([$val01]);
+                
                 $row_mssql  = $stmtMSSQL->fetch(PDO::FETCH_ASSOC);
 
                 if (!$row_mssql){
