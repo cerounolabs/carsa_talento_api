@@ -46,6 +46,7 @@
                     $val00      = 'E';
                     $detalle    = array(
                         'login_usuario'             => '',
+                        'login_contrasenha'         => '',
                         'login_foto'                => '',
                         'login_funcionario_codigo'  => '',
                         'login_funcionario_nombre'  => '',
@@ -58,10 +59,11 @@
                     $json       = json_encode(array('code' => 201, 'status' => 'Error', 'message' => 'Error LOGIN: Usuario No Existe', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
                     
                 } else {
-                    if($row_mssql['login_usuario'] == $val01 && $row_mssql['login_contrasenha'] == $val02){
+                    if($row_mssql['login_contrasenha'] == $val02){
                         $val00      = 'O';
                         $detalle    = array(
                             'login_usuario'             => $row_mssql['login_usuario'],
+                            'login_contrasenha'         => $row_mssql['login_contrasenha'],
                             'login_foto'                => $row_mssql['login_foto'],
                             'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
                             'login_funcionario_nombre'  => $row_mssql['login_funcionario_nombre'],
@@ -76,6 +78,7 @@
                         $val00      = 'I';
                         $detalle    = array(
                             'login_usuario'             => $row_mssql['login_usuario'],
+                            'login_contrasenha'         => $row_mssql['login_contrasenha'],
                             'login_foto'                => $row_mssql['login_foto'],
                             'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
                             'login_funcionario_nombre'  => $row_mssql['login_funcionario_nombre'],
