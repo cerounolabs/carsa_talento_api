@@ -46,7 +46,6 @@
                     $val00      = 'E';
                     $detalle    = array(
                         'login_usuario'             => '',
-                        'login_contrasenha'         => '',
                         'login_foto'                => '',
                         'login_funcionario_codigo'  => '',
                         'login_funcionario_nombre'  => '',
@@ -63,7 +62,6 @@
                         $val00      = 'O';
                         $detalle    = array(
                             'login_usuario'             => $row_mssql['login_usuario'],
-                            'login_contrasenha'         => $row_mssql['login_contrasenha'],
                             'login_foto'                => $row_mssql['login_foto'],
                             'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
                             'login_funcionario_nombre'  => $row_mssql['login_funcionario_nombre'],
@@ -78,7 +76,6 @@
                         $val00      = 'I';
                         $detalle    = array(
                             'login_usuario'             => $row_mssql['login_usuario'],
-                            'login_contrasenha'         => $row_mssql['login_contrasenha'],
                             'login_foto'                => $row_mssql['login_foto'],
                             'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
                             'login_funcionario_nombre'  => $row_mssql['login_funcionario_nombre'],
