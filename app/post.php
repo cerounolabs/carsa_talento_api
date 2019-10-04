@@ -208,9 +208,11 @@
             a.Apell2                        AS      funcionario_apellido_2,
             a.FuCod                         AS      funcionario_codigo,
             CONVERT(date, a.FuFchNac, 23)   AS      funcionario_fecha_nacimiento,
-            a.FuMail                        AS      funcionario_email
+            a.FuMail                        AS      funcionario_email,
+            b.FOTO_TARGET                   AS      funcionario_foto
             
             FROM FUNCIONARI a
+            INNER JOIN COLABORADOR_BASICOS b ON a.FuCod = b.COD_FUNC
             
             WHERE a.FEst = 'A'";
 
@@ -221,7 +223,7 @@
 
             WHERE a.FUNFICCFU = ?";
 
-            $sql02  = "INSERT INTO FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICCFU, FUNFICNOM, FUNFICAPE, FUNFICDOC, FUNFICFHA, FUNFICEMA, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql02  = "INSERT INTO FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICCFU, FUNFICNOM, FUNFICAPE, FUNFICDOC, FUNFICFHA, FUNFICEMA, FUNFICFOT, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             $sql03  = "SELECT
             a.CAMFUCCAC         AS      campanha_codigo,
@@ -257,6 +259,7 @@
                     $row05_mssql = $rowMSSQL['funcionario_codigo'];
                     $row06_mssql = $rowMSSQL['funcionario_fecha_nacimiento'];
                     $row07_mssql = trim($rowMSSQL['funcionario_email']);
+                    $row08_mssql = trim($rowMSSQL['funcionario_foto']);
 
                     $stmtMYSQL->execute([$row05_mssql]);
                     $row00_mysql = $stmtMYSQL->fetch(PDO::FETCH_ASSOC);
@@ -300,7 +303,7 @@
                                 break;
                         }
 
-                        $stmtMYSQL2->execute([$FUNFICEST, $FUNFICTDC, $FUNFICTSC, $FUNFICECC, $row05_mssql, $row03_mssql, $row04_mssql, $row02_mssql, $row06_mssql, $row07_mssql, $val01, $val02, $val03]);
+                        $stmtMYSQL2->execute([$FUNFICEST, $FUNFICTDC, $FUNFICTSC, $FUNFICECC, $row05_mssql, $row03_mssql, $row04_mssql, $row02_mssql, $row06_mssql, $row07_mssql, $row08_mssql, $val01, $val02, $val03]);
                         $FUNFICCOD = $connMYSQL->lastInsertId();
                     } else {
                         $FUNFICCOD = $row00_mysql['funcionario_codigo'];
