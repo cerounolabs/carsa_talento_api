@@ -886,3 +886,96 @@
         
         return $json;
     });
+
+    $app->get('/v1/300/detalle/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01      = $request->getAttribute('codigo');
+        
+        if (isset($val01)) {
+            $sql00  = "SELECT
+            b.CAMFICCOD         AS      campanha_codigo,
+            b.CAMFICNOM         AS      campanha_nombre,
+
+            c.FUNFICCOD         AS      funcionario_codigo,
+            c.FUNFICCFU         AS      funcionario_sistema_codigo,
+            c.FUNFICNOM         AS      funcionario_nombre,
+            c.FUNFICAPE         AS      funcionario_apellido,
+            c.FUNFICFOT         AS      funcionario_foto,
+            
+            a.CAMFUCEST         AS      funcionario_estado_codigo
+            
+            FROM CAMFUC a
+            INNER JOIN CAMFIC b ON a.CAMFUCCAC = b.CAMFICCOD
+            INNER JOIN FUNFIC c ON a.CAMFUCFUC = c.FUNFICCOD
+
+            WHERE a.CAMFUCCAC = ?
+            
+            ORDER BY a.CAMFUCCAC";
+
+            try {
+                $connMYSQL  = getConnectionMYSQL();
+                $stmtMYSQL  = $connMYSQL->prepare($sql00);
+                $stmtMYSQL->execute([$val01]);
+
+                while ($rowMYSQL = $stmtMYSQL->fetch()) {
+                    if ($rowMYSQL['funcionario_estado_codigo'] === 'P') {
+                        $funcionario_estado_nombre = 'PENDIENTE';
+                    } elseif ($rowMYSQL['funcionario_estado_codigo'] === 'C') {
+                        $funcionario_estado_nombre = 'CARGADO';
+                    } elseif ($rowMYSQL['funcionario_estado_codigo'] === 'F') {
+                        $funcionario_estado_nombre = 'CONFIRMADO';
+                    }
+
+                    $detalle    = array(
+                        'campanha_codigo'               => $rowMYSQL['campanha_codigo'],
+                        'campanha_nombre'               => $rowMYSQL['campanha_nombre'],
+                        'funcionario_codigo'            => $rowMYSQL['funcionario_codigo'],
+                        'funcionario_sistema_codigo'    => $rowMYSQL['funcionario_sistema_codigo'],
+                        'funcionario_nombre'            => $rowMYSQL['funcionario_nombre'],
+                        'funcionario_apellido'          => $rowMYSQL['funcionario_apellido'],
+                        'funcionario_persona'           => $rowMYSQL['funcionario_nombre'].' '.$rowMYSQL['funcionario_apellido'],
+                        'funcionario_foto'              => $rowMYSQL['funcionario_foto'],
+                        'funcionario_estado_codigo'     => $rowMYSQL['funcionario_estado_codigo'],
+                        'funcionario_estado_nombre'     => $funcionario_estado_nombre
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle = array(
+                        'campanha_codigo'               => '',
+                        'campanha_nombre'               => '',
+                        'funcionario_codigo'            => '',
+                        'funcionario_sistema_codigo'    => '',
+                        'funcionario_nombre'            => '',
+                        'funcionario_apellido'          => '',
+                        'funcionario_persona'           => '',
+                        'funcionario_foto'              => '',
+                        'funcionario_estado_codigo'     => '',
+                        'funcionario_estado_nombre'     => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtMYSQL->closeCursor();
+                $stmtMYSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
