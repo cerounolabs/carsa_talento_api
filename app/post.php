@@ -231,7 +231,7 @@
             
             WHERE a.CAMFUCCAC = ? AND a.CAMFUCFUC = ?";
 
-            $sql04  = "INSERT INTO CAMFUC (CAMFUCCAC, CAMFUCFUC, CAMFUCAUS, CAMFUCAFH, CAMFUCAIP) VALUES (?, ?, ?, ?, ?)";
+            $sql04  = "INSERT INTO CAMFUC (CAMFUCCAC, CAMFUCFUC, CAMFUCEST, CAMFUCAUS, CAMFUCAFH, CAMFUCAIP) VALUES (?, ?, ?, ?, ?, ?)";
             $sql05  = "UPDATE CAMFIC SET CAMFICEST = 3, CAMFICAUS = ?, CAMFICAFH = ?, CAMFICAIP = ? WHERE CAMFICCOD = ? AND CAMFICEST = 2";
 
             try {
@@ -310,7 +310,8 @@
                     $row01_mysql = $stmtMYSQL3->fetch(PDO::FETCH_ASSOC);
 
                     if(!$row01_mysql){
-                        $stmtMYSQL4->execute([$val00, $FUNFICCOD, $val01, $val02, $val03]);
+                        $CAMFUCEST = 'P';
+                        $stmtMYSQL4->execute([$val00, $FUNFICCOD, $CAMFUCEST, $val01, $val02, $val03]);
                     }
                 }
 
