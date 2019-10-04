@@ -14,13 +14,13 @@
             $sql00  = "SELECT
             a.ClUsu                 AS      login_usuario,
             a.ClCon                 AS      login_contrasenha,
-            a.Clfotbmp              AS      login_foto,
             a.FuCod                 AS      login_funcionario_codigo,
             a.ClNom                 AS      login_funcionario_nombre,
 
-			b.CARGO                 AS      login_cargo,
-			b.UNIDAD                AS      login_gerencia,
-			b.CORREO_ELECTRONICO    AS      login_email
+            b.CARGO                 AS      login_cargo,
+            b.UNIDAD                AS      login_gerencia,
+            b.FOTO_TARGET           AS      login_foto,
+            b.CORREO_ELECTRONICO    AS      login_email
 
             FROM FSD050 a
 			INNER JOIN COLABORADOR_BASICOS b ON a.FuCod = b.COD_FUNC
