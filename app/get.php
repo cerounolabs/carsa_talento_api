@@ -717,7 +717,7 @@
         LEFT JOIN DOMFIC f ON a.FUNFICATSCNEW = f.DOMFICCOD
         LEFT JOIN DOMFIC g ON a.FUNFICAECCNEW = g.DOMFICCOD
         
-        ORDER BY a.FUNFICCOD";
+        ORDER BY a.FUNFICACOD DESC";
 
         try {
             $connMYSQL  = getConnectionMYSQL();
