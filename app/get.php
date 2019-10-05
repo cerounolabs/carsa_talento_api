@@ -664,6 +664,198 @@
         return $json;
     });
 
+    $app->get('/v1/200/auditoria', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        a.FUNFICACOD            AS      auditoria_codigo,
+        a.FUNFICAMET            AS      auditoria_metodo,
+        a.FUNFICAUSU            AS      auditoria_usuario,
+        a.FUNFICAFEC            AS      auditoria_fecha_hora,
+        a.FUNFICADIP            AS      auditoria_ip,
+
+        a.FUNFICACODOLD         AS      auditoria_antes_codigo,
+        a.FUNFICAESTOLD         AS      auditoria_antes_estado_codigo,
+        b.DOMFICCOD             AS      auditoria_antes_documento_codigo,
+        b.DOMFICNOM             AS      auditoria_antes_documento_nombre,
+        a.FUNFICADOCOLD         AS      auditoria_antes_documento_numero,
+        c.DOMFICCOD             AS      auditoria_antes_sexo_codigo,
+        c.DOMFICNOM             AS      auditoria_antes_sexo_nombre,
+        d.DOMFICCOD             AS      auditoria_antes_estado_civil_codigo,
+        d.DOMFICNOM             AS      auditoria_antes_estado_civil_nombre,
+        a.FUNFICACFUOLD         AS      auditoria_antes_codigo_sistema,
+        a.FUNFICANOMOLD         AS      auditoria_antes_nombre,
+        a.FUNFICAAPEOLD         AS      auditoria_antes_apellido,
+        a.FUNFICAFHAOLD         AS      auditoria_antes_fecha_nacimiento,
+        a.FUNFICAEMAOLD         AS      auditoria_antes_email,
+        a.FUNFICAFOTOLD         AS      auditoria_antes_foto,
+        a.FUNFICAOBSOLD         AS      auditoria_antes_observacion,
+
+        a.FUNFICACODNEW         AS      auditoria_despues_codigo,
+        a.FUNFICAESTNEW         AS      auditoria_despues_estado_codigo,
+        e.DOMFICCOD             AS      auditoria_despues_documento_codigo,
+        e.DOMFICNOM             AS      auditoria_despues_documento_nombre,
+        a.FUNFICADOCNEW         AS      auditoria_despues_documento_numero,
+        f.DOMFICCOD             AS      auditoria_despues_sexo_codigo,
+        f.DOMFICNOM             AS      auditoria_despues_sexo_nombre,
+        g.DOMFICCOD             AS      auditoria_despues_estado_civil_codigo,
+        g.DOMFICNOM             AS      auditoria_despues_estado_civil_nombre,
+        a.FUNFICACFUNEW         AS      auditoria_despues_codigo_sistema,
+        a.FUNFICANOMNEW         AS      auditoria_despues_nombre,
+        a.FUNFICAAPENEW         AS      auditoria_despues_apellido,
+        a.FUNFICAFHANEW         AS      auditoria_despues_fecha_nacimiento,
+        a.FUNFICAEMANEW         AS      auditoria_despues_email,
+        a.FUNFICAFOTNEW         AS      auditoria_despues_foto,
+        a.FUNFICAOBSNEW         AS      auditoria_despues_observacion
+
+        FROM FUNFICA a
+        LEFT JOIN DOMFIC b ON a.FUNFICATDCOLD = b.DOMFICCOD
+        LEFT JOIN DOMFIC c ON a.FUNFICATSCOLD = c.DOMFICCOD
+        LEFT JOIN DOMFIC d ON a.FUNFICAECCOLD = d.DOMFICCOD
+
+        LEFT JOIN DOMFIC e ON a.FUNFICATDCNEW = e.DOMFICCOD
+        LEFT JOIN DOMFIC f ON a.FUNFICATSCNEW = f.DOMFICCOD
+        LEFT JOIN DOMFIC g ON a.FUNFICAECCNEW = g.DOMFICCOD
+        
+        ORDER BY a.FUNFICCOD";
+
+        try {
+            $connMYSQL  = getConnectionMYSQL();
+            $stmtMYSQL  = $connMYSQL->prepare($sql00);
+            $stmtMYSQL->execute(); 
+
+            while ($rowMYSQL = $stmtMYSQL->fetch()) {
+                if ($rowMYSQL['auditoria_antes_estado_codigo'] == 'A') {
+                    $auditoria_antes_estado_nombre = 'ACTIVO';
+                } else {
+                    $auditoria_antes_estado_nombre = 'INACTIVO';
+                }
+
+                if ($rowMYSQL['auditoria_despues_estado_codigo'] == 'A') {
+                    $auditoria_despues_estado_nombre = 'ACTIVO';
+                } else {
+                    $auditoria_despues_estado_nombre = 'INACTIVO';
+                }
+
+                $detalle    = array(
+                    'auditoria_codigo'                          => $rowMYSQL['auditoria_codigo'],
+                    'auditoria_metodo'                          => $rowMYSQL['auditoria_metodo'],
+                    'auditoria_usuario'                         => $rowMYSQL['auditoria_usuario'],
+                    'auditoria_fecha_hora'                      => $rowMYSQL['auditoria_fecha_hora'],
+                    'auditoria_ip'                              => $rowMYSQL['auditoria_ip'],
+
+                    'auditoria_antes_codigo'                    => $rowMYSQL['auditoria_antes_codigo'],
+                    'auditoria_antes_estado_codigo'             => $rowMYSQL['auditoria_antes_estado_codigo'],
+                    'auditoria_antes_estado_nombre'             => $auditoria_antes_estado_nombre,
+                    'auditoria_antes_documento_codigo'          => $rowMYSQL['auditoria_antes_documento_codigo'],
+                    'auditoria_antes_documento_nombre'          => $rowMYSQL['auditoria_antes_documento_nombre'],
+                    'auditoria_antes_documento_numero'          => $rowMYSQL['auditoria_antes_documento_numero'],
+                    'auditoria_antes_sexo_codigo'               => $rowMYSQL['auditoria_antes_sexo_codigo'],
+                    'auditoria_antes_sexo_nombre'               => $rowMYSQL['auditoria_antes_sexo_nombre'],
+                    'auditoria_antes_estado_civil_codigo'       => $rowMYSQL['auditoria_antes_estado_civil_codigo'],
+                    'auditoria_antes_estado_civil_nombre'       => $rowMYSQL['auditoria_antes_estado_civil_nombre'],
+                    'auditoria_antes_codigo_sistema'            => $rowMYSQL['auditoria_antes_codigo_sistema'],
+                    'auditoria_antes_nombre'                    => $rowMYSQL['auditoria_antes_nombre'],
+                    'auditoria_antes_apellido'                  => $rowMYSQL['auditoria_antes_apellido'],
+                    'auditoria_antes_persona'                   => $rowMYSQL['auditoria_antes_nombre'].' '.$rowMYSQL['auditoria_antes_apellido'],
+                    'auditoria_antes_fecha_nacimiento'          => $rowMYSQL['auditoria_antes_fecha_nacimiento'],
+                    'auditoria_antes_fecha_nacimiento_2'        => date("d/m/Y", strtotime($rowMYSQL['auditoria_antes_fecha_nacimiento'])),
+                    'auditoria_antes_email'                     => $rowMYSQL['auditoria_antes_email'],
+                    'auditoria_antes_foto'                      => $rowMYSQL['auditoria_antes_foto'],
+                    'auditoria_antes_observacion'               => $rowMYSQL['auditoria_antes_observacion'],
+
+                    'auditoria_despues_codigo'                  => $rowMYSQL['auditoria_despues_codigo'],
+                    'auditoria_despues_estado_codigo'           => $rowMYSQL['auditoria_despues_estado_codigo'],
+                    'auditoria_despues_estado_nombre'           => $auditoria_despues_estado_nombre,
+                    'auditoria_despues_documento_codigo'        => $rowMYSQL['auditoria_despues_documento_codigo'],
+                    'auditoria_despues_documento_nombre'        => $rowMYSQL['auditoria_despues_documento_nombre'],
+                    'auditoria_despues_documento_numero'        => $rowMYSQL['auditoria_despues_documento_numero'],
+                    'auditoria_despues_sexo_codigo'             => $rowMYSQL['auditoria_despues_sexo_codigo'],
+                    'auditoria_despues_sexo_nombre'             => $rowMYSQL['auditoria_despues_sexo_nombre'],
+                    'auditoria_despues_estado_civil_codigo'     => $rowMYSQL['auditoria_despues_estado_civil_codigo'],
+                    'auditoria_despues_estado_civil_nombre'     => $rowMYSQL['auditoria_despues_estado_civil_nombre'],
+                    'auditoria_despues_codigo_sistema'          => $rowMYSQL['auditoria_despues_codigo_sistema'],
+                    'auditoria_despues_nombre'                  => $rowMYSQL['auditoria_despues_nombre'],
+                    'auditoria_despues_apellido'                => $rowMYSQL['auditoria_despues_apellido'],
+                    'auditoria_despues_persona'                 => $rowMYSQL['auditoria_despues_nombre'].' '.$rowMYSQL['auditoria_despues_apellido'],
+                    'auditoria_despues_fecha_nacimiento'        => $rowMYSQL['auditoria_despues_fecha_nacimiento'],
+                    'auditoria_despues_fecha_nacimiento_2'      => date("d/m/Y", strtotime($rowMYSQL['auditoria_despues_fecha_nacimiento'])),
+                    'auditoria_despues_email'                   => $rowMYSQL['auditoria_despues_email'],
+                    'auditoria_despues_foto'                    => $rowMYSQL['auditoria_despues_foto'],
+                    'auditoria_despues_observacion'             => $rowMYSQL['auditoria_despues_observacion']
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'auditoria_codigo'                          => '',
+                    'auditoria_metodo'                          => '',
+                    'auditoria_usuario'                         => '',
+                    'auditoria_fecha_hora'                      => '',
+                    'auditoria_ip'                              => '',
+
+                    'auditoria_antes_codigo'                    => '',
+                    'auditoria_antes_estado_codigo'             => '',
+                    'auditoria_antes_estado_nombre'             => '',
+                    'auditoria_antes_documento_codigo'          => '',
+                    'auditoria_antes_documento_nombre'          => '',
+                    'auditoria_antes_documento_numero'          => '',
+                    'auditoria_antes_sexo_codigo'               => '',
+                    'auditoria_antes_sexo_nombre'               => '',
+                    'auditoria_antes_estado_civil_codigo'       => '',
+                    'auditoria_antes_estado_civil_nombre'       => '',
+                    'auditoria_antes_codigo_sistema'            => '',
+                    'auditoria_antes_nombre'                    => '',
+                    'auditoria_antes_apellido'                  => '',
+                    'auditoria_antes_persona'                   => '',
+                    'auditoria_antes_fecha_nacimiento'          => '',
+                    'auditoria_antes_fecha_nacimiento_2'        => '',
+                    'auditoria_antes_email'                     => '',
+                    'auditoria_antes_foto'                      => '',
+                    'auditoria_antes_observacion'               => '',
+
+                    'auditoria_despues_codigo'                  => '',
+                    'auditoria_despues_estado_codigo'           => '',
+                    'auditoria_despues_estado_nombre'           => '',
+                    'auditoria_despues_documento_codigo'        => '',
+                    'auditoria_despues_documento_nombre'        => '',
+                    'auditoria_despues_documento_numero'        => '',
+                    'auditoria_despues_sexo_codigo'             => '',
+                    'auditoria_despues_sexo_nombre'             => '',
+                    'auditoria_despues_estado_civil_codigo'     => '',
+                    'auditoria_despues_estado_civil_nombre'     => '',
+                    'auditoria_despues_codigo_sistema'          => '',
+                    'auditoria_despues_nombre'                  => '',
+                    'auditoria_despues_apellido'                => '',
+                    'auditoria_despues_persona'                 => '',
+                    'auditoria_despues_fecha_nacimiento'        => '',
+                    'auditoria_despues_fecha_nacimiento_2'      => '',
+                    'auditoria_despues_email'                   => '',
+                    'auditoria_despues_foto'                    => '',
+                    'auditoria_despues_observacion'             => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMYSQL->closeCursor();
+            $stmtMYSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
+
     $app->get('/v1/200/estadocivil', function($request) {
         require __DIR__.'/../src/connect.php';
 
