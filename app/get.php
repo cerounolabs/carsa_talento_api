@@ -972,10 +972,10 @@
             } else {
                 $detalle = array(
                     'funcionario_estado_civil_codigo'   => '',
-                    'funcionario_estado_civil_nombre'   => '',
+                    'funcionario_estado_civil_nombre'   => 'No hay registro',
                     'funcionario_sexo_codigo'           => '',
-                    'funcionario_sexo_nombre'           => '',
-                    'funcionario_cantidad'              => ''
+                    'funcionario_sexo_nombre'           => 'No hay registro',
+                    'funcionario_cantidad'              => 0
                 );
 
                 header("Content-Type: application/json; charset=utf-8");
@@ -1079,8 +1079,8 @@
             } else {
                 $detalle = array(
                     'funcionario_mes_codigo'    => '',
-                    'funcionario_mes_nombre'    => '',
-                    'funcionario_mes_cantidad'  => ''
+                    'funcionario_mes_nombre'    => 'No hay registro',
+                    'funcionario_mes_cantidad'  => 0
                 );
 
                 header("Content-Type: application/json; charset=utf-8");
@@ -1136,8 +1136,8 @@
             } else {
                 $detalle = array(
                     'campanha_codigo'       => '',
-                    'campanha_nombre'       => '',
-                    'campanha_cantidad'     => ''
+                    'campanha_nombre'       => 'No hay registro',
+                    'campanha_cantidad'     => 0
                 );
 
                 header("Content-Type: application/json; charset=utf-8");
