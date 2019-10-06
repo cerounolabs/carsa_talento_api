@@ -169,14 +169,15 @@
         $val14      = $request->getParsedBody()['campanha_formulario_6'];
         $val15      = $request->getParsedBody()['campanha_formulario_7'];
         $val16      = $request->getParsedBody()['campanha_formulario_8'];
+        $val17      = $request->getParsedBody()['campanha_color'];
         
         if (isset($val01) && isset($val02) && isset($val03) && isset($val04) && isset($val06) && isset($val07) && isset($val08)) {
-            $sql00  = "INSERT INTO CAMFIC (CAMFICEST, CAMFICNOM, CAMFICFDE, CAMFICFHA, CAMFICFO1, CAMFICFO2, CAMFICFO3, CAMFICFO4, CAMFICFO5, CAMFICFO6, CAMFICFO7, CAMFICFO8, CAMFICOBS, CAMFICAUS, CAMFICAFH, CAMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO CAMFIC (CAMFICEST, CAMFICNOM, CAMFICFDE, CAMFICFHA, CAMFICCOL, CAMFICFO1, CAMFICFO2, CAMFICFO3, CAMFICFO4, CAMFICFO5, CAMFICFO6, CAMFICFO7, CAMFICFO8, CAMFICOBS, CAMFICAUS, CAMFICAFH, CAMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$val01, $val02, $val03, $val04, $val09, $val10, $val11, $val12, $val13, $val14, $val15, $val16, $val05, $val06, $val07, $val08]); 
+                $stmtMYSQL->execute([$val01, $val02, $val03, $val04, $val17, $val09, $val10, $val11, $val12, $val13, $val14, $val15, $val16, $val05, $val06, $val07, $val08]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
