@@ -18,7 +18,7 @@
             a.ClNom                 AS      login_funcionario_nombre,
 
             b.CARGO                 AS      login_cargo,
-            b.UNIDAD                AS      login_gerencia,
+            b.GERENCIA              AS      login_gerencia,
             b.FOTO_TARGET           AS      login_foto,
             b.CORREO_ELECTRONICO    AS      login_email
 
@@ -161,14 +161,22 @@
         $val06      = $request->getParsedBody()['campanha_usuario'];
         $val07      = $request->getParsedBody()['campanha_fecha_hora'];
         $val08      = $request->getParsedBody()['campanha_ip'];
+        $val09      = $request->getParsedBody()['campanha_formulario_1'];
+        $val10      = $request->getParsedBody()['campanha_formulario_2'];
+        $val11      = $request->getParsedBody()['campanha_formulario_3'];
+        $val12      = $request->getParsedBody()['campanha_formulario_4'];
+        $val13      = $request->getParsedBody()['campanha_formulario_5'];
+        $val14      = $request->getParsedBody()['campanha_formulario_6'];
+        $val15      = $request->getParsedBody()['campanha_formulario_7'];
+        $val16      = $request->getParsedBody()['campanha_formulario_8'];
         
         if (isset($val01) && isset($val02) && isset($val03) && isset($val04) && isset($val06) && isset($val07) && isset($val08)) {
-            $sql00  = "INSERT INTO CAMFIC (CAMFICEST, CAMFICNOM, CAMFICFDE, CAMFICFHA, CAMFICOBS, CAMFICAUS, CAMFICAFH, CAMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO CAMFIC (CAMFICEST, CAMFICNOM, CAMFICFDE, CAMFICFHA, CAMFICFO1, CAMFICFO2, CAMFICFO3, CAMFICFO4, CAMFICFO5, CAMFICFO6, CAMFICFO7, CAMFICFO8, CAMFICOBS, CAMFICAUS, CAMFICAFH, CAMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$val01, $val02, $val03, $val04, $val05, $val06, $val07, $val08]); 
+                $stmtMYSQL->execute([$val01, $val02, $val03, $val04, $val09, $val10, $val11, $val12, $val13, $val14, $val15, $val16, $val05, $val06, $val07, $val08]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
