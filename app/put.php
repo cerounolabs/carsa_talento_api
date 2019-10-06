@@ -62,11 +62,11 @@
         
         if (isset($val00) && isset($val01) && isset($val02) && isset($val03) && isset($val04) && isset($val06) && isset($val07) && isset($val08)) {
             $sql00  = "UPDATE CAMFIC SET CAMFICEST = ?, CAMFICNOM = ?, CAMFICFDE = ?, CAMFICFHA = ?, CAMFICFO1 = ?, CAMFICFO2 = ?, CAMFICFO3 = ?, CAMFICFO4 = ?, CAMFICFO5 = ?, CAMFICFO6 = ?, CAMFICFO7 = ?, CAMFICFO8 = ?, CAMFICOBS = ?, CAMFICAUS = ?, CAMFICAFH = ?, CAMFICAIP = ? WHERE CAMFICCOD = ? AND CAMFICEST IN (2, 3)";
-
+            
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$val01, $val02, $val03, $val04, $val05, $val06, $val07, $val08, $val00]); 
+                $stmtMYSQL->execute([$val01, $val02, $val03, $val04, $val09, $val10, $val11, $val12, $val13, $val14, $val15, $val16, $val05, $val06, $val07, $val08, $val00]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success UPDATE', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
