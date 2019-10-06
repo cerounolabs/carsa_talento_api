@@ -551,7 +551,6 @@
             a.CAMFICAUS                     AS      campanha_usuario,
             a.CAMFICAFH                     AS      campanha_fecha_hora,
             a.CAMFICAIP                     AS      campanha_ip,
-
             b.DOMFICCOD                     AS      campanha_estado_codigo,
             b.DOMFICNOM                     AS      campanha_estado_nombre
             
@@ -638,6 +637,8 @@
                         'campanha_fecha_hora'       => $rowMYSQL['campanha_fecha_hora'],
                         'campanha_ip'               => $rowMYSQL['campanha_ip']
                     );
+
+                    $result[]   = $detalle;
                 }
 
                 if (isset($result)){
