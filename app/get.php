@@ -281,7 +281,9 @@
             
             FROM DOMFICA a
             
-            WHERE a.DOMFICAVALOLD = ? OR a.DOMFICAVALNEW = ?";
+            WHERE a.DOMFICAVALOLD = ? OR a.DOMFICAVALNEW = ?
+            
+            ORDER BY a.DOMFICACOD DESC";
 
             try {
                 $connMYSQL  = getConnectionMYSQL();
@@ -382,6 +384,14 @@
         a.CAMFICNOM                     AS      campanha_nombre,
         a.CAMFICFDE                     AS      campanha_fecha_inicio,
         a.CAMFICFHA                     AS      campanha_fecha_final,
+        a.CAMFICFO1                     AS      campanha_formulario_1,
+        a.CAMFICFO2                     AS      campanha_formulario_2,
+        a.CAMFICFO3                     AS      campanha_formulario_3,
+        a.CAMFICFO4                     AS      campanha_formulario_4,
+        a.CAMFICFO5                     AS      campanha_formulario_5,
+        a.CAMFICFO6                     AS      campanha_formulario_6,
+        a.CAMFICFO7                     AS      campanha_formulario_7,
+        a.CAMFICFO8                     AS      campanha_formulario_8,
         a.CAMFICOBS                     AS      campanha_observacion,
         a.CAMFICAUS                     AS      campanha_usuario,
         a.CAMFICAFH                     AS      campanha_fecha_hora,
@@ -401,6 +411,54 @@
             $stmtMYSQL->execute(); 
 
             while ($rowMYSQL = $stmtMYSQL->fetch()) {
+                if($rowMYSQL['campanha_formulario_1'] === 'S'){
+                    $campanha_formulario_1 = 'checked';
+                } else {
+                    $campanha_formulario_1 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_2'] === 'S'){
+                    $campanha_formulario_2 = 'checked';
+                } else {
+                    $campanha_formulario_2 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_3'] === 'S'){
+                    $campanha_formulario_3 = 'checked';
+                } else {
+                    $campanha_formulario_3 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_4'] === 'S'){
+                    $campanha_formulario_4 = 'checked';
+                } else {
+                    $campanha_formulario_4 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_5'] === 'S'){
+                    $campanha_formulario_5 = 'checked';
+                } else {
+                    $campanha_formulario_5 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_6'] === 'S'){
+                    $campanha_formulario_6 = 'checked';
+                } else {
+                    $campanha_formulario_6 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_7'] === 'S'){
+                    $campanha_formulario_7 = 'checked';
+                } else {
+                    $campanha_formulario_7 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_8'] === 'S'){
+                    $campanha_formulario_8 = 'checked';
+                } else {
+                    $campanha_formulario_8 = '';
+                }
+
                 $detalle    = array(
                     'campanha_codigo'           => $rowMYSQL['campanha_codigo'],
                     'campanha_estado_codigo'    => $rowMYSQL['campanha_estado_codigo'],
@@ -410,6 +468,14 @@
                     'campanha_fecha_inicio_2'   => date('d/m/Y', strtotime($rowMYSQL['campanha_fecha_inicio'])),
                     'campanha_fecha_final'      => $rowMYSQL['campanha_fecha_final'],
                     'campanha_fecha_final_2'    => date("d/m/Y", strtotime($rowMYSQL['campanha_fecha_final'])),
+                    'campanha_formulario_1'     => $campanha_formulario_1,
+                    'campanha_formulario_2'     => $campanha_formulario_2,
+                    'campanha_formulario_3'     => $campanha_formulario_3,
+                    'campanha_formulario_4'     => $campanha_formulario_4,
+                    'campanha_formulario_5'     => $campanha_formulario_5,
+                    'campanha_formulario_6'     => $campanha_formulario_6,
+                    'campanha_formulario_7'     => $campanha_formulario_7,
+                    'campanha_formulario_8'     => $campanha_formulario_8,
                     'campanha_observacion'      => $rowMYSQL['campanha_observacion'],
                     'campanha_usuario'          => $rowMYSQL['campanha_usuario'],
                     'campanha_fecha_hora'       => $rowMYSQL['campanha_fecha_hora'],
@@ -432,6 +498,14 @@
                     'campanha_fecha_inicio_2'   => '',
                     'campanha_fecha_final'      => '',
                     'campanha_fecha_final_2'    => '',
+                    'campanha_formulario_1'     => '',
+                    'campanha_formulario_2'     => '',
+                    'campanha_formulario_3'     => '',
+                    'campanha_formulario_4'     => '',
+                    'campanha_formulario_5'     => '',
+                    'campanha_formulario_6'     => '',
+                    'campanha_formulario_7'     => '',
+                    'campanha_formulario_8'     => '',
                     'campanha_observacion'      => '',
                     'campanha_usuario'          => '',
                     'campanha_fecha_hora'       => '',

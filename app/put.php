@@ -51,9 +51,17 @@
         $val06      = $request->getParsedBody()['campanha_usuario'];
         $val07      = $request->getParsedBody()['campanha_fecha_hora'];
         $val08      = $request->getParsedBody()['campanha_ip'];
+        $val09      = $request->getParsedBody()['campanha_formulario_1'];
+        $val10      = $request->getParsedBody()['campanha_formulario_2'];
+        $val11      = $request->getParsedBody()['campanha_formulario_3'];
+        $val12      = $request->getParsedBody()['campanha_formulario_4'];
+        $val13      = $request->getParsedBody()['campanha_formulario_5'];
+        $val14      = $request->getParsedBody()['campanha_formulario_6'];
+        $val15      = $request->getParsedBody()['campanha_formulario_7'];
+        $val16      = $request->getParsedBody()['campanha_formulario_8'];
         
         if (isset($val00) && isset($val01) && isset($val02) && isset($val03) && isset($val04) && isset($val06) && isset($val07) && isset($val08)) {
-            $sql00  = "UPDATE CAMFIC SET CAMFICEST = ?, CAMFICNOM = ?, CAMFICFDE = ?, CAMFICFHA = ?, CAMFICOBS = ?, CAMFICAUS = ?, CAMFICAFH = ?, CAMFICAIP = ? WHERE CAMFICCOD = ?";
+            $sql00  = "UPDATE CAMFIC SET CAMFICEST = ?, CAMFICNOM = ?, CAMFICFDE = ?, CAMFICFHA = ?, CAMFICFO1 = ?, CAMFICFO2 = ?, CAMFICFO3 = ?, CAMFICFO4 = ?, CAMFICFO5 = ?, CAMFICFO6 = ?, CAMFICFO7 = ?, CAMFICFO8 = ?, CAMFICOBS = ?, CAMFICAUS = ?, CAMFICAFH = ?, CAMFICAIP = ? WHERE CAMFICCOD = ? AND CAMFICEST IN (2, 3)";
 
             try {
                 $connMYSQL  = getConnectionMYSQL();

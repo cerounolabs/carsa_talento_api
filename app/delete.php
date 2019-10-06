@@ -53,7 +53,7 @@
         $val08      = $request->getParsedBody()['campanha_ip'];
         
         if (isset($val00)) {
-            $sql00  = "DELETE FROM CAMFIC WHERE CAMFICCOD = ?";
+            $sql00  = "DELETE FROM CAMFIC WHERE CAMFICCOD = ? AND CAMFICEST IN (2, 3)";
 
             try {
                 $connMYSQL  = getConnectionMYSQL();
