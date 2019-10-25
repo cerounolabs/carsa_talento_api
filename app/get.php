@@ -1355,15 +1355,15 @@
 
                 while ($rowMSSQL = $stmtMSSQL->fetch()) {
                     $detalle    = array(
-                        'funcionario_codigo'                        => $rowMYSQL['funcionario_codigo'],
-                        'funcionario_documento'                     => $rowMYSQL['funcionario_documento'],
-                        'funcionario_completo'                      => $rowMYSQL['funcionario_completo'],
-                        'funcionario_fecha_nacimiento'              => $rowMYSQL['funcionario_fecha_nacimiento'],
-                        'funcionario_fecha_nacimiento_2'            => date("d/m/Y", strtotime($rowMYSQL['funcionario_fecha_nacimiento'])),
-                        'funcionario_particular_direccion'          => $rowMYSQL['funcionario_particular_direccion'],
-                        'funcionario_particular_telefono1_codigo'   => $rowMYSQL['funcionario_particular_telefono1_codigo'],
-                        'funcionario_particular_telefono1_numero'   => $rowMYSQL['funcionario_particular_telefono1_numero'],
-                        'funcionario_email'                         => $rowMYSQL['funcionario_email']
+                        'funcionario_codigo'                        => $rowMSSQL['funcionario_codigo'],
+                        'funcionario_documento'                     => $rowMSSQL['funcionario_documento'],
+                        'funcionario_completo'                      => $rowMSSQL['funcionario_completo'],
+                        'funcionario_fecha_nacimiento'              => $rowMSSQL['funcionario_fecha_nacimiento'],
+                        'funcionario_fecha_nacimiento_2'            => date("d/m/Y", strtotime($rowMSSQL['funcionario_fecha_nacimiento'])),
+                        'funcionario_particular_direccion'          => $rowMSSQL['funcionario_particular_direccion'],
+                        'funcionario_particular_telefono1_codigo'   => $rowMSSQL['funcionario_particular_telefono1_codigo'],
+                        'funcionario_particular_telefono1_numero'   => $rowMSSQL['funcionario_particular_telefono1_numero'],
+                        'funcionario_email'                         => $rowMSSQL['funcionario_email']
                     );
 
                     $result[]   = $detalle;
