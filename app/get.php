@@ -1329,68 +1329,75 @@
     $app->get('/v1/400/{codigo}', function($request) {
         require __DIR__.'/../src/connect.php';
 
-        $sql00  = "SELECT
-        a.FuCod                                 AS      funcionario_codigo,
-        a.FuCIC                                 AS      funcionario_documento,
-        a.NombC                                 AS      funcionario_completo,
-        CONVERT(date, a.FuFchNac, 23)           AS      funcionario_fecha_nacimiento,
-        a.FuDirPar                              AS      funcionario_particular_direccion,
-        a.FuCodCel1                             AS      funcionario_particular_telefono1_codigo,
-        a.FuCel1                                AS      funcionario_particular_telefono1_numero,
-        a.Fumail                                AS      funcionario_email
-
-        FROM FUNCIONARI a
-
-        WHERE a.FuCod = ?
+        $val01      = $request->getAttribute('codigo');
         
-        ORDER BY a.FuCod";
+        if (isset($val01)) {
+            $sql00  = "SELECT
+            a.FuCod                                 AS      funcionario_codigo,
+            a.FuCIC                                 AS      funcionario_documento,
+            a.NombC                                 AS      funcionario_completo,
+            CONVERT(date, a.FuFchNac, 23)           AS      funcionario_fecha_nacimiento,
+            a.FuDirPar                              AS      funcionario_particular_direccion,
+            a.FuCodCel1                             AS      funcionario_particular_telefono1_codigo,
+            a.FuCel1                                AS      funcionario_particular_telefono1_numero,
+            a.Fumail                                AS      funcionario_email
 
-        try {
-            $connMSSQL  = getConnectionMSSQL();
-            $stmtMSSQL  = $connMSSQL->prepare($sql00);
-            $stmtMSSQL->execute(); 
+            FROM FUNCIONARI a
 
-            while ($rowMSSQL = $stmtMSSQL->fetch()) {
-                $detalle    = array(
-                    'funcionario_codigo'                        => $rowMYSQL['funcionario_codigo'],
-                    'funcionario_documento'                     => $rowMYSQL['funcionario_documento'],
-                    'funcionario_completo'                      => $rowMYSQL['funcionario_completo'],
-                    'funcionario_fecha_nacimiento'              => $rowMYSQL['funcionario_fecha_nacimiento'],
-                    'funcionario_fecha_nacimiento_2'            => date("d/m/Y", strtotime($rowMYSQL['funcionario_fecha_nacimiento'])),
-                    'funcionario_particular_direccion'          => $rowMYSQL['funcionario_particular_direccion'],
-                    'funcionario_particular_telefono1_codigo'   => $rowMYSQL['funcionario_particular_telefono1_codigo'],
-                    'funcionario_particular_telefono1_numero'   => $rowMYSQL['funcionario_particular_telefono1_numero'],
-                    'funcionario_email'                         => $rowMYSQL['funcionario_email']
-                );
+            WHERE a.FuCod = ?
+            
+            ORDER BY a.FuCod";
 
-                $result[]   = $detalle;
-            }
+            try {
+                $connMSSQL  = getConnectionMSSQL();
+                $stmtMSSQL  = $connMSSQL->prepare($sql00);
+                $stmtMSSQL->execute([$val01]); 
 
-            if (isset($result)){
+                while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                    $detalle    = array(
+                        'funcionario_codigo'                        => $rowMYSQL['funcionario_codigo'],
+                        'funcionario_documento'                     => $rowMYSQL['funcionario_documento'],
+                        'funcionario_completo'                      => $rowMYSQL['funcionario_completo'],
+                        'funcionario_fecha_nacimiento'              => $rowMYSQL['funcionario_fecha_nacimiento'],
+                        'funcionario_fecha_nacimiento_2'            => date("d/m/Y", strtotime($rowMYSQL['funcionario_fecha_nacimiento'])),
+                        'funcionario_particular_direccion'          => $rowMYSQL['funcionario_particular_direccion'],
+                        'funcionario_particular_telefono1_codigo'   => $rowMYSQL['funcionario_particular_telefono1_codigo'],
+                        'funcionario_particular_telefono1_numero'   => $rowMYSQL['funcionario_particular_telefono1_numero'],
+                        'funcionario_email'                         => $rowMYSQL['funcionario_email']
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle = array(
+                        'funcionario_codigo'                        => '',
+                        'funcionario_documento'                     => '',
+                        'funcionario_completo'                      => '',
+                        'funcionario_fecha_nacimiento'              => '',
+                        'funcionario_fecha_nacimiento_2'            => '',
+                        'funcionario_particular_direccion'          => '',
+                        'funcionario_particular_telefono1_codigo'   => '',
+                        'funcionario_particular_telefono1_numero'   => '',
+                        'funcionario_email'                         => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtMSSQL->closeCursor();
+                $stmtMSSQL = null;
+            } catch (PDOException $e) {
                 header("Content-Type: application/json; charset=utf-8");
-                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-            } else {
-                $detalle = array(
-                    'funcionario_codigo'                        => '',
-                    'funcionario_documento'                     => '',
-                    'funcionario_completo'                      => '',
-                    'funcionario_fecha_nacimiento'              => '',
-                    'funcionario_fecha_nacimiento_2'            => '',
-                    'funcionario_particular_direccion'          => '',
-                    'funcionario_particular_telefono1_codigo'   => '',
-                    'funcionario_particular_telefono1_numero'   => '',
-                    'funcionario_email'                         => ''
-                );
-
-                header("Content-Type: application/json; charset=utf-8");
-                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
             }
-
-            $stmtMSSQL->closeCursor();
-            $stmtMSSQL = null;
-        } catch (PDOException $e) {
+        } else {
             header("Content-Type: application/json; charset=utf-8");
-            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
         }
 
         $connMSSQL  = null;
