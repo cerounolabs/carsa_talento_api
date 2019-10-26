@@ -1333,20 +1333,28 @@
         
         if (isset($val01)) {
             $sql00  = "SELECT
-            a.FuCod                                 AS      funcionario_codigo,
-            a.FuCIC                                 AS      funcionario_documento,
-            a.NombC                                 AS      funcionario_completo,
-            CONVERT(date, a.FuFchNac, 23)           AS      funcionario_fecha_nacimiento,
-            a.FuDirPar                              AS      funcionario_particular_direccion,
-            a.FuCodCel1                             AS      funcionario_particular_telefono1_codigo,
-            a.FuCel1                                AS      funcionario_particular_telefono1_numero,
-            a.Fumail                                AS      funcionario_email
+            a.COD_FUNC                      AS          funcionario_codigo,
+            a.USUARIO                       AS          funcionario_usuario,
+            a.NOMBRE_Y_APELLIDO             AS          funcionario_completo,
+            a.NRO_CEDULA                    AS          funcionario_documento,
+            a.FEC_NACIMIENTO                AS          funcionario_fecha_nacimiento,
+            a.EDAD                          AS          funcionario_edad,
+            a.SEXO                          AS          funcionario_sexo,
+            a.ESTADO_CIVIL                  AS          funcionario_estado_civil,
+            a.NACIONALIDAD                  AS          funcionario_nacionalidad,
+            a.CORREO_ELECTRONICO            AS          funcionario_email,
+            a.FECHA_INGRESO                 AS          funcionario_fecha_ingreso,
+            a.GERENCIA                      AS          funcionario_gerencia,
+            a.DEPARTAMENTO                  AS          funcionario_deparmento,
+            a.CARGO                         AS          funcionario_cargo,
+            a.FOTO_TARGET                   AS          funcionario_foto,
+            a.ANTIGUEDAD                    AS          funcionario_antiguedad
 
-            FROM FUNCIONARI a
+            FROM COLABORADOR_BASICOS a
 
-            WHERE a.FuCod = ?
+            WHERE a.COD_FUNC = ?
             
-            ORDER BY a.FuCod";
+            ORDER BY a.COD_FUNC";
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
@@ -1355,15 +1363,22 @@
 
                 while ($rowMSSQL = $stmtMSSQL->fetch()) {
                     $detalle    = array(
-                        'funcionario_codigo'                        => $rowMSSQL['funcionario_codigo'],
-                        'funcionario_documento'                     => $rowMSSQL['funcionario_documento'],
-                        'funcionario_completo'                      => $rowMSSQL['funcionario_completo'],
-                        'funcionario_fecha_nacimiento'              => $rowMSSQL['funcionario_fecha_nacimiento'],
-                        'funcionario_fecha_nacimiento_2'            => date("d/m/Y", strtotime($rowMSSQL['funcionario_fecha_nacimiento'])),
-                        'funcionario_particular_direccion'          => $rowMSSQL['funcionario_particular_direccion'],
-                        'funcionario_particular_telefono1_codigo'   => $rowMSSQL['funcionario_particular_telefono1_codigo'],
-                        'funcionario_particular_telefono1_numero'   => $rowMSSQL['funcionario_particular_telefono1_numero'],
-                        'funcionario_email'                         => $rowMSSQL['funcionario_email']
+                        'funcionario_codigo'                    => $rowMSSQL['funcionario_codigo'],
+                        'funcionario_usuario'                   => strtoupper($rowMSSQL['funcionario_usuario']),
+                        'funcionario_completo'                  => strtoupper($rowMSSQL['funcionario_completo']),
+                        'funcionario_documento'                 => strtoupper($rowMSSQL['funcionario_documento']),
+                        'funcionario_fecha_nacimiento'          => date("d/m/Y", strtotime($rowMSSQL['funcionario_fecha_nacimiento'])),
+                        'funcionario_edad'                      => $rowMSSQL['funcionario_edad'],
+                        'funcionario_sexo'                      => strtoupper($rowMSSQL['funcionario_sexo']),
+                        'funcionario_estado_civil'              => strtoupper($rowMSSQL['funcionario_estado_civil']),
+                        'funcionario_nacionalidad'              => strtoupper($rowMSSQL['funcionario_nacionalidad']),
+                        'funcionario_email'                     => strtolower($rowMSSQL['funcionario_email']),
+                        'funcionario_fecha_ingreso'             => date("d/m/Y", strtotime($rowMSSQL['funcionario_fecha_ingreso'])),
+                        'funcionario_gerencia'                  => strtoupper($rowMSSQL['funcionario_gerencia']),
+                        'funcionario_deparmento'                => strtoupper($rowMSSQL['funcionario_deparmento']),
+                        'funcionario_cargo'                     => strtoupper($rowMSSQL['funcionario_cargo']),
+                        'funcionario_foto'                      => strtolower($rowMSSQL['funcionario_foto']),
+                        'funcionario_antiguedad'                => strtoupper($rowMSSQL['funcionario_antiguedad'])
                     );
 
                     $result[]   = $detalle;
@@ -1374,15 +1389,22 @@
                     $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
                 } else {
                     $detalle = array(
-                        'funcionario_codigo'                        => '',
-                        'funcionario_documento'                     => '',
-                        'funcionario_completo'                      => '',
-                        'funcionario_fecha_nacimiento'              => '',
-                        'funcionario_fecha_nacimiento_2'            => '',
-                        'funcionario_particular_direccion'          => '',
-                        'funcionario_particular_telefono1_codigo'   => '',
-                        'funcionario_particular_telefono1_numero'   => '',
-                        'funcionario_email'                         => ''
+                        'funcionario_codigo'                    => '',
+                        'funcionario_usuario'                   => '',
+                        'funcionario_completo'                  => '',
+                        'funcionario_documento'                 => '',
+                        'funcionario_fecha_nacimiento'          => '',
+                        'funcionario_edad'                      => '',
+                        'funcionario_sexo'                      => '',
+                        'funcionario_estado_civil'              => '',
+                        'funcionario_nacionalidad'              => '',
+                        'funcionario_email'                     => '',
+                        'funcionario_fecha_ingreso'             => '',
+                        'funcionario_gerencia'                  => '',
+                        'funcionario_deparmento'                => '',
+                        'funcionario_cargo'                     => '',
+                        'funcionario_foto'                      => '',
+                        'funcionario_antiguedad'                => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
