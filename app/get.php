@@ -1432,7 +1432,7 @@
 
         $sql00  = "SELECT
         a.AiDept            AS          departamento_codigo,
-        a.AiNomb            AS          departamento_nombre,
+        a.AiNomb            AS          departamento_nombre
 
         FROM FST004 a
         
@@ -1485,7 +1485,7 @@
         if (isset($val01)) {
             $sql00  = "SELECT
             a.AiDept            AS          departamento_codigo,
-            a.AiNomb            AS          departamento_nombre,
+            a.AiNomb            AS          departamento_nombre
 
             FROM FST004 a
 
