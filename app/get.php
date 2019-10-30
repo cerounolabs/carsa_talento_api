@@ -1669,8 +1669,6 @@
         a.ECDsc         AS          estado_civil_nombre
 
         FROM ESTCIV a
-
-        WHERE a.ECCod = ?
         
         ORDER BY a.ECDsc";
 
