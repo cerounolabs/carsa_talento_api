@@ -1769,3 +1769,223 @@
         
         return $json;
     });
+
+    $app->get('/v1/800', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        a.FuDesvCod             AS          motivo_despido_codigo,
+        a.FuDesvDesc            AS          motivo_despido_nombre
+
+        FROM FUMOTDESV a
+
+        WHERE a.FuDesvCod = ?
+        
+        ORDER BY a.FuDesvDesc";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute(); 
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $detalle    = array(
+                    'motivo_despido_codigo'         => $rowMSSQL['motivo_despido_codigo'],
+                    'motivo_despido_nombre'         => strtoupper($rowMSSQL['motivo_despido_nombre'])
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'motivo_despido_codigo'         => '',
+                    'motivo_despido_nombre'         => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMSSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
+
+    $app->get('/v1/800/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01      = $request->getAttribute('codigo');
+        
+        if (isset($val01)) {
+            $sql00  = "SELECT
+            a.FuDesvCod             AS          motivo_despido_codigo,
+            a.FuDesvDesc            AS          motivo_despido_nombre
+
+            FROM FUMOTDESV a
+
+            WHERE a.FuDesvCod = ?
+            
+            ORDER BY a.FuDesvDesc";
+
+            try {
+                $connMSSQL  = getConnectionMSSQL();
+                $stmtMSSQL  = $connMSSQL->prepare($sql00);
+                $stmtMSSQL->execute([$val01]); 
+
+                while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                    $detalle    = array(
+                        'motivo_despido_codigo'         => $rowMSSQL['motivo_despido_codigo'],
+                        'motivo_despido_nombre'         => strtoupper($rowMSSQL['motivo_despido_nombre'])
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle = array(
+                        'motivo_despido_codigo'         => '',
+                        'motivo_despido_nombre'         => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtMSSQL->closeCursor();
+                $stmtMSSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
+
+    $app->get('/v1/900', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        a.RRHH231ID             AS          hobbies_codigo,
+        a.RRHH231DSC            AS          hobbies_nombre
+
+        FROM RRHH231 a
+        
+        ORDER BY a.RRHH231ID";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute(); 
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $detalle    = array(
+                    'hobbies_codigo'            => $rowMSSQL['hobbies_codigo'],
+                    'hobbies_nombre'            => strtoupper($rowMSSQL['hobbies_nombre'])
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'hobbies_codigo'            => '',
+                    'hobbies_nombre'            => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMSSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
+
+    $app->get('/v1/900/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01      = $request->getAttribute('codigo');
+        
+        if (isset($val01)) {
+            $sql00  = "SELECT
+            a.RRHH231ID             AS          hobbies_codigo,
+            a.RRHH231DSC            AS          hobbies_nombre
+
+            FROM RRHH231 a
+
+            WHERE a.RRHH231ID = ?
+            
+            ORDER BY a.RRHH231ID";
+
+            try {
+                $connMSSQL  = getConnectionMSSQL();
+                $stmtMSSQL  = $connMSSQL->prepare($sql00);
+                $stmtMSSQL->execute([$val01]); 
+
+                while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                    $detalle    = array(
+                        'hobbies_codigo'            => $rowMSSQL['hobbies_codigo'],
+                        'hobbies_nombre'            => strtoupper($rowMSSQL['hobbies_nombre'])
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle = array(
+                        'hobbies_codigo'            => '',
+                        'hobbies_nombre'            => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtMSSQL->closeCursor();
+                $stmtMSSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
