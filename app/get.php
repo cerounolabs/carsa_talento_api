@@ -1997,7 +1997,7 @@
 
         FROM FGPARAM a
 
-        WHERE a.FGPARAMDES = 'Parametros de Parentezco. TH' AND a.FGPARAMNUM = ?
+        WHERE a.FGPARAMDES = 'Parametros de Parentezco. TH'
         
         ORDER BY a.FGPARAMNUM";
 
