@@ -2100,3 +2100,118 @@
         
         return $json;
     });
+
+    $app->get('/v1/1100', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        a.CjCar         AS          cargo_codigo,
+        a.CjNom         AS          cargo_nombre,
+        a.CjAbr         AS          cargo_abreviado
+
+        FROM FST053 a
+        
+        ORDER BY a.CjNom";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute(); 
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $detalle    = array(
+                    'cargo_codigo'              => $rowMSSQL['cargo_codigo'],
+                    'cargo_nombre'              => strtoupper($rowMSSQL['cargo_nombre']),
+                    'cargo_abreviado'           => strtoupper($rowMSSQL['cargo_abreviado'])
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'cargo_codigo'              => '',
+                    'cargo_nombre'              => '',
+                    'cargo_abreviado'           => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMSSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
+
+    $app->get('/v1/1100/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01      = $request->getAttribute('codigo');
+        
+        if (isset($val01)) {
+            $sql00  = "SELECT
+            a.CjCar         AS          cargo_codigo,
+            a.CjNom         AS          cargo_nombre,
+            a.CjAbr         AS          cargo_abreviado
+
+            FROM FST053 a
+
+            WHERE a.CjCar = ?
+            
+            ORDER BY a.CjNom";
+
+            try {
+                $connMSSQL  = getConnectionMSSQL();
+                $stmtMSSQL  = $connMSSQL->prepare($sql00);
+                $stmtMSSQL->execute([$val01]); 
+
+                while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                    $detalle    = array(
+                        'cargo_codigo'              => $rowMSSQL['cargo_codigo'],
+                        'cargo_nombre'              => strtoupper($rowMSSQL['cargo_nombre']),
+                        'cargo_abreviado'           => strtoupper($rowMSSQL['cargo_abreviado'])
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle = array(
+                        'cargo_codigo'              => '',
+                        'cargo_nombre'              => '',
+                        'cargo_abreviado'           => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtMSSQL->closeCursor();
+                $stmtMSSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
