@@ -1778,6 +1778,8 @@
         a.FuDesvDesc            AS          motivo_despido_nombre
 
         FROM FUMOTDESV a
+
+        WHERE a.FuDesvDesc IS NOT NULL
         
         ORDER BY a.FuDesvDesc";
 
@@ -1832,7 +1834,7 @@
 
             FROM FUMOTDESV a
 
-            WHERE a.FuDesvCod = ?
+            WHERE a.FuDesvDesc IS NOT NULL AND a.FuDesvCod = ?
             
             ORDER BY a.FuDesvDesc";
 
