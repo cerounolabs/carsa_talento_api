@@ -531,7 +531,7 @@
         $FUNFICEST  = 'P';
         $FUNFICTDC  = 15;
         $FUNFICTSC  = $val07;
-        $FUNFICCFU  = 0;
+        $FUNFICCFU  = $val00;
         $FUNFICNOM  = trim($val01).' '.trim($val02);
         $FUNFICAPE  = trim($val03).' '.trim($val04);
         $FUNFICDOC  = trim($val05);
