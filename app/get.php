@@ -1356,7 +1356,7 @@
         require __DIR__.'/../src/connect.php';
 
         $sql00  = "SELECT
-        MAX(a.FUNFICCFU)            AS      funcionario_codigo_sistema,
+        MAX(a.FUNFICCFU)            AS      funcionario_codigo_sistema
 
         FROM FUNFIC a
         
