@@ -480,3 +480,93 @@
         
         return $json;
     });
+
+    $app->post('/v1/1200/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val00      = $request->getAttribute('codigo');
+        $val01      = $request->getParsedBody()['datos_personales_nombre_1'];
+        $val02      = $request->getParsedBody()['datos_personales_nombre_2'];
+        $val03      = $request->getParsedBody()['datos_personales_apellido_1'];
+        $val04      = $request->getParsedBody()['datos_personales_apellido_2'];
+        $val05      = $request->getParsedBody()['datos_personales_documento'];
+        $val06      = $request->getParsedBody()['datos_personales_estado_civil'];
+        $val07      = $request->getParsedBody()['datos_personales_sexo'];
+        $val08      = $request->getParsedBody()['datos_personales_fecha_nacimiento'];
+        $val09      = $request->getParsedBody()['datos_personales_cantidad_hijo'];
+        $val10      = $request->getParsedBody()['auditoria_usuario'];
+        $val11      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $val12      = $request->getParsedBody()['auditoria_ip'];
+
+        switch ($val06) {
+            case 1:
+                $FUNFICECC = 7;
+                break;
+
+            case 2:
+                $FUNFICECC = 8;
+                break;
+
+            case 3:
+                $FUNFICECC = 9;
+                break;
+
+            case 4:
+                $FUNFICECC = 10;
+                break;
+
+            case 5:
+                $FUNFICECC = 11;
+                break;
+
+            case 6:
+                $FUNFICECC = 12;
+                break;
+            
+            default:
+                $FUNFICECC = 14;
+                break;
+        }
+
+        $FUNFICEST  = 'P';
+        $FUNFICTDC  = 15;
+        $FUNFICTSC  = $val07;
+//        $FUNFICECC  = '';
+        $FUNFICCFU  = 0;
+        $FUNFICNOM  = trim($val01).' '.trim($val02);
+        $FUNFICAPE  = trim($val03).' '.trim($val04);
+        $FUNFICDOC  = trim($val05);
+        $FUNFICFHA  = $val08;
+        $FUNFICEMA  = '';
+        $FUNFICFOT  = 'assets/images/users/default.png';
+        $FUNFICOBS  = '';
+        $FUNFICAUS  = $val10;
+        $FUNFICAFH  = $val11;
+        $FUNFICAIP  = $val12;
+
+        if (isset($val01) && isset($val03) && isset($val05) && isset($val08)) {
+            $sql00  = "INSERT INTO FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICCFU, FUNFICNOM, FUNFICAPE, FUNFICDOC, FUNFICFHA, FUNFICEMA, FUNFICFOT, FUNFICOBS, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            try {
+                $connMYSQL  = getConnectionMYSQL();
+                $stmtMYSQL  = $connMYSQL->prepare($sql00);
+                $stmtMYSQL->execute([$FUNFICEST, $FUNFICTDC, $FUNFICTSC, $FUNFICECC, $FUNFICCFU, $FUNFICNOM, $FUNFICAPE, $FUNFICDOC, $FUNFICFHA, $FUNFICEMA, $FUNFICFOT, $FUNFICOBS, $FUNFICAUS, $FUNFICAFH, $FUNFICAIP]); 
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtMYSQL->closeCursor();
+                $stmtMYSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
