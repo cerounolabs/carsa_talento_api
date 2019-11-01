@@ -1352,6 +1352,53 @@
         return $json;
     });
 
+    $app->get('/v1/200/nuevo', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        MAX(a.FUNFICCFU)            AS      funcionario_codigo_sistema,
+
+        FROM FUNFIC a
+        
+        ORDER BY a.FUNFICCFU";
+
+        try {
+            $connMYSQL  = getConnectionMYSQL();
+            $stmtMYSQL  = $connMYSQL->prepare($sql00);
+            $stmtMYSQL->execute(); 
+
+            while ($rowMYSQL = $stmtMYSQL->fetch()) {
+                $detalle    = array(
+                    'funcionario_codigo_sistema'                => $rowMYSQL['funcionario_codigo_sistema'] + 1
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'funcionario_codigo_sistema'                => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMYSQL->closeCursor();
+            $stmtMYSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
+
     $app->get('/v1/300/participacion', function($request) {
         require __DIR__.'/../src/connect.php';
 
