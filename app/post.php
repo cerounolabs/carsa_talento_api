@@ -532,14 +532,14 @@
         $FUNFICTDC  = 15;
         $FUNFICTSC  = $val07;
         $FUNFICCFU  = $val00;
-        $FUNFICNOM  = trim($val01).' '.trim($val02);
-        $FUNFICAPE  = trim($val03).' '.trim($val04);
-        $FUNFICDOC  = trim($val05);
+        $FUNFICNOM  = trim(strtoupper($val01)).' '.trim(strtoupper($val02));
+        $FUNFICAPE  = trim(strtoupper($val03)).' '.trim(strtoupper($val04));
+        $FUNFICDOC  = trim(strtoupper($val05));
         $FUNFICFHA  = $val08;
         $FUNFICEMA  = '';
         $FUNFICFOT  = 'assets/images/users/default.png';
         $FUNFICOBS  = '';
-        $FUNFICAUS  = $val10;
+        $FUNFICAUS  = trim(strtoupper($val10));
         $FUNFICAFH  = $val11;
         $FUNFICAIP  = $val12;
 
@@ -550,6 +550,60 @@
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
                 $stmtMYSQL->execute([$FUNFICEST, $FUNFICTDC, $FUNFICTSC, $FUNFICECC, $FUNFICCFU, $FUNFICNOM, $FUNFICAPE, $FUNFICDOC, $FUNFICFHA, $FUNFICEMA, $FUNFICFOT, $FUNFICOBS, $FUNFICAUS, $FUNFICAFH, $FUNFICAIP]); 
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtMYSQL->closeCursor();
+                $stmtMYSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
+
+    $app->post('/v1/1300/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val00      = $request->getAttribute('codigo');
+        $val01      = $request->getParsedBody()['datos_conyuge_nombre_1'];
+        $val02      = $request->getParsedBody()['datos_conyuge_nombre_2'];
+        $val03      = $request->getParsedBody()['datos_conyuge_apellido_1'];
+        $val04      = $request->getParsedBody()['datos_conyuge_apellido_2'];
+        $val05      = $request->getParsedBody()['datos_conyuge_sexo'];
+        $val06      = $request->getParsedBody()['datos_conyuge_fecha_nacimiento'];
+        $val07      = $request->getParsedBody()['datos_conyuge_empresa'];
+        $val08      = $request->getParsedBody()['auditoria_usuario'];
+        $val09      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $val10      = $request->getParsedBody()['auditoria_ip'];
+
+        $FUNCONEST  = 'A';
+        $FUNCONTSC  = $val05;
+        $FUNCONFUC  = $val00;
+        $FUNCONNOM  = trim(strtoupper($val01)).' '.trim(strtoupper($val02));
+        $FUNCONAPE  = trim(strtoupper($val03)).' '.trim(strtoupper($val04));
+        $FUNCONFHA  = $val06;
+        $FUNCONEMP  = trim(strtoupper($val07));
+        $FUNCONOBS  = '';
+        $FUNCONAUS  = trim(strtoupper($val08));
+        $FUNCONAFH  = $val09;
+        $FUNCONAIP  = $val10;
+
+        if (isset($val01) && isset($val03) && isset($val05)) {
+            $sql00  = "INSERT INTO FUNCON (FUNCONEST, FUNCONTSC, FUNCONFUC, FUNCONNOM, FUNCONAPE, FUNCONFHA, FUNCONEMP, FUNCONOBS, FUNCONAUS, FUNCONAFH, FUNCONAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            try {
+                $connMYSQL  = getConnectionMYSQL();
+                $stmtMYSQL  = $connMYSQL->prepare($sql00);
+                $stmtMYSQL->execute([$FUNCONEST, $FUNCONTSC, $FUNCONFUC, $FUNCONNOM, $FUNCONAPE, $FUNCONFHA, $FUNCONEMP, $FUNCONOBS, $FUNCONAUS, $FUNCONAFH, $FUNCONAIP]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
