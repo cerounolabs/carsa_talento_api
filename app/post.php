@@ -820,7 +820,7 @@
         $FUNRPPAIP  = $aud03;
         
         if (isset($val00) && isset($val01)) {
-            $sql00  = "INSERT INTO FUNTRA (FUNRPPEST, FUNRPPTCC, FUNRPPTTC, FUNRPPFUC, FUNRPPNOM, FUNRPPTCN, FUNRPPTTN, FUNRPPOBS, FUNRPPAUS, FUNRPPAFH, FUNRPPAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO FUNRPP (FUNRPPEST, FUNRPPTCC, FUNRPPTTC, FUNRPPFUC, FUNRPPNOM, FUNRPPTCN, FUNRPPTTN, FUNRPPOBS, FUNRPPAUS, FUNRPPAFH, FUNRPPAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             try {
                 $connMYSQL  = getConnectionMYSQL();
