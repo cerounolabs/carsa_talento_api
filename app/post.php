@@ -721,3 +721,73 @@
         
         return $json;
     });
+
+    $app->post('/v1/1600/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val00      = $request->getAttribute('codigo');
+        $val01      = $request->getParsedBody()['datos_particulares_vivienda'];
+        $val02      = $request->getParsedBody()['datos_particulares_departamento'];
+        $val03      = $request->getParsedBody()['datos_particulares_ciudad'];
+        $val04      = $request->getParsedBody()['datos_particulares_barrio'];
+        $val05      = $request->getParsedBody()['datos_particulares_nro_casa'];
+        $val06      = $request->getParsedBody()['datos_particulares_calle_1'];
+        $val07      = $request->getParsedBody()['datos_particulares_calle_2'];
+        $val08      = $request->getParsedBody()['datos_particulares_calle_3'];
+        $val09      = $request->getParsedBody()['datos_particulares_ubicacion'];
+        $val10      = $request->getParsedBody()['datos_particulares_celular_1'];
+        $val11      = $request->getParsedBody()['datos_particulares_celular_2'];
+        $val12      = $request->getParsedBody()['datos_particulares_telefono'];
+        $val13      = $request->getParsedBody()['datos_particulares_email'];
+        $val14      = $request->getParsedBody()['datos_particulares_observacion'];
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        $FUNPAREST  = 'A';
+        $FUNPARTVC  = $val01;
+        $FUNPARFUC  = $val00;
+        $FUNPARDEC  = $val02;
+        $FUNPARCIC  = $val03;
+        $FUNPARBAR  = trim(strtoupper($val04));
+        $FUNPARCAS  = trim(strtoupper($val05));
+        $FUNPARCA1  = trim(strtoupper($val06));
+        $FUNPARCA2  = trim(strtoupper($val07));
+        $FUNPARCA3  = trim(strtoupper($val08));
+        $FUNPARUBI  = trim(strtoupper($val09));
+        $FUNPARTE1  = trim(strtoupper($val12));
+        $FUNPARCE1  = trim(strtoupper($val10));
+        $FUNPARCE2  = trim(strtoupper($val11));
+        $FUNPAREMA  = trim(strtolower($val13));
+        $FUNPAROBS  = trim(strtoupper($val14));
+        $FUNPARAUS  = trim(strtoupper($aud01));
+        $FUNPARAFH  = $aud02;
+        $FUNPARAIP  = trim(strtoupper($aud03));
+        
+        if (isset($val00) && isset($val01)) {
+            $sql00  = "INSERT INTO FUNPAR (FUNPAREST, FUNPARTVC, FUNPARFUC, FUNPARDEC, FUNPARCIC, FUNPARBAR, FUNPARCAS, FUNPARCA1, FUNPARCA2, FUNPARCA3, FUNPARUBI, FUNPARTE1, FUNPARCE1, FUNPARCE2, FUNPAREMA, FUNPAROBS, FUNPARAUS, FUNPARAFH, FUNPARAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            try {
+                $connMYSQL  = getConnectionMYSQL();
+                $stmtMYSQL  = $connMYSQL->prepare($sql00);
+                $stmtMYSQL->execute([$FUNPAREST, $FUNPARTVC, $FUNPARFUC, $FUNPARDEC, $FUNPARCIC, $FUNPARBAR, $FUNPARCAS, $FUNPARCA1, $FUNPARCA2, $FUNPARCA3, $FUNPARUBI, $FUNPARTE1, $FUNPARCE1, $FUNPARCE2, $FUNPAREMA, $FUNPAROBS, $FUNPARAUS, $FUNPARAFH, $FUNPARAIP]); 
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtMYSQL->closeCursor();
+                $stmtMYSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
