@@ -923,13 +923,13 @@
         $aud03      = $request->getParsedBody()['auditoria_ip'];
 
         $FUNFAMEST  = 'A';
-        $FUNFAMTPC  = trim(strtoupper($val03));
-        $FUNFAMFUC  = $val05;
-        $FUNFAMNOM  = $val07;
-        $FUNFAMEMP  = $val00;
-        $FUNFAMOCU  = trim(strtoupper($val06));
-        $FUNFAMTEL  = trim(strtoupper($val08));
-        $FUNFAMOBS  = $val01;
+        $FUNFAMTPC  = $val02;
+        $FUNFAMFUC  = $val00;
+        $FUNFAMNOM  = trim(strtoupper($val01));
+        $FUNFAMEMP  = trim(strtoupper($val04));
+        $FUNFAMOCU  = trim(strtoupper($val03));
+        $FUNFAMTEL  = trim(strtoupper($val05));
+        $FUNFAMOBS  = trim(strtoupper($val06));
 
         $FUNFAMAUS  = trim(strtoupper($aud01));
         $FUNFAMAFH  = $aud02;
@@ -961,3 +961,4 @@
         
         return $json;
     });
+    
