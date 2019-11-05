@@ -845,3 +845,64 @@
         
         return $json;
     });
+
+    $app->post('/v1/1800/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val00      = $request->getAttribute('codigo');
+        $val01      = $request->getParsedBody()['datos_otros_cantidad_depende'];
+        $val02      = $request->getParsedBody()['datos_otros_cantidad_contribuyen'];
+        $val03      = $request->getParsedBody()['datos_otros_movilidad'];
+        $val04      = $request->getParsedBody()['datos_otros_tiempo_traslado'];
+        $val05      = $request->getParsedBody()['datos_otros_hobbies'];
+        $val06      = $request->getParsedBody()['datos_otros_hobbies_especificar'];
+        $val07      = $request->getParsedBody()['datos_otros_proyectos'];
+        $val08      = $request->getParsedBody()['datos_otros_proyectos_especificar'];
+        $val09      = $request->getParsedBody()['datos_otros_observacion'];
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        $FUNOAPEST  = 'A';
+        $FUNOAPTMC  = trim(strtoupper($val03));
+        $FUNOAPTHC  = $val05;
+        $FUNOAPTPC  = $val07;
+        $FUNOAPFUC  = $val00;
+        $FUNOAPTHE  = trim(strtoupper($val06));
+        $FUNOAPTPE  = trim(strtoupper($val08));
+        $FUNOAPCAD  = $val01;
+        $FUNOAPCAC  = $val02;
+        $FUNOAPTDT  = trim(strtoupper($val04));
+        $FUNOAPOBS  = trim(strtoupper($val09));
+
+        $FUNOAPAUS  = trim(strtoupper($aud01));
+        $FUNOAPAFH  = $aud02;
+        $FUNOAPAIP  = trim(strtoupper($aud03));
+        
+        if (isset($val00) && isset($val01)) {
+            $sql00  = "INSERT INTO FUNOAP (FUNOAPEST, FUNOAPTMC, FUNOAPTHC, FUNOAPTPC, FUNOAPFUC, FUNOAPTHE, FUNOAPTPE, FUNOAPCAD, FUNOAPCAC, FUNOAPTDT, FUNOAPOBS, FUNOAPAUS, FUNOAPAFH, FUNOAPAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            try {
+                $connMYSQL  = getConnectionMYSQL();
+                $stmtMYSQL  = $connMYSQL->prepare($sql00);
+                $stmtMYSQL->execute([$FUNOAPEST, $FUNOAPTMC, $FUNOAPTHC, $FUNOAPTPC, $FUNOAPFUC, $FUNOAPTHE, $FUNOAPTPE, $FUNOAPCAD, $FUNOAPCAC, $FUNOAPTDT, $FUNOAPOBS, $FUNOAPAUS, $FUNOAPAFH, $FUNOAPAIP]); 
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtMYSQL->closeCursor();
+                $stmtMYSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
