@@ -906,3 +906,58 @@
         
         return $json;
     });
+
+    $app->post('/v1/1900/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val00      = $request->getAttribute('codigo');
+        $val01      = $request->getParsedBody()['datos_familiares_persona_nombre'];
+        $val02      = $request->getParsedBody()['datos_familiares_persona_parentezco'];
+        $val03      = $request->getParsedBody()['datos_familiares_persona_ocupacion'];
+        $val04      = $request->getParsedBody()['datos_familiares_persona_empresa'];
+        $val05      = $request->getParsedBody()['datos_familiares_persona_telefono'];
+        $val06      = $request->getParsedBody()['datos_familiares_persona_observacion'];
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        $FUNFAMEST  = 'A';
+        $FUNFAMTPC  = trim(strtoupper($val03));
+        $FUNFAMFUC  = $val05;
+        $FUNFAMNOM  = $val07;
+        $FUNFAMEMP  = $val00;
+        $FUNFAMOCU  = trim(strtoupper($val06));
+        $FUNFAMTEL  = trim(strtoupper($val08));
+        $FUNFAMOBS  = $val01;
+
+        $FUNFAMAUS  = trim(strtoupper($aud01));
+        $FUNFAMAFH  = $aud02;
+        $FUNFAMAIP  = trim(strtoupper($aud03));
+        
+        if (isset($val00) && isset($val01)) {
+            $sql00  = "INSERT INTO FUNFAM (FUNFAMEST, FUNFAMTPC, FUNFAMFUC, FUNFAMNOM, FUNFAMEMP, FUNFAMOCU, FUNFAMTEL, FUNFAMOBS, FUNFAMAUS, FUNFAMAFH, FUNFAMAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            try {
+                $connMYSQL  = getConnectionMYSQL();
+                $stmtMYSQL  = $connMYSQL->prepare($sql00);
+                $stmtMYSQL->execute([$FUNFAMEST, $FUNFAMTPC, $FUNFAMFUC, $FUNFAMNOM, $FUNFAMEMP, $FUNFAMOCU, $FUNFAMTEL, $FUNFAMOBS, $FUNFAMAUS, $FUNFAMAFH, $FUNFAMAIP]); 
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtMYSQL->closeCursor();
+                $stmtMYSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
