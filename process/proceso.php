@@ -94,13 +94,23 @@
         $connMYSQL  = null;
     }
 
+    echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
     echo "++++++++++++++++ SISTEMA CORPORATIVO => SISTEMA TALENTO ++++++++++++++++";
     echo "\n";
+    echo "INICIO setDepartamento() => ".date('Y-m-d H:i:s');
+    echo "\n";
     setDepartamento();
+    echo "\n";
+    echo "FIN setDepartamento() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    echo "INICIO setCiudad() => ".date('Y-m-d H:i:s');
     echo "\n";
     setCiudad();
     echo "\n";
+    echo "FIN setCiudad() => ".date('Y-m-d H:i:s');
+    echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
+    echo "\n";
 ?>
