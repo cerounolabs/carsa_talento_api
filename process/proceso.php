@@ -4,7 +4,7 @@
 
         $sql00  = "SELECT a.AiDept AS departamento_codigo, a.AiNomb AS departamento_nombre FROM FST004 a ORDER BY a.AiNomb";
         $sql01  = "SELECT * FROM LOCDEP WHERE LOCDEPEQU = ?";
-        $sql02  = "INSERT INTO LOCDEP(LOCDEPEST, LOCDEPNOM, LOCDEPEQU, LOCDEPOBS, LOCDEPAUS, LOCDEPAFH, LOCDEPAIP) VALUES ('A', ?, ?, '', 'MIGRACION', NOW(), '192.168.16.92')";
+        $sql02  = "INSERT INTO LOCDEP (LOCDEPEST, LOCDEPNOM, LOCDEPEQU, LOCDEPOBS, LOCDEPAUS, LOCDEPAFH, LOCDEPAIP) VALUES ('A', ?, ?, '', 'MIGRACION', NOW(), '192.168.16.92')";
 
         try {
             $connMSSQL  = getConnectionMSSQL();
@@ -17,12 +17,15 @@
             $stmtMYSQL2 = $connMYSQL->prepare($sql02);
 
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
-                $stmtMYSQL1->execute([$rowMSSQL['departamento_codigo']]);
+                $codDepto = $rowMSSQL['departamento_codigo'];
+                $nomDepto = trim($rowMSSQL['departamento_nombre']);
 
-                $rowMSYQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                $stmtMYSQL1->execute([$codDepto]);
+
+                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
                     
-                if (!$rowMSYQL1){
-                    $stmtMYSQL2->execute([$rowMSSQL['departamento_nombre'], $rowMSSQL['departamento_codigo']]);
+                if (!$rowMYSQL1){
+                    $stmtMYSQL2->execute([$nomDepto, $codDepto]);
                 }
             }
 
@@ -59,12 +62,16 @@
             $stmtMYSQL2 = $connMYSQL->prepare($sql02);
 
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
-                $stmtMYSQL1->execute([$rowMSSQL['ciudad_codigo'], $rowMSSQL['departamento_codigo']]);
+                $codDepto   = $rowMSSQL['departamento_codigo'];
+                $codCiudad  = $rowMSSQL['ciudad_codigo'];
+                $nomCiudad  = $rowMSSQL['ciudad_nombre'];
+
+                $stmtMYSQL1->execute([$codCiudad, $codDepto]);
 
                 $rowMSYQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
                     
                 if (!$rowMSYQL1){
-                    $stmtMYSQL2->execute([$rowMSSQL['departamento_codigo'], $rowMSSQL['ciudad_nombre'], $rowMSSQL['ciudad_codigo']]);
+                    $stmtMYSQL2->execute([$codDepto, $nomCiudad, $codCiudad]);
                 }
             }
 
@@ -86,7 +93,7 @@
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
     echo "++++++++++++++++ SISTEMA CORPORATIVO => SISTEMA TALENTO ++++++++++++++++";
-    
+    echo "\n";
     setDepartamento();
     echo "\n";
     setCiudad();
