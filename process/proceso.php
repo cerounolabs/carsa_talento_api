@@ -19,7 +19,9 @@
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
                 $codDepto = $rowMSSQL['departamento_codigo'];
                 $nomDepto = trim($rowMSSQL['departamento_nombre']);
-
+                echo "codDepto => ".$codDepto;
+                echo "nomDepto => ".$nomDepto;
+                 
                 $stmtMYSQL1->execute([$codDepto]);
 
                 $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
