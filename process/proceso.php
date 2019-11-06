@@ -1,16 +1,16 @@
 <?php
+    require __DIR__.'/../src/connect.php';
+    
     function setDepartamento(){
-        require __DIR__.'/../src/connect.php';
-
         $LOCDEPEST  = 'A';
         $LOCDEPOBS  = '';
         $LOCDEPAUS  = 'MIGRACION';
         $LOCDEPAFH  = date('Y-m-d H:i:s');
         $LOCDEPAIP  = '192.168.16.92';
 
-        $sql00  = "SELECT a.AiDept AS departamento_codigo, a.AiNomb AS departamento_nombre FROM FST004 a ORDER BY a.AiNomb";
-        $sql01  = "SELECT * FROM LOCDEP WHERE LOCDEPEQU = ?";
-        $sql02  = "INSERT INTO LOCDEP (LOCDEPEST, LOCDEPNOM, LOCDEPEQU, LOCDEPOBS, LOCDEPAUS, LOCDEPAFH, LOCDEPAIP) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql00      = "SELECT a.AiDept AS departamento_codigo, a.AiNomb AS departamento_nombre FROM FST004 a ORDER BY a.AiNomb";
+        $sql01      = "SELECT * FROM LOCDEP WHERE LOCDEPEQU = ?";
+        $sql02      = "INSERT INTO LOCDEP (LOCDEPEST, LOCDEPNOM, LOCDEPEQU, LOCDEPOBS, LOCDEPAUS, LOCDEPAFH, LOCDEPAIP) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             $connMSSQL  = getConnectionMSSQL();
@@ -39,7 +39,7 @@
             $stmtMYSQL1->closeCursor();
             $stmtMYSQL2->closeCursor();
 
-            $stmtMSSQL = null;
+            $stmtMSSQL  = null;
             $stmtMYSQL1 = null;
             $stmtMYSQL2 = null;
         } catch (PDOException $e) {
@@ -51,8 +51,6 @@
     }
 
     function setCiudad(){
-        require __DIR__.'/../src/connect.php';
-
         $sql00  = "SELECT a.AiDept AS departamento_codigo, a.ApCiud AS ciudad_codigo, a.ApNomb AS ciudad_nombre FROM FST003 a ORDER BY a.AiDept, a.ApNomb";
         $sql01  = "SELECT * FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?";
         $sql02  = "INSERT INTO LOCCIU(LOCCIUEST, LOCCIUDEC, LOCCIUNOM, LOCCIUEQU, LOCCIUOBS, LOCCIUAUS, LOCCIUAFH, LOCCIUAIP) VALUES ('A', (SELECT LOCDEPCOD FROM LOCDEP WHERE LOCDEPEQU = ?), ?, ?, '', 'MIGRACION', NOW(), '192.168.16.92')";
@@ -89,7 +87,7 @@
             $stmtMYSQL1 = null;
             $stmtMYSQL2 = null;
         } catch (PDOException $e) {
-            echo 'Error setDepartamento(): '.$e;
+            echo 'Error setCiudad(): '.$e;
         }
 
         $connMSSQL  = null;
