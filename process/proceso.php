@@ -2,9 +2,15 @@
     function setDepartamento(){
         require __DIR__.'/../src/connect.php';
 
+        $LOCDEPEST  = 'A';
+        $LOCDEPOBS  = '';
+        $LOCDEPAUS  = 'MIGRACION';
+        $LOCDEPAFH  = date('Y-m-d H:i:s');
+        $LOCDEPAIP  = '192.168.16.92';
+
         $sql00  = "SELECT a.AiDept AS departamento_codigo, a.AiNomb AS departamento_nombre FROM FST004 a ORDER BY a.AiNomb";
         $sql01  = "SELECT * FROM LOCDEP WHERE LOCDEPEQU = ?";
-        $sql02  = "INSERT INTO LOCDEP (LOCDEPEST, LOCDEPNOM, LOCDEPEQU, LOCDEPOBS, LOCDEPAUS, LOCDEPAFH, LOCDEPAIP) VALUES ('A', ?, ?, '', 'MIGRACION', NOW(), '192.168.16.92')";
+        $sql02  = "INSERT INTO LOCDEP (LOCDEPEST, LOCDEPNOM, LOCDEPEQU, LOCDEPOBS, LOCDEPAUS, LOCDEPAFH, LOCDEPAIP) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             $connMSSQL  = getConnectionMSSQL();
@@ -19,15 +25,13 @@
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
                 $codDepto = $rowMSSQL['departamento_codigo'];
                 $nomDepto = trim($rowMSSQL['departamento_nombre']);
-                echo "codDepto => ".$codDepto;
-                echo "nomDepto => ".$nomDepto;
-                 
+
                 $stmtMYSQL1->execute([$codDepto]);
 
                 $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
                     
                 if (!$rowMYSQL1){
-                    $stmtMYSQL2->execute([$nomDepto, $codDepto]);
+                    $stmtMYSQL2->execute([$LOCDEPEST, $nomDepto, $codDepto, $LOCDEPOBS, $LOCDEPAUS, $LOCDEPAFH, $LOCDEPAIP]);
                 }
             }
 
