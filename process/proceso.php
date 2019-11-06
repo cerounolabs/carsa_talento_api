@@ -23,15 +23,15 @@
             $stmtMYSQL2 = $connMYSQL->prepare($sql02);
 
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
-                $codDepto = $rowMSSQL['departamento_codigo'];
-                $nomDepto = trim($rowMSSQL['departamento_nombre']);
+                $LOCDEPEQU = $rowMSSQL['departamento_codigo'];
+                $LOCDEPNOM = trim($rowMSSQL['departamento_nombre']);
 
-                $stmtMYSQL1->execute([$codDepto]);
+                $stmtMYSQL1->execute([$LOCDEPEQU]);
 
                 $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
                     
                 if (!$rowMYSQL1){
-                    $stmtMYSQL2->execute([$LOCDEPEST, $nomDepto, $codDepto, $LOCDEPOBS, $LOCDEPAUS, $LOCDEPAFH, $LOCDEPAIP]);
+                    $stmtMYSQL2->execute([$LOCDEPEST, $LOCDEPNOM, $LOCDEPEQU, $LOCDEPOBS, $LOCDEPAUS, $LOCDEPAFH, $LOCDEPAIP]);
                 }
             }
 
