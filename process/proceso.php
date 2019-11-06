@@ -95,7 +95,7 @@
     }
 
     function setEstadoCivil(){
-        $DOMFICEST  = 'A';
+        $DOMFICEST  = 'H';
         $DOMFICNOM  = '';
         $DOMFICEQU  = '';
         $DOMFICVAL  = 'ESTADOCIVIL';
@@ -147,7 +147,7 @@
     }
 
     function setMotivoDespido(){
-        $DOMFICEST  = 'A';
+        $DOMFICEST  = 'H';
         $DOMFICNOM  = '';
         $DOMFICEQU  = '';
         $DOMFICVAL  = 'MOTIVOSALIDA';
@@ -199,7 +199,7 @@
     }
 
     function setHobbies(){
-        $DOMFICEST  = 'A';
+        $DOMFICEST  = 'H';
         $DOMFICNOM  = '';
         $DOMFICEQU  = '';
         $DOMFICVAL  = 'HOBBIES';
@@ -251,7 +251,7 @@
     }
 
     function setParentezco(){
-        $DOMFICEST  = 'A';
+        $DOMFICEST  = 'H';
         $DOMFICNOM  = '';
         $DOMFICEQU  = '';
         $DOMFICVAL  = 'PARENTESCO';
@@ -303,7 +303,7 @@
     }
 
     function setCargo(){
-        $DOMFICEST  = 'A';
+        $DOMFICEST  = 'H';
         $DOMFICNOM  = '';
         $DOMFICEQU  = '';
         $DOMFICVAL  = 'CARGOOCUPADO';
