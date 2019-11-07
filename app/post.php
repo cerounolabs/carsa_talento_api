@@ -498,39 +498,10 @@
         $val11      = $request->getParsedBody()['auditoria_fecha_hora'];
         $val12      = $request->getParsedBody()['auditoria_ip'];
 
-        switch ($val06) {
-            case 1:
-                $FUNFICECC = 7;
-                break;
-
-            case 2:
-                $FUNFICECC = 8;
-                break;
-
-            case 3:
-                $FUNFICECC = 9;
-                break;
-
-            case 4:
-                $FUNFICECC = 10;
-                break;
-
-            case 5:
-                $FUNFICECC = 11;
-                break;
-
-            case 6:
-                $FUNFICECC = 12;
-                break;
-            
-            default:
-                $FUNFICECC = 14;
-                break;
-        }
-
         $FUNFICEST  = 'P';
         $FUNFICTDC  = 15;
         $FUNFICTSC  = $val07;
+        $FUNFICECC  = $val06;
         $FUNFICCFU  = $val00;
         $FUNFICNOM  = trim(strtoupper($val01)).' '.trim(strtoupper($val02));
         $FUNFICAPE  = trim(strtoupper($val03)).' '.trim(strtoupper($val04));
@@ -544,8 +515,8 @@
         $FUNFICAIP  = $val12;
 
         if (isset($val01) && isset($val03) && isset($val05) && isset($val08)) {
-            $sql00  = "INSERT INTO FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICCFU, FUNFICNOM, FUNFICAPE, FUNFICDOC, FUNFICFHA, FUNFICEMA, FUNFICFOT, FUNFICOBS, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            
+            $sql00  = "INSERT INTO FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICCFU, FUNFICNOM, FUNFICAPE, FUNFICDOC, FUNFICFHA, FUNFICEMA, FUNFICFOT, FUNFICOBS, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, ?, ?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'ESTADOCIVIL' AND DOMFICEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
@@ -650,7 +621,7 @@
         $FUNTRAAIP  = $val08;
         
         if (isset($val00) && isset($val01)) {
-            $sql00  = "INSERT INTO FUNTRA (FUNTRAEST, FUNTRATCC, FUNTRAMSC, FUNTRAFUC, FUNTRAEMP, FUNTRAFDE, FUNTRAFHA, FUNTRAOBS, FUNTRAAUS, FUNTRAAFH, FUNTRAAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO FUNTRA (FUNTRAEST, FUNTRATCC, FUNTRAMSC, FUNTRAFUC, FUNTRAEMP, FUNTRAFDE, FUNTRAFHA, FUNTRAOBS, FUNTRAAUS, FUNTRAAFH, FUNTRAAIP) VALUES (?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'CARGOOCUPADO' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'MOTIVOSALIDA' AND DOMFICEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?)";
             
             try {
                 $connMYSQL  = getConnectionMYSQL();
@@ -696,7 +667,7 @@
         $FUNOAEAIP  = $val05;
         
         if (isset($val00) && isset($val01)) {
-            $sql00  = "INSERT INTO FUNOAE (FUNOAEEST, FUNOAEAEC, FUNOAEFUC, FUNOAENOM, FUNOAEOBS, FUNOAEAUS, FUNOAEAFH, FUNOAEAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO FUNOAE (FUNOAEEST, FUNOAEAEC, FUNOAEFUC, FUNOAENOM, FUNOAEOBS, FUNOAEAUS, FUNOAEAFH, FUNOAEAIP) VALUES (?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'ACTIVIDADECONOMICA' AND DOMFICEQU = ?), ?, ?, ?, ?, ?, ?)";
             
             try {
                 $connMYSQL  = getConnectionMYSQL();
@@ -766,12 +737,12 @@
         $FUNPARAIP  = trim(strtoupper($aud03));
         
         if (isset($val00) && isset($val01)) {
-            $sql00  = "INSERT INTO FUNPAR (FUNPAREST, FUNPARTVC, FUNPARFUC, FUNPARDEC, FUNPARCIC, FUNPARBAR, FUNPARCAS, FUNPARCA1, FUNPARCA2, FUNPARCA3, FUNPARUBI, FUNPARTE1, FUNPARCE1, FUNPARCE2, FUNPAREMA, FUNPAROBS, FUNPARAUS, FUNPARAFH, FUNPARAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO FUNPAR (FUNPAREST, FUNPARTVC, FUNPARFUC, FUNPARCIC, FUNPARBAR, FUNPARCAS, FUNPARCA1, FUNPARCA2, FUNPARCA3, FUNPARUBI, FUNPARTE1, FUNPARCE1, FUNPARCE2, FUNPAREMA, FUNPAROBS, FUNPARAUS, FUNPARAFH, FUNPARAIP) VALUES (?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'TIPOVIVIENDA' AND DOMFICEQU = ?), ?, (SELECT LOCCIUCOD FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$FUNPAREST, $FUNPARTVC, $FUNPARFUC, $FUNPARDEC, $FUNPARCIC, $FUNPARBAR, $FUNPARCAS, $FUNPARCA1, $FUNPARCA2, $FUNPARCA3, $FUNPARUBI, $FUNPARTE1, $FUNPARCE1, $FUNPARCE2, $FUNPAREMA, $FUNPAROBS, $FUNPARAUS, $FUNPARAFH, $FUNPARAIP]); 
+                $stmtMYSQL->execute([$FUNPAREST, $FUNPARTVC, $FUNPARFUC, $FUNPARCIC, $FUNPARDEC, $FUNPARBAR, $FUNPARCAS, $FUNPARCA1, $FUNPARCA2, $FUNPARCA3, $FUNPARUBI, $FUNPARTE1, $FUNPARCE1, $FUNPARCE2, $FUNPAREMA, $FUNPAROBS, $FUNPARAUS, $FUNPARAFH, $FUNPARAIP]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
@@ -881,7 +852,7 @@
         $FUNOAPAIP  = trim(strtoupper($aud03));
         
         if (isset($val00) && isset($val01)) {
-            $sql00  = "INSERT INTO FUNOAP (FUNOAPEST, FUNOAPTMC, FUNOAPTHC, FUNOAPTPC, FUNOAPFUC, FUNOAPTHE, FUNOAPTPE, FUNOAPCAD, FUNOAPCAC, FUNOAPTDT, FUNOAPOBS, FUNOAPAUS, FUNOAPAFH, FUNOAPAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO FUNOAP (FUNOAPEST, FUNOAPTMC, FUNOAPTHC, FUNOAPTPC, FUNOAPFUC, FUNOAPTHE, FUNOAPTPE, FUNOAPCAD, FUNOAPCAC, FUNOAPTDT, FUNOAPOBS, FUNOAPAUS, FUNOAPAFH, FUNOAPAIP) VALUES (?, ?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'HOBBIES' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'PROYECTOPERSONAL' AND DOMFICEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             try {
                 $connMYSQL  = getConnectionMYSQL();
@@ -936,7 +907,7 @@
         $FUNFAMAIP  = trim(strtoupper($aud03));
         
         if (isset($val00) && isset($val01)) {
-            $sql00  = "INSERT INTO FUNFAM (FUNFAMEST, FUNFAMTPC, FUNFAMFUC, FUNFAMNOM, FUNFAMEMP, FUNFAMOCU, FUNFAMTEL, FUNFAMOBS, FUNFAMAUS, FUNFAMAFH, FUNFAMAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO FUNFAM (FUNFAMEST, FUNFAMTPC, FUNFAMFUC, FUNFAMNOM, FUNFAMEMP, FUNFAMOCU, FUNFAMTEL, FUNFAMOBS, FUNFAMAUS, FUNFAMAFH, FUNFAMAIP) VALUES (?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'PARENTESCO' AND DOMFICEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             try {
                 $connMYSQL  = getConnectionMYSQL();
