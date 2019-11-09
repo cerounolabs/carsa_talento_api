@@ -1757,13 +1757,15 @@
                         $estado_nombre = 'INACTIVO';
                     }
 
-                    $pos                            = strpos($_POST['funcionario_conyuge_nombre'], ' ');
-                    $funcionario_conyuge_nombre_1   = substr($_POST['funcionario_conyuge_nombre'], 0, $pos);
-                    $funcionario_conyuge_nombre_2   = substr($_POST['funcionario_conyuge_nombre'], ($pos + 1));
+                    $str                            = trim($_POST['funcionario_conyuge_nombre']);
+                    $pos                            = strpos($str, ' ');
+                    $funcionario_conyuge_nombre_1   = substr($str, 0, $pos);
+                    $funcionario_conyuge_nombre_2   = substr($str, ($pos + 1));
 
-                    $pos                            = strpos($_POST['funcionario_conyuge_apellido'], ' ');
-                    $funcionario_conyuge_apellido_1 = substr($_POST['funcionario_conyuge_apellido'], 0, $pos);
-                    $funcionario_conyuge_apellido_2 = substr($_POST['funcionario_conyuge_apellido'], ($pos + 1));
+                    $str                            = trim($_POST['funcionario_conyuge_apellido']);
+                    $pos                            = strpos($str, ' ');
+                    $funcionario_conyuge_apellido_1 = substr($str, 0, $pos);
+                    $funcionario_conyuge_apellido_2 = substr($str, ($pos + 1));
 
                     $detalle    = array(
                         'funcionario_conyuge_codigo'                                => $rowMYSQL01['funcionario_conyuge_codigo'],
@@ -1773,7 +1775,7 @@
                         'funcionario_conyuge_nombre_2'                              => strtoupper($funcionario_conyuge_nombre_2),
                         'funcionario_conyuge_apellido_1'                            => strtoupper($funcionario_conyuge_apellido_1),
                         'funcionario_conyuge_apellido_2'                            => strtoupper($funcionario_conyuge_apellido_2),
-                        'funcionario_conyuge_fecha_nacimiento'                      => $rowMYSQL01['funcionario_conyuge_fecha_nacimiento'],
+                        'funcionario_conyuge_fecha_nacimiento'                      => date("Y-m-d", strtotime($rowMYSQL01['funcionario_conyuge_fecha_nacimiento'])),
                         'funcionario_conyuge_fecha_nacimiento_2'                    => date("d/m/Y", strtotime($rowMYSQL01['funcionario_conyuge_fecha_nacimiento'])),
                         'funcionario_conyuge_empresa'                               => strtoupper($rowMYSQL01['funcionario_conyuge_empresa']),
                         'funcionario_conyuge_observacion'                           => strtoupper($rowMYSQL01['funcionario_conyuge_observacion']),
