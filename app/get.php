@@ -1757,12 +1757,12 @@
                         $estado_nombre = 'INACTIVO';
                     }
 
-                    $str                            = trim($_POST['funcionario_conyuge_nombre']);
+                    $str                            = trim($rowMYSQL01['funcionario_conyuge_nombre']);
                     $pos                            = strpos($str, ' ');
                     $funcionario_conyuge_nombre_1   = substr($str, 0, $pos);
                     $funcionario_conyuge_nombre_2   = substr($str, ($pos + 1));
 
-                    $str                            = trim($_POST['funcionario_conyuge_apellido']);
+                    $str                            = trim($rowMYSQL01['funcionario_conyuge_apellido']);
                     $pos                            = strpos($str, ' ');
                     $funcionario_conyuge_apellido_1 = substr($str, 0, $pos);
                     $funcionario_conyuge_apellido_2 = substr($str, ($pos + 1));
