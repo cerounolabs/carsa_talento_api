@@ -653,18 +653,19 @@
         $val00      = $request->getAttribute('codigo');
         $val01      = $request->getParsedBody()['datos_laborales_otra_actividad'];
         $val02      = $request->getParsedBody()['datos_laborales_especificar'];
-        $val03      = $request->getParsedBody()['auditoria_usuario'];
-        $val04      = $request->getParsedBody()['auditoria_fecha_hora'];
-        $val05      = $request->getParsedBody()['auditoria_ip'];
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
 
         $FUNOAEEST  = 'A';
         $FUNOAEAEC  = $val01;
         $FUNOAEFUC  = $val00;
-        $FUNOAENOM  = trim(strtoupper($val03));
+        $FUNOAENOM  = trim(strtoupper($val02));
         $FUNOAEOBS  = '';
-        $FUNOAEAUS  = trim(strtoupper($val06));
-        $FUNOAEAFH  = $val04;
-        $FUNOAEAIP  = $val05;
+        $FUNOAEAUS  = trim(strtoupper($aud01));
+        $FUNOAEAFH  = $aud02;
+        $FUNOAEAIP  = $aud03;
         
         if (isset($val00) && isset($val01)) {
             $sql00  = "INSERT INTO FUNOAE (FUNOAEEST, FUNOAEAEC, FUNOAEFUC, FUNOAENOM, FUNOAEOBS, FUNOAEAUS, FUNOAEAFH, FUNOAEAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
