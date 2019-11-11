@@ -461,7 +461,7 @@
                     $FUNFAMTPC = 0;
                 }
 
-                if (isset($rowMSSQL['familiar_celular_prefijo']) && trim($rowMSSQL['familiar_celular_prefijo']) != '' && $rowMSSQL['familiar_celular_prefijo'] != NULL && trim($rowMSSQL['familiar_celular_prefijo']) != '021' && trim($rowMSSQL['familiar_celular_prefijo'] != '014')){
+                if (isset($rowMSSQL['familiar_celular_prefijo']) && trim($rowMSSQL['familiar_celular_prefijo']) != '' && $rowMSSQL['familiar_celular_prefijo'] != NULL && trim($rowMSSQL['familiar_celular_prefijo']) != '021' && trim($rowMSSQL['familiar_celular_prefijo']) != '014'){
                     $FUNFAMTCC = '+595 '.substr(trim($rowMSSQL['familiar_celular_prefijo']), 1);
                 } else {
                     $FUNFAMTCC = '0';
