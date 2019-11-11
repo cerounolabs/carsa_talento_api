@@ -447,7 +447,7 @@
 
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
                 $FUNFAMTPC = $rowMSSQL['familiar_tipo_parentezco'];
-                $FUNFAMTCC = $rowMSSQL['familiar_celular_prefijo'];
+                
                 $FUNFAMFUC = $rowMSSQL['familiar_funcionario'];
                 $FUNFAMNOM = trim(strtoupper($rowMSSQL['familiar_nombre1'])).' '.trim(strtoupper($rowMSSQL['familiar_nombre2']));
                 $FUNFAMAPE = trim(strtoupper($rowMSSQL['familiar_apellido1'])).' '.trim(strtoupper($rowMSSQL['familiar_apellido2']));
@@ -456,6 +456,12 @@
                 $FUNFAMEMP = trim(strtoupper($rowMSSQL['familiar_empresa']));
                 $FUNFAMOCU = trim(strtoupper($rowMSSQL['familiar_ocupacion']));
                 $FUNFAMCEL = trim(strtoupper($rowMSSQL['familiar_celular_numero']));
+
+                if (isset($rowMSSQL['familiar_celular_prefijo']) || $rowMSSQL['familiar_celular_prefijo'] != '' || $rowMSSQL['familiar_celular_prefijo'] != NULL){
+                    $FUNFAMTCC = $rowMSSQL['familiar_celular_prefijo'];
+                } else {
+                    $FUNFAMTCC = 'NULL';
+                }
 
                 $stmtMYSQL1->execute([$FUNFAMFUC, $FUNFAMTPC, $FUNFAMNOM, $FUNFAMAPE]);
 
@@ -531,6 +537,10 @@
     setPrefijo();
     echo "\n";
     echo "FIN setPrefijo() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    setColFamiliares();
+    echo "\n";
+    echo "FIN setColFamiliares() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
