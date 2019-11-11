@@ -354,6 +354,64 @@
         $connMYSQL  = null;
     }
 
+    function setPrefijo(){
+        $DOMFICEST  = 'H';
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'PREFIJOTELEFONIA PREFIJOCELULAR';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.CelLBId AS prefijo_codigo, a.CelLB AS prefijo_numero, a.CelLBTipo AS prefijo_tipo sFROM PrefCelLB as ORDER BY a.CelLBTipo";
+        $sql01      = "SELECT * FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU = $rowMSSQL['prefijo_codigo'];
+                $DOMFICNOM = '+595 '.substr(trim($rowMSSQL['prefijo_numero']), 1);
+
+                if (trim(strtoupper($rowMSSQL['prefijo_tipo'])) === 'TELEFONO'){
+                    $DOMFICVAL  = 'PREFIJOTELEFONIA';
+                } else {
+                    $DOMFICVAL  = 'PREFIJOCELULAR';
+                }
+
+                $stmtMYSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMYSQL1){
+                    $stmtMYSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAFH, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setDepartamento(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
     function setColFamiliares(){
         $FUNFAMEST = 'A';
         $FUNFAMTPC = '';
@@ -470,9 +528,9 @@
     echo "\n";
     echo "FIN setCargo() => ".date('Y-m-d H:i:s');
     echo "\n";
-    setColFamiliares();
+    setPrefijo();
     echo "\n";
-    echo "FIN setColFamiliares() => ".date('Y-m-d H:i:s');
+    echo "FIN setPrefijo() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
