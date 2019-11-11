@@ -400,7 +400,7 @@
                 $FUNFAMOCU = trim(strtoupper($rowMSSQL['familiar_ocupacion']));
                 $FUNFAMCEL = trim(strtoupper($rowMSSQL['familiar_telefono_numero']));
                 $FUNFAMTEL = trim(strtoupper($rowMSSQL['familiar_telefono_numero']));
-                $FUNFAMOBS = trim(strtoupper($rowMSSQL['']));
+                //$FUNFAMOBS = trim(strtoupper($rowMSSQL['']));
 
                 $stmtMYSQL1->execute([$FUNFAMFUC, $FUNFAMTPC, $FUNFAMNOM, $FUNFAMAPE]);
 
