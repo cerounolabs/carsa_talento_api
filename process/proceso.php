@@ -416,7 +416,7 @@
         $FUNFAMEST = 'A';
         $FUNFAMTPC = '';
         $FUNFAMTCC = '';
-        $FUNFAMTTC = 'NULL';
+        $FUNFAMTTC = '0';
         $FUNFAMFUC = '';
         $FUNFAMNOM = '';
         $FUNFAMAPE = '';
@@ -433,7 +433,7 @@
 
         $sql00      = "SELECT a.FuCod AS familiar_funcionario, a.FuHOrd AS familiar_orden, a.FuHCI AS familiar_documento, a.FuHNom1 AS familiar_nombre1, a.FuHNom2 AS familiar_nombre2, a.FuHApe1 AS familiar_apellido1, a.FuHApe2 AS familiar_apellido2, a.FuHNomC AS familiar_completo, a.FuHFchNa AS familiar_fecha_nacimiento, a.FuHTipPar AS familiar_tipo_parentezco, a.FHOcupFa AS familiar_ocupacion, a.FHEmpLab AS familiar_empresa, a.FHPreCon AS familiar_celular_prefijo, a.FHNumCon AS familiar_celular_numero, a.FuHUsuAl AS familiar_alta_usuario, a.FuHFchAl AS familiar_alta_fecha, a.FuHHrAl AS familiar_alta_hora, a.FuHUsuMd AS familiar_modificacion_usuario, a.FuHFchMd AS familiar_modificacion_fecha, a.FuHHrMd AS familiar_modificacion_hora FROM FUNCIONAR2 a INNER JOIN FUNCIONARI b ON a.FuCod = b.FuCod AND b.FEst = 'A' ORDER BY a.FuCod";
         $sql01      = "SELECT FUNFAMCOD FROM FUNFAM WHERE FUNFAMFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?) AND FUNFAMTPC = (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'PARENTESCO') AND FUNFAMNOM = ? AND FUNFAMAPE = ?";
-        $sql02      = "INSERT INTO FUNFAM (FUNFAMEST, FUNFAMTPC, FUNFAMTCC, FUNFAMTTC, FUNFAMFUC, FUNFAMNOM, FUNFAMAPE, FUNFAMFHA, FUNFAMCIC, FUNFAMEMP, FUNFAMOCU, FUNFAMCEL, FUNFAMTEL, FUNFAMOBS, FUNFAMAUS, FUNFAMAFH, FUNFAMAIP) VALUES (?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'PARENTESCO'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'PREFIJOCELULAR' AND DOMFICEST = 'H'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'PREFIJOTELEFONIA' AND DOMFICEST = 'H'), (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql02      = "INSERT INTO FUNFAM (FUNFAMEST, FUNFAMTPC, FUNFAMTCC, FUNFAMTTC, FUNFAMFUC, FUNFAMNOM, FUNFAMAPE, FUNFAMFHA, FUNFAMCIC, FUNFAMEMP, FUNFAMOCU, FUNFAMCEL, FUNFAMTEL, FUNFAMOBS, FUNFAMAUS, FUNFAMAFH, FUNFAMAIP) VALUES (?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'PARENTESCO'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'PREFIJOCELULAR' AND DOMFICEST = 'H'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'PREFIJOTELEFONIA' AND DOMFICEST = 'H'), (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             $connMSSQL  = getConnectionMSSQL();
@@ -457,14 +457,10 @@
                 $FUNFAMOCU = trim(strtoupper($rowMSSQL['familiar_ocupacion']));
                 $FUNFAMCEL = trim(strtoupper($rowMSSQL['familiar_celular_numero']));
 
-                echo trim($rowMSSQL['familiar_celular_prefijo']);
-                echo "\n";
                 if (isset($rowMSSQL['familiar_celular_prefijo']) || $rowMSSQL['familiar_celular_prefijo'] != '' || $rowMSSQL['familiar_celular_prefijo'] != NULL){
                     $FUNFAMTCC = '+595 '.substr(trim($rowMSSQL['familiar_celular_prefijo']), 1);
-                    echo $FUNFAMTCC;
-                    echo "\n";
                 } else {
-                    $FUNFAMTCC = 'NULL';
+                    $FUNFAMTCC = '0';
                 }
 
                 $stmtMYSQL1->execute([$FUNFAMFUC, $FUNFAMTPC, $FUNFAMNOM, $FUNFAMAPE]);
