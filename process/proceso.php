@@ -446,8 +446,6 @@
             $stmtMYSQL2 = $connMYSQL->prepare($sql02);
 
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
-                $FUNFAMTPC = $rowMSSQL['familiar_tipo_parentezco'];
-                
                 $FUNFAMFUC = $rowMSSQL['familiar_funcionario'];
                 $FUNFAMNOM = trim(strtoupper($rowMSSQL['familiar_nombre1'])).' '.trim(strtoupper($rowMSSQL['familiar_nombre2']));
                 $FUNFAMAPE = trim(strtoupper($rowMSSQL['familiar_apellido1'])).' '.trim(strtoupper($rowMSSQL['familiar_apellido2']));
@@ -456,6 +454,12 @@
                 $FUNFAMEMP = trim(strtoupper($rowMSSQL['familiar_empresa']));
                 $FUNFAMOCU = trim(strtoupper($rowMSSQL['familiar_ocupacion']));
                 $FUNFAMCEL = trim(strtoupper($rowMSSQL['familiar_celular_numero']));
+
+                if ($rowMSSQL['familiar_tipo_parentezco'] != NULL && $rowMSSQL['familiar_tipo_parentezco'] != 0){
+                    $FUNFAMTPC = $rowMSSQL['familiar_tipo_parentezco'];
+                } else {
+                    $FUNFAMTPC = 0;
+                }
 
                 if (isset($rowMSSQL['familiar_celular_prefijo']) && trim($rowMSSQL['familiar_celular_prefijo']) != '' && $rowMSSQL['familiar_celular_prefijo'] != NULL){
                     $FUNFAMTCC = '+595 '.substr(trim($rowMSSQL['familiar_celular_prefijo']), 1);
