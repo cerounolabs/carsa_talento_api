@@ -454,6 +454,9 @@
                 $FUNFAMEMP = trim(strtoupper($rowMSSQL['familiar_empresa']));
                 $FUNFAMOCU = trim(strtoupper($rowMSSQL['familiar_ocupacion']));
                 $FUNFAMCEL = trim(strtoupper($rowMSSQL['familiar_celular_numero']));
+                $FUNFAMCEL = str_replace(' ', '', $FUNFAMCEL);
+                $FUNFAMCEL = str_replace('-', '', $FUNFAMCEL);
+                $FUNFAMCEL = str_replace('.', '', $FUNFAMCEL);
 
                 if ($rowMSSQL['familiar_tipo_parentezco'] != NULL && $rowMSSQL['familiar_tipo_parentezco'] != 0){
                     $FUNFAMTPC = $rowMSSQL['familiar_tipo_parentezco'];
