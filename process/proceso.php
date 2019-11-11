@@ -457,7 +457,7 @@
                 $FUNFAMOCU = trim(strtoupper($rowMSSQL['familiar_ocupacion']));
                 $FUNFAMCEL = trim(strtoupper($rowMSSQL['familiar_celular_numero']));
 
-                if (isset($rowMSSQL['familiar_celular_prefijo']) && $rowMSSQL['familiar_celular_prefijo'] != '' && $rowMSSQL['familiar_celular_prefijo'] != NULL && $rowMSSQL['familiar_celular_prefijo'] != ' '){
+                if (isset($rowMSSQL['familiar_celular_prefijo']) && trim($rowMSSQL['familiar_celular_prefijo']) != '' && $rowMSSQL['familiar_celular_prefijo'] != NULL){
                     $FUNFAMTCC = '+595 '.substr(trim($rowMSSQL['familiar_celular_prefijo']), 1);
                 } else {
                     $FUNFAMTCC = '0';
