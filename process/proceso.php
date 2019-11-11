@@ -354,6 +354,78 @@
         $connMYSQL  = null;
     }
 
+    function setColFamiliares(){
+        $FUNFAMEST = 'A';
+        $FUNFAMTPC = '';
+        $FUNFAMTCC = '';
+        $FUNRPPTTC = '';
+        $FUNFAMFUC = '';
+        $FUNFAMNOM = '';
+        $FUNFAMAPE = '';
+        $FUNFAMFHA = '';
+        $FUNFAMCIC = '';
+        $FUNFAMEMP = '';
+        $FUNFAMOCU = '';
+        $FUNFAMCEL = '';
+        $FUNFAMTEL = '';
+        $FUNFAMOBS = '';
+        $FUNFAMAUS  = 'MIGRACION';
+        $FUNFAMAFH  = date('Y-m-d H:i:s');
+        $FUNFAMAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.FuCod AS familiar_funcionario, a.FuHOrd AS familiar_orden, a.FuHCI AS familiar_documento, a.FuHNom1 AS familiar_nombre1, a.FuHNom2 AS familiar_nombre2, a.FuHApe1 AS familiar_apellido1, a.FuHApe2 AS familiar_apellido2, a.FuHNomC AS familiar_completo, a.FuHFchNa AS familiar_fecha_nacimiento, a.FuHTipPar AS familiar_tipo_parentezco, a.FHOcupFa AS familiar_ocupacion, a.FHEmpLab AS familiar_empresa, a.FHPreCon AS familiar_telefono_prefijo, a.FHNumCon AS familiar_telefono_numero, a.FuHUsuAl AS familiar_alta_usuario, a.FuHFchAl AS familiar_alta_fecha, a.FuHHrAl AS familiar_alta_hora, a.FuHUsuMd AS familiar_modificacion_usuario, a.FuHFchMd AS familiar_modificacion_fecha, a.FuHHrMd AS familiar_modificacion_hora FROM FUNCIONAR2 a ORDER BY a.FuCod";
+        $sql01      = "SELECT FUNFAMCOD FROM FUNFAM WHERE FUNFAMFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?) AND FUNFAMTPC = (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'PARENTESCO') AND FUNFAMNOM = ? AND FUNFAMAPE = ?";
+        $sql02      = "INSERT INTO FUNFAM (FUNFAMEST, FUNFAMTPC, FUNFAMTCC, FUNRPPTTC, FUNFAMFUC, FUNFAMNOM, FUNFAMAPE, FUNFAMFHA, FUNFAMCIC, FUNFAMEMP, FUNFAMOCU, FUNFAMCEL, FUNFAMTEL, FUNFAMOBS, FUNFAMAUS, FUNFAMAFH, FUNFAMAIP) VALUES (?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'PARENTESCO'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'PREFIJOCELULAR'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'PREFIJOTELEFONIA'), (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $FUNFAMTPC = $rowMSSQL['familiar_tipo_parentezco'];
+                $FUNFAMTCC = $rowMSSQL['familiar_telefono_prefijo'];
+                $FUNRPPTTC = $rowMSSQL['familiar_telefono_prefijo'];
+                $FUNFAMFUC = $rowMSSQL['familiar_funcionario'];
+                $FUNFAMNOM = trim(strtoupper($rowMSSQL['familiar_nombre1'])).' '.trim(strtoupper($rowMSSQL['familiar_nombre2']));
+                $FUNFAMAPE = trim(strtoupper($rowMSSQL['familiar_apellido1'])).' '.trim(strtoupper($rowMSSQL['familiar_apellido2']));
+                $FUNFAMFHA = $rowMSSQL['familiar_fecha_nacimiento'];
+                $FUNFAMCIC = trim(strtoupper($rowMSSQL['familiar_documento']));
+                $FUNFAMEMP = trim(strtoupper($rowMSSQL['familiar_empresa']));
+                $FUNFAMOCU = trim(strtoupper($rowMSSQL['familiar_ocupacion']));
+                $FUNFAMCEL = trim(strtoupper($rowMSSQL['familiar_telefono_numero']));
+                $FUNFAMTEL = trim(strtoupper($rowMSSQL['familiar_telefono_numero']));
+                $FUNFAMOBS = trim(strtoupper($rowMSSQL['']));
+
+                $stmtMYSQL1->execute([$FUNFAMFUC, $FUNFAMTPC, $FUNFAMNOM, $FUNFAMAPE]);
+
+                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMYSQL1){
+                    $stmtMYSQL2->execute([$FUNFAMEST, $FUNFAMTPC, $FUNFAMTCC, $FUNRPPTTC, $FUNFAMFUC, $FUNFAMNOM, $FUNFAMAPE, $FUNFAMFHA, $FUNFAMCIC, $FUNFAMEMP, $FUNFAMOCU, $FUNFAMCEL, $FUNFAMTEL, $FUNFAMOBS, $FUNFAMAUS, $FUNFAMAFH, $FUNFAMAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setDepartamento(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
@@ -400,6 +472,10 @@
     setCargo();
     echo "\n";
     echo "FIN setCargo() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    setColFamiliares();
+    echo "\n";
+    echo "FIN setColFamiliares() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
