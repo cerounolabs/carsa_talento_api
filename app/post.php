@@ -939,4 +939,53 @@
         
         return $json;
     });
+
+    $app->post('/v1/2000/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val00      = $request->getAttribute('codigo');
+        $val01      = $request->getParsedBody()['datos_movil_marca_codigo'];
+        $val02      = $request->getParsedBody()['datos_movil_color_codigo'];
+        $val03      = $request->getParsedBody()['datos_movil_modelo_nombre'];
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        $FUNCELEST  = 'A';
+        $FUNCELTMC  = $val01;
+        $FUNCELTCC  = $val02;
+        $FUNCELFUC  = $val00;
+        $FUNCELMOD  = trim(strtoupper($val03));
+        $FUNCELOBS  = '';
+        $FUNCELAUS  = trim(strtoupper($aud01));
+        $FUNCELAFH  = $aud02;
+        $FUNCELAIP  = $aud03;
+        
+        if (isset($val00) && isset($val01)) {
+            $sql00  = "INSERT INTO FUNCEL (FUNCELEST, FUNCELTMC, FUNCELTCC, FUNCELFUC, FUNCELMOD, FUNCELOBS, FUNCELAUS, FUNCELAFH, FUNCELAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            try {
+                $connMYSQL  = getConnectionMYSQL();
+                $stmtMYSQL  = $connMYSQL->prepare($sql00);
+                $stmtMYSQL->execute([$FUNCELEST, $FUNCELTMC, $FUNCELTCC, $FUNCELFUC, $FUNCELMOD, $FUNCELOBS, $FUNCELAUS, $FUNCELAFH, $FUNCELAIP]); 
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtMYSQL->closeCursor();
+                $stmtMYSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
     
