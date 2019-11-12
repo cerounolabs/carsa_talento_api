@@ -1778,6 +1778,29 @@
                     $result_funcionario[]   = $detalle;
                 }
 
+                if (!isset($result_funcionario)){
+                    $detalle    = array(
+                        'funcionario_codigo'                                        => '',
+                        'funcionario_usuario'                                       => '',
+                        'funcionario_completo'                                      => '',
+                        'funcionario_documento'                                     => '',
+                        'funcionario_fecha_nacimiento'                              => '',
+                        'funcionario_edad'                                          => '',
+                        'funcionario_sexo'                                          => '',
+                        'funcionario_estado_civil'                                  => '',
+                        'funcionario_nacionalidad'                                  => '',
+                        'funcionario_email'                                         => '',
+                        'funcionario_fecha_ingreso'                                 => '',
+                        'funcionario_gerencia'                                      => '',
+                        'funcionario_deparmento'                                    => '',
+                        'funcionario_cargo'                                         => '',
+                        'funcionario_foto'                                          => '',
+                        'funcionario_antiguedad'                                    => ''
+                    );
+
+                    $result_funcionario[]   = $detalle;
+                }
+
                 $stmtMYSQL01= $connMYSQL->prepare($sql01);
                 $stmtMYSQL01->execute([$val01]);
 
@@ -1819,6 +1842,28 @@
                     $result_funcionario_conyuge[]   = $detalle;
                 }
 
+                if (!isset($result_funcionario_conyuge)){
+                    $detalle    = array(
+                        'funcionario_conyuge_codigo'                                => '',
+                        'funcionario_conyuge_estado_codigo'                         => '',
+                        'funcionario_conyuge_estado_nombre'                         => '',
+                        'funcionario_conyuge_nombre_1'                              => '',
+                        'funcionario_conyuge_nombre_2'                              => '',
+                        'funcionario_conyuge_apellido_1'                            => '',
+                        'funcionario_conyuge_apellido_2'                            => '',
+                        'funcionario_conyuge_fecha_nacimiento'                      => '',
+                        'funcionario_conyuge_empresa'                               => '',
+                        'funcionario_conyuge_observacion'                           => '',
+                        'funcionario_conyuge_sexo_codigo'                           => '',
+                        'funcionario_conyuge_sexo_nombre'                           => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => ''
+                    );
+
+                    $result_funcionario_conyuge[]   = $detalle;
+                }
+
                 $stmtMYSQL02= $connMYSQL->prepare($sql02);
                 $stmtMYSQL02->execute([$val01]);
 
@@ -1849,6 +1894,27 @@
                     $result_funcionario_trabajo_anterior[]   = $detalle;
                 }
 
+                if (!isset($result_funcionario_trabajo_anterior)){
+                    $detalle    = array(
+                        'funcionario_trabajo_anterior_codigo'                       => '',
+                        'funcionario_trabajo_anterior_estado_codigo'                => '',
+                        'funcionario_trabajo_anterior_estado_nombre'                => '',
+                        'funcionario_trabajo_anterior_empresa'                      => '',
+                        'funcionario_trabajo_anterior_fecha_desde'                  => '',
+                        'funcionario_trabajo_anterior_fecha_hasta'                  => '',
+                        'funcionario_trabajo_anterior_observacion'                  => '',
+                        'funcionario_trabajo_anterior_cargo_codigo'                 => '',
+                        'funcionario_trabajo_anterior_cargo_nombre'                 => '',
+                        'funcionario_trabajo_anterior_motivo_salida_codigo'         => '',
+                        'funcionario_trabajo_anterior_motivo_salida_nombre'         => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => ''
+                    );
+
+                    $result_funcionario_trabajo_anterior[]   = $detalle;
+                }
+
                 $stmtMYSQL03= $connMYSQL->prepare($sql03);
                 $stmtMYSQL03->execute([$val01]);
 
@@ -1870,6 +1936,23 @@
                         'auditoria_usuario'                                         => strtoupper($rowMYSQL03['auditoria_usuario']),
                         'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL03['auditoria_fecha'])),
                         'auditoria_ip'                                              => strtoupper($rowMYSQL03['auditoria_ip'])       
+                    );
+
+                    $result_funcionario_actividad_economica[]   = $detalle;
+                }
+
+                if (!isset($result_funcionario_actividad_economica)){
+                    $detalle    = array(
+                        'funcionario_actividad_economica_codigo'                    => '',
+                        'funcionario_actividad_economica_estado_codigo'             => '',
+                        'funcionario_actividad_economica_estado_nombre'             => '',
+                        'funcionario_actividad_economica_nombre'                    => '',
+                        'funcionario_actividad_economica_observacion'               => '',
+                        'funcionario_actividad_economica_tipo_codigo'               => '',
+                        'funcionario_actividad_economica_tigo_nombre'               => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => ''
                     );
 
                     $result_funcionario_actividad_economica[]   = $detalle;
@@ -1915,6 +1998,37 @@
                     $result_funcionario_particulares[]   = $detalle;
                 }
 
+                if (!isset($result_funcionario_particulares)){
+                    $detalle    = array(
+                        'funcionario_particulares_codigo'                           => '',
+                        'funcionario_particulares_estado_codigo'                    => '',
+                        'funcionario_particulares_estado_nombre'                    => '',
+                        'funcionario_particulares_barrio'                           => '',
+                        'funcionario_particulares_casa_numero'                      => '',
+                        'funcionario_particulares_calle_1'                          => '',
+                        'funcionario_particulares_calle_2'                          => '',
+                        'funcionario_particulares_calle_3'                          => '',
+                        'funcionario_particulares_posicion'                         => '',
+                        'funcionario_particulares_telefono_codigo_1'                => '',
+                        'funcionario_particulares_telefono_numero_1'                => '',
+                        'funcionario_particulares_celular_codigo_1'                 => '',
+                        'funcionario_particulares_celular_numero_1'                 => '',
+                        'funcionario_particulares_celular_codigo_2'                 => '',
+                        'funcionario_particulares_celular_numero_2'                 => '',
+                        'funcionario_particulares_email'                            => '',
+                        'funcionario_particulares_observacion'                      => '',
+                        'funcionario_particulares_vivienda_codigo'                  => '',
+                        'funcionario_particulares_vivienda_nombre'                  => '',
+                        'funcionario_particulares_ciudad_codigo'                    => '',
+                        'funcionario_particulares_ciudad_nombre'                    => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => ''
+                    );
+
+                    $result_funcionario_particulares[]   = $detalle;
+                }
+
                 $stmtMYSQL05= $connMYSQL->prepare($sql05);
                 $stmtMYSQL05->execute([$val01]);
 
@@ -1940,6 +2054,27 @@
                         'auditoria_usuario'                                         => strtoupper($rowMYSQL05['auditoria_usuario']),
                         'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL05['auditoria_fecha'])),
                         'auditoria_ip'                                              => strtoupper($rowMYSQL05['auditoria_ip'])      
+                    );
+
+                    $result_funcionario_referencia[]   = $detalle;
+                }
+
+                if (!isset($result_funcionario_referencia)){
+                    $detalle    = array(
+                        'funcionario_referencia_codigo'                             => '',
+                        'funcionario_referencia_estado_codigo'                      => '',
+                        'funcionario_referencia_estado_nombre'                      => '',
+                        'funcionario_referencia_nombre'                             => '',
+                        'funcionario_referencia_celular_numero'                     => '',
+                        'funcionario_referencia_telefono_numero'                    => '',
+                        'funcionario_referencia_observacion'                        => '',
+                        'funcionario_referencia_celular_codigo'                     => '',
+                        'funcionario_referencia_celular_nombre'                     => '',
+                        'funcionario_referencia_telefono_codigo'                    => '',
+                        'funcionario_referencia_telefono_nombre'                    => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => ''
                     );
 
                     $result_funcionario_referencia[]   = $detalle;
@@ -1978,6 +2113,30 @@
                     $result_funcionario_actividad[]   = $detalle;
                 }
 
+                if (!isset($result_funcionario_actividad)){
+                    $detalle    = array(
+                        'funcionario_actividad_codigo'                              => '',
+                        'funcionario_actividad_estado_codigo'                       => '',
+                        'funcionario_actividad_estado_nombre'                       => '',
+                        'funcionario_actividad_movilidad_codigo'                    => '',
+                        'funcionario_actividad_hobbie_especificar'                  => '',
+                        'funcionario_actividad_proyecto_especificar'                => '',
+                        'funcionario_actividad_cantidad_dependiente'                => '',
+                        'funcionario_actividad_cantidad_contribuyente'              => '',
+                        'funcionario_actividad_tiempo_traslado'                     => '',
+                        'funcionario_actividad_observacion'                         => '',
+                        'funcionario_actividad_hobbie_codigo'                       => '',
+                        'funcionario_actividad_hobbis_nombre'                       => '',
+                        'funcionario_actividad_proyecto_codigo'                     => '',
+                        'funcionario_actividad_proyecto_nombre'                     => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => ''
+                    );
+
+                    $result_funcionario_actividad[]   = $detalle;
+                }
+
                 $stmtMYSQL07= $connMYSQL->prepare($sql07);
                 $stmtMYSQL07->execute([$val01]);
 
@@ -2007,6 +2166,26 @@
                     $result_funcionario_familiares[]   = $detalle;
                 }
 
+                if (!isset($result_funcionario_familiares)){
+                    $detalle    = array(
+                        'funcionario_familiares_codigo'                             => '',
+                        'funcionario_familiares_estado_codigo'                      => '',
+                        'funcionario_familiares_estado_nombre'                      => '',
+                        'funcionario_familiares_nombre'                             => '',
+                        'funcionario_familiares_empresa'                            => '',
+                        'funcionario_familiares_ocupacion'                          => '',
+                        'funcionario_familiares_telefono'                           => '',
+                        'funcionario_familiares_observacion'                        => '',
+                        'funcionario_familiares_parentezco_codigo'                  => '',
+                        'funcionario_familiares_parentezco_nombre'                  => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => '' 
+                    );
+
+                    $result_funcionario_familiares[]   = $detalle;
+                }
+
                 $stmtMYSQL08= $connMYSQL->prepare($sql08);
                 $stmtMYSQL08->execute([$val01]);
 
@@ -2030,6 +2209,25 @@
                         'auditoria_usuario'                                         => strtoupper($rowMYSQL08['auditoria_usuario']),
                         'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL08['auditoria_fecha'])),
                         'auditoria_ip'                                              => strtoupper($rowMYSQL08['auditoria_ip'])       
+                    );
+
+                    $result_funcionario_movil[]   = $detalle;
+                }
+
+                if (!isset($result_funcionario_movil)){
+                    $detalle    = array(
+                        'funcionario_movil_codigo'                                  => '',
+                        'funcionario_movil_estado_codigo'                           => '',
+                        'funcionario_movil_estado_nombre'                           => '',
+                        'funcionario_movil_modelo'                                  => '',
+                        'funcionario_movil_observacion'                             => '',
+                        'funcionario_movil_marca_codigo'                            => '',
+                        'funcionario_movil_marca_nombre'                            => '',
+                        'funcionario_movil_color_codigo'                            => '',
+                        'funcionario_movil_color_nombre'                            => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => ''
                     );
 
                     $result_funcionario_movil[]   = $detalle;
