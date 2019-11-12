@@ -708,8 +708,11 @@
         $val08      = $request->getParsedBody()['datos_particulares_calle_3'];
         $val09      = $request->getParsedBody()['datos_particulares_ubicacion'];
         $val10      = $request->getParsedBody()['datos_particulares_celular_1'];
+        $val10_1    = $request->getParsedBody()['datos_particulares_celular_prefijo_1'];
         $val11      = $request->getParsedBody()['datos_particulares_celular_2'];
+        $val11_1    = $request->getParsedBody()['datos_particulares_celular_prefijo_2'];
         $val12      = $request->getParsedBody()['datos_particulares_telefono'];
+        $val12_1    = $request->getParsedBody()['datos_particulares_telefono_prefijo_1'];
         $val13      = $request->getParsedBody()['datos_particulares_email'];
         $val14      = $request->getParsedBody()['datos_particulares_observacion'];
 
@@ -719,6 +722,9 @@
 
         $FUNPAREST  = 'A';
         $FUNPARTVC  = $val01;
+        $FUNPARTCC  = $val10_1;
+        $FUNPARTEC  = $val11_1;
+        $FUNPARTTC  = $val12_1;
         $FUNPARFUC  = $val00;
         $FUNPARDEC  = $val02;
         $FUNPARCIC  = $val03;
@@ -738,12 +744,12 @@
         $FUNPARAIP  = trim(strtoupper($aud03));
         
         if (isset($val00) && isset($val01)) {
-            $sql00  = "INSERT INTO FUNPAR (FUNPAREST, FUNPARTVC, FUNPARFUC, FUNPARCIC, FUNPARBAR, FUNPARCAS, FUNPARCA1, FUNPARCA2, FUNPARCA3, FUNPARUBI, FUNPARTE1, FUNPARCE1, FUNPARCE2, FUNPAREMA, FUNPAROBS, FUNPARAUS, FUNPARAFH, FUNPARAIP) VALUES (?, ?, ?, (SELECT LOCCIUCOD FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO FUNPAR (FUNPAREST, FUNPARTVC, FUNPARTCC, FUNPARTEC, FUNPARTTC, FUNPARFUC, FUNPARCIC, FUNPARBAR, FUNPARCAS, FUNPARCA1, FUNPARCA2, FUNPARCA3, FUNPARUBI, FUNPARTE1, FUNPARCE1, FUNPARCE2, FUNPAREMA, FUNPAROBS, FUNPARAUS, FUNPARAFH, FUNPARAIP) VALUES (?, ?, ?, (SELECT LOCCIUCOD FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$FUNPAREST, $FUNPARTVC, $FUNPARFUC, $FUNPARCIC, $FUNPARDEC, $FUNPARBAR, $FUNPARCAS, $FUNPARCA1, $FUNPARCA2, $FUNPARCA3, $FUNPARUBI, $FUNPARTE1, $FUNPARCE1, $FUNPARCE2, $FUNPAREMA, $FUNPAROBS, $FUNPARAUS, $FUNPARAFH, $FUNPARAIP]); 
+                $stmtMYSQL->execute([$FUNPAREST, $FUNPARTVC, $FUNPARTCC, $FUNPARTEC, $FUNPARTTC, $FUNPARFUC, $FUNPARCIC, $FUNPARDEC, $FUNPARBAR, $FUNPARCAS, $FUNPARCA1, $FUNPARCA2, $FUNPARCA3, $FUNPARUBI, $FUNPARTE1, $FUNPARCE1, $FUNPARCE2, $FUNPAREMA, $FUNPAROBS, $FUNPARAUS, $FUNPARAFH, $FUNPARAIP]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
