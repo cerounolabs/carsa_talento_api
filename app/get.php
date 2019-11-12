@@ -1744,7 +1744,7 @@
             c.DOMFICNOM         AS          funcionario_movil_color_nombre
             FROM FUNCEL a
             INNER JOIN DOMFIC b ON a.FUNCELTMC = b.DOMFICCOD
-            INNER JOIN DOMFIC c ON a.FUNCELTCC = b.DOMFICCOD
+            INNER JOIN DOMFIC c ON a.FUNCELTCC = c.DOMFICCOD
             WHERE a.FUNCELFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
             ORDER BY a.FUNCELAFH DESC";
 
