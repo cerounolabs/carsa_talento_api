@@ -1638,9 +1638,9 @@
             a.FUNPARCA2         AS          funcionario_particulares_calle_2,
             a.FUNPARCA3         AS          funcionario_particulares_calle_3,
             a.FUNPARUBI         AS          funcionario_particulares_posicion,
-            a.FUNPARTE1         AS          funcionario_particulares_telefono_1,
-            a.FUNPARCE1         AS          funcionario_particulares_celular_1,
-            a.FUNPARCE2         AS          funcionario_particulares_celular_2,
+            a.FUNPARTE1         AS          funcionario_particulares_telefono_numero_1,
+            a.FUNPARCE1         AS          funcionario_particulares_celular_numero_1,
+            a.FUNPARCE2         AS          funcionario_particulares_celular_numero_2,
             a.FUNPAREMA         AS          funcionario_particulares_email,
             a.FUNPAROBS         AS          funcionario_particulares_observacion,
             a.FUNPARAUS         AS          auditoria_usuario,
@@ -1648,11 +1648,24 @@
             a.FUNPARAIP         AS          auditoria_ip,
             b.DOMFICCOD         AS          funcionario_particulares_vivienda_codigo,
             b.DOMFICNOM         AS          funcionario_particulares_vivienda_nombre,
-            c.LOCCIUCOD         AS          funcionario_particulares_ciudad_codigo,
-            c.LOCCIUNOM         AS          funcionario_particulares_ciudad_nombre
+
+            c.DOMFICCOD         AS          funcionario_particulares_celular_codigo_1,
+            c.DOMFICNOM         AS          funcionario_particulares_celular_nombre_1,
+
+            d.DOMFICCOD         AS          funcionario_particulares_celular_codigo_2,
+            d.DOMFICNOM         AS          funcionario_particulares_celular_nombre_2,
+
+            e.DOMFICCOD         AS          funcionario_particulares_telefono_codigo_1,
+            e.DOMFICNOM         AS          funcionario_particulares_telefono_nombre_1,
+
+            f.LOCCIUCOD         AS          funcionario_particulares_ciudad_codigo,
+            f.LOCCIUNOM         AS          funcionario_particulares_ciudad_nombre
             FROM FUNPAR a
             INNER JOIN DOMFIC b ON a.FUNPARTVC = b.DOMFICCOD
-            INNER JOIN LOCCIU c ON a.FUNPARCIC = c.LOCCIUCOD
+            INNER JOIN DOMFIC c ON a.FUNPARTCC = c.DOMFICCOD
+            INNER JOIN DOMFIC d ON a.FUNPARTEC = d.DOMFICCOD
+            INNER JOIN DOMFIC e ON a.FUNPARTTC = e.DOMFICCOD
+            INNER JOIN LOCCIU f ON a.FUNPARCIC = f.LOCCIUCOD
             WHERE a.FUNPARFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
             ORDER BY a.FUNPARAFH DESC";
 
@@ -1864,9 +1877,12 @@
                         'funcionario_particulares_calle_2'                          => strtoupper($rowMYSQL04['funcionario_particulares_calle_2']),
                         'funcionario_particulares_calle_3'                          => strtoupper($rowMYSQL04['funcionario_particulares_calle_3']),
                         'funcionario_particulares_posicion'                         => strtoupper($rowMYSQL04['funcionario_particulares_posicion']),
-                        'funcionario_particulares_telefono_1'                       => strtoupper($rowMYSQL04['funcionario_particulares_telefono_1']),
-                        'funcionario_particulares_celular_1'                        => strtoupper($rowMYSQL04['funcionario_particulares_celular_1']),
-                        'funcionario_particulares_celular_2'                        => strtoupper($rowMYSQL04['funcionario_particulares_celular_2']),
+                        'funcionario_particulares_telefono_codigo_1'                => $rowMYSQL04['funcionario_particulares_telefono_codigo_1'],
+                        'funcionario_particulares_telefono_numero_1'                => strtoupper($rowMYSQL04['funcionario_particulares_telefono_numero_1']),
+                        'funcionario_particulares_celular_codigo_1'                 => $rowMYSQL04['funcionario_particulares_celular_codigo_1'],
+                        'funcionario_particulares_celular_numero_1'                 => strtoupper($rowMYSQL04['funcionario_particulares_celular_numero_1']),
+                        'funcionario_particulares_celular_codigo_2'                 => $rowMYSQL04['funcionario_particulares_celular_codigo_2'],
+                        'funcionario_particulares_celular_numero_2'                 => strtoupper($rowMYSQL04['funcionario_particulares_celular_numero_2']),
                         'funcionario_particulares_email'                            => strtolower($rowMYSQL04['funcionario_particulares_email']),
                         'funcionario_particulares_observacion'                      => strtoupper($rowMYSQL04['funcionario_particulares_observacion']),
                         'funcionario_particulares_vivienda_codigo'                  => $rowMYSQL04['funcionario_particulares_vivienda_codigo'],
