@@ -1730,6 +1730,24 @@
             WHERE a.FUNFAMFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
             ORDER BY a.FUNFAMAFH DESC";
 
+            $sql08  = "SELECT
+            a.FUNCELCOD         AS          funcionario_movil_codigo,
+            a.FUNCELEST         AS          funcionario_movil_estado_codigo,
+            a.FUNCELMOD         AS          funcionario_movil_modelo,
+            a.FUNCELOBS         AS          funcionario_movil_observacion,
+            a.FUNCELAUS         AS          auditoria_usuario,
+            a.FUNCELAFH         AS          auditoria_fecha,
+            a.FUNCELAIP         AS          auditoria_ip,
+            b.DOMFICCOD         AS          funcionario_movil_marca_codigo,
+            b.DOMFICNOM         AS          funcionario_movil_marca_nombre,
+            c.DOMFICCOD         AS          funcionario_movil_color_codigo,
+            c.DOMFICNOM         AS          funcionario_movil_color_nombre
+            FROM FUNCEL a
+            INNER JOIN DOMFIC b ON a.FUNCELTMC = b.DOMFICCOD
+            INNER JOIN DOMFIC c ON a.FUNCELTCC = b.DOMFICCOD
+            WHERE a.FUNCELFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
+            ORDER BY a.FUNCELAFH DESC";
+
             try {
                 $connMSSQL  = getConnectionMSSQL();
                 $connMYSQL  = getConnectionMYSQL();
@@ -1989,6 +2007,34 @@
                     $result_funcionario_familiares[]   = $detalle;
                 }
 
+                $stmtMYSQL08= $connMYSQL->prepare($sql08);
+                $stmtMYSQL08->execute([$val01]);
+
+                while ($rowMYSQL08 = $stmtMYSQL08->fetch()) {
+                    if($rowMYSQL08['funcionario_movil_estado_codigo'] === 'A'){
+                        $estado_nombre = 'ACTIVO';
+                    } else {
+                        $estado_nombre = 'INACTIVO';
+                    }
+
+                    $detalle    = array(
+                        'funcionario_movil_codigo'                                  => $rowMYSQL08['funcionario_movil_codigo'],
+                        'funcionario_movil_estado_codigo'                           => $rowMYSQL08['funcionario_movil_estado_codigo'],
+                        'funcionario_movil_estado_nombre'                           => $estado_nombre,
+                        'funcionario_movil_modelo'                                  => strtoupper($rowMYSQL08['funcionario_movil_modelo']),
+                        'funcionario_movil_observacion'                             => strtoupper($rowMYSQL08['funcionario_movil_observacion']),
+                        'funcionario_movil_marca_codigo'                            => $rowMYSQL08['funcionario_movil_marca_codigo'],
+                        'funcionario_movil_marca_nombre'                            => strtoupper($rowMYSQL08['funcionario_movil_marca_nombre']),
+                        'funcionario_movil_color_codigo'                            => $rowMYSQL08['funcionario_movil_color_codigo'],
+                        'funcionario_movil_color_nombre'                            => strtoupper($rowMYSQL08['funcionario_movil_color_nombre']),
+                        'auditoria_usuario'                                         => strtoupper($rowMYSQL08['auditoria_usuario']),
+                        'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL08['auditoria_fecha'])),
+                        'auditoria_ip'                                              => strtoupper($rowMYSQL08['auditoria_ip'])       
+                    );
+
+                    $result_funcionario_movil[]   = $detalle;
+                }
+
                 $result = array(
                     'funcionario'                       => $result_funcionario,
                     'funcionario_conyuge'               => $result_funcionario_conyuge,
@@ -1997,7 +2043,8 @@
                     'funcionario_particulares'          => $result_funcionario_particulares,
                     'funcionario_referencia'            => $result_funcionario_referencia,
                     'funcionario_actividad'             => $result_funcionario_actividad,
-                    'funcionario_familiares'            => $result_funcionario_familiares
+                    'funcionario_familiares'            => $result_funcionario_familiares,
+                    'funcionario_movil'                 => $result_funcionario_movil
                 );
 
                 if (isset($result)){
@@ -2050,6 +2097,9 @@
 
                 $stmtMYSQL07->closeCursor();
                 $stmtMYSQL07 = null;
+
+                $stmtMYSQL08->closeCursor();
+                $stmtMYSQL08 = null;
             } catch (PDOException $e) {
                 header("Content-Type: application/json; charset=utf-8");
                 $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
