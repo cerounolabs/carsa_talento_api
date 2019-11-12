@@ -2263,18 +2263,26 @@
                 $stmtMYSQL09->execute([$val01]);
 
                 while ($rowMYSQL09 = $stmtMYSQL09->fetch()) {
-                    if($rowMYSQL09['funcionario_datos_estado_codigo'] === 'A'){
-                        $estado_nombre = 'ACTIVO';
-                    } else {
-                        $estado_nombre = 'INACTIVO';
+                    switch ($rowMYSQL09['funcionario_datos_estado_codigo']) {
+                        case 'A':
+                            $estado_nombre = 'ACTIVO';
+                            break;
+                        
+                        case 'P':
+                                $estado_nombre = 'PENDIENTE';
+                                break;
+
+                        default:
+                            $estado_nombre = 'INACTIVO';
+                            break;
                     }
 
-                    $str                            = trim($rowMYSQL01['funcionario_datos_nombre']);
+                    $str                            = trim($rowMYSQL09['funcionario_datos_nombre']);
                     $pos                            = strpos($str, ' ');
                     $funcionario_datos_nombre_1     = substr($str, 0, $pos);
                     $funcionario_datos_nombre_2     = substr($str, ($pos + 1));
 
-                    $str                            = trim($rowMYSQL01['funcionario_datos_apellido']);
+                    $str                            = trim($rowMYSQL09['funcionario_datos_apellido']);
                     $pos                            = strpos($str, ' ');
                     $funcionario_datos_apellido_1   = substr($str, 0, $pos);
                     $funcionario_datos_apellido_2   = substr($str, ($pos + 1));
