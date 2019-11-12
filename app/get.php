@@ -1748,6 +1748,32 @@
             WHERE a.FUNCELFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
             ORDER BY a.FUNCELAFH DESC";
 
+            $sql09  = "SELECT
+            a.FUNFICCOD         AS          funcionario_datos_codigo,
+            a.FUNFICEST         AS          funcionario_datos_estado_codigo,
+            a.FUNFICNOM         AS          funcionario_datos_nombre,
+            a.FUNFICAPE         AS          funcionario_datos_apellido,
+            a.FUNFICDOC         AS          funcionario_datos_documento_numero,
+            a.FUNFICFHA         AS          funcionario_datos_fecha_nacimiento,
+            a.FUNFICEMA         AS          funcionario_datos_email,
+            a.FUNFICFOT         AS          funcionario_datos_foto,
+            a.FUNFICOBS         AS          funcionario_datos_observacion,
+            a.FUNFICAUS         AS          auditoria_usuario,
+            a.FUNFICAFH         AS          auditoria_fecha,
+            a.FUNFICAIP         AS          auditoria_ip,
+            b.DOMFICCOD         AS          funcionario_datos_documento_codigo,
+            b.DOMFICNOM         AS          funcionario_datos_documento_nombre,
+            c.DOMFICCOD         AS          funcionario_datos_sexo_codigo,
+            c.DOMFICNOM         AS          funcionario_datos_sexo_nombre,
+            d.DOMFICCOD         AS          funcionario_datos_estado_civil_codigo,
+            d.DOMFICNOM         AS          funcionario_datos_estado_civil_nombre
+            FROM FUNFIC a
+            INNER JOIN DOMFIC b ON a.FUNFICTDC = b.DOMFICCOD
+            INNER JOIN DOMFIC c ON a.FUNFICTSC = c.DOMFICCOD
+            INNER JOIN DOMFIC d ON a.FUNFICECC = d.DOMFICCOD
+            WHERE a.FUNFICCFU =  ?
+            ORDER BY a.FUNFICAFH DESC";
+
             try {
                 $connMSSQL  = getConnectionMSSQL();
                 $connMYSQL  = getConnectionMYSQL();
@@ -2233,8 +2259,84 @@
                     $result_funcionario_movil[]   = $detalle;
                 }
 
+                $stmtMYSQL09= $connMYSQL->prepare($sql09);
+                $stmtMYSQL09->execute([$val01]);
+
+                while ($rowMYSQL09 = $stmtMYSQL09->fetch()) {
+                    if($rowMYSQL09['funcionario_datos_estado_codigo'] === 'A'){
+                        $estado_nombre = 'ACTIVO';
+                    } else {
+                        $estado_nombre = 'INACTIVO';
+                    }
+
+                    $str                            = trim($rowMYSQL01['funcionario_datos_nombre']);
+                    $pos                            = strpos($str, ' ');
+                    $funcionario_datos_nombre_1     = substr($str, 0, $pos);
+                    $funcionario_datos_nombre_2     = substr($str, ($pos + 1));
+
+                    $str                            = trim($rowMYSQL01['funcionario_datos_apellido']);
+                    $pos                            = strpos($str, ' ');
+                    $funcionario_datos_apellido_1   = substr($str, 0, $pos);
+                    $funcionario_datos_apellido_2   = substr($str, ($pos + 1));
+
+                    $detalle    = array(
+                        'funcionario_datos_codigo'                                  => $rowMYSQL09['funcionario_datos_codigo'],
+                        'funcionario_datos_estado_codigo'                           => $rowMYSQL09['funcionario_datos_estado_codigo'],
+                        'funcionario_datos_estado_nombre'                           => $estado_nombre,
+                        'funcionario_datos_nombre_1'                                => strtoupper($funcionario_datos_nombre_1),
+                        'funcionario_datos_nombre_2'                                => strtoupper($funcionario_datos_nombre_2),
+                        'funcionario_datos_apellido_1'                              => strtoupper($funcionario_datos_apellido_1),
+                        'funcionario_datos_apellido_2'                              => strtoupper($funcionario_datos_apellido_2),
+                        'funcionario_datos_documento_numero'                        => strtoupper($rowMYSQL09['funcionario_datos_documento_numero']),
+                        'funcionario_datos_fecha_nacimiento'                        => date("Y-m-d", strtotime($rowMYSQL09['funcionario_datos_fecha_nacimiento'])),
+                        'funcionario_datos_email'                                   => strtolower($rowMYSQL09['funcionario_datos_email']),
+                        'funcionario_datos_foto'                                    => strtolower($rowMYSQL09['funcionario_datos_foto']),
+                        'funcionario_datos_observacion'                             => strtoupper($rowMYSQL09['funcionario_datos_observacion']),
+                        'funcionario_datos_documento_codigo'                        => $rowMYSQL09['funcionario_datos_documento_codigo'],
+                        'funcionario_datos_documento_nombre'                        => strtoupper($rowMYSQL09['funcionario_datos_documento_nombre']),
+                        'funcionario_datos_sexo_codigo'                             => $rowMYSQL09['funcionario_datos_sexo_codigo'],
+                        'funcionario_datos_sexo_nombre'                             => strtoupper($rowMYSQL09['funcionario_datos_sexo_nombre']),
+                        'funcionario_datos_estado_civil_codigo'                     => $rowMYSQL09['funcionario_datos_estado_civil_codigo'],
+                        'funcionario_datos_estado_civil_nombre'                     => strtoupper($rowMYSQL09['funcionario_datos_estado_civil_nombre']),
+                        'auditoria_usuario'                                         => strtoupper($rowMYSQL09['auditoria_usuario']),
+                        'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL09['auditoria_fecha'])),
+                        'auditoria_ip'                                              => strtoupper($rowMYSQL09['auditoria_ip'])      
+                    );
+
+                    $result_funcionario_datos[]   = $detalle;
+                }
+
+                if (!isset($result_funcionario_datos)){
+                    $detalle    = array(
+                        'funcionario_datos_codigo'                                  => '',
+                        'funcionario_datos_estado_codigo'                           => '',
+                        'funcionario_datos_estado_nombre'                           => '',
+                        'funcionario_datos_nombre_1'                                => '',
+                        'funcionario_datos_nombre_2'                                => '',
+                        'funcionario_datos_apellido_1'                              => '',
+                        'funcionario_datos_apellido_2'                              => '',
+                        'funcionario_datos_documento_numero'                        => '',
+                        'funcionario_datos_fecha_nacimiento'                        => '',
+                        'funcionario_datos_email'                                   => '',
+                        'funcionario_datos_foto'                                    => '',
+                        'funcionario_datos_observacion'                             => '',
+                        'funcionario_datos_documento_codigo'                        => '',
+                        'funcionario_datos_documento_nombre'                        => '',
+                        'funcionario_datos_sexo_codigo'                             => '',
+                        'funcionario_datos_sexo_nombre'                             => '',
+                        'funcionario_datos_estado_civil_codigo'                     => '',
+                        'funcionario_datos_estado_civil_nombre'                     => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => ''
+                    );
+
+                    $result_funcionario_datos[]   = $detalle;
+                }
+
                 $result = array(
                     'funcionario'                       => $result_funcionario,
+                    'funcionario_datos'                 => $result_funcionario_datos,
                     'funcionario_conyuge'               => $result_funcionario_conyuge,
                     'funcionario_trabajo_anterior'      => $result_funcionario_trabajo_anterior,
                     'funcionario_actividad_economica'   => $result_funcionario_actividad_economica,
