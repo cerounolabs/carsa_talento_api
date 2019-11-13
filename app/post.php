@@ -810,36 +810,48 @@
 
         $val00      = $request->getAttribute('codigo');
         $val01      = $request->getParsedBody()['datos_familiares_persona_nombre'];
-        $val02      = $request->getParsedBody()['datos_familiares_persona_parentezco'];
-        $val03      = $request->getParsedBody()['datos_familiares_persona_ocupacion'];
-        $val04      = $request->getParsedBody()['datos_familiares_persona_empresa'];
-        $val05      = $request->getParsedBody()['datos_familiares_persona_telefono'];
-        $val06      = $request->getParsedBody()['datos_familiares_persona_observacion'];
+        $val02      = $request->getParsedBody()['datos_familiares_persona_apellido'];
+        $val03      = $request->getParsedBody()['datos_familiares_persona_parentezco'];
+        $val04      = $request->getParsedBody()['datos_familiares_persona_ocupacion'];
+        $val05      = $request->getParsedBody()['datos_familiares_persona_empresa'];
+        $val06      = $request->getParsedBody()['datos_familiares_persona_telefono_codigo'];
+        $val07      = $request->getParsedBody()['datos_familiares_persona_telefono_numero'];
+        $val08      = $request->getParsedBody()['datos_familiares_persona_celular_codigo'];
+        $val09      = $request->getParsedBody()['datos_familiares_persona_celular_numero'];
+        $val10      = $request->getParsedBody()['datos_familiares_persona_fecha_nacimiento'];
+        $val11      = $request->getParsedBody()['datos_familiares_persona_documento_numero'];
+        $val12      = $request->getParsedBody()['datos_familiares_persona_observacion'];
 
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
         $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
         $aud03      = $request->getParsedBody()['auditoria_ip'];
 
         $FUNFAMEST  = 'A';
-        $FUNFAMTPC  = $val02;
+        $FUNFAMTPC  = $val03;
+        $FUNFAMTCC  = $val08;
+        $FUNFAMTTC  = $val06;
         $FUNFAMFUC  = $val00;
         $FUNFAMNOM  = trim(strtoupper($val01));
-        $FUNFAMEMP  = trim(strtoupper($val04));
-        $FUNFAMOCU  = trim(strtoupper($val03));
-        $FUNFAMTEL  = trim(strtoupper($val05));
-        $FUNFAMOBS  = trim(strtoupper($val06));
+        $FUNFAMAPE  = trim(strtoupper($val02));
+        $FUNFAMFHA  = $val10;
+        $FUNFAMCIC  = trim(strtoupper($val11));
+        $FUNFAMEMP  = trim(strtoupper($val05));
+        $FUNFAMOCU  = trim(strtoupper($val04));
+        $FUNFAMCEL  = trim(strtoupper($val09));
+        $FUNFAMTEL  = trim(strtoupper($val07));
+        $FUNFAMOBS  = trim(strtoupper($val12));
 
         $FUNFAMAUS  = trim(strtoupper($aud01));
         $FUNFAMAFH  = $aud02;
         $FUNFAMAIP  = trim(strtoupper($aud03));
         
         if (isset($val00) && isset($val01)) {
-            $sql00  = "INSERT INTO FUNFAM (FUNFAMEST, FUNFAMTPC, FUNFAMFUC, FUNFAMNOM, FUNFAMEMP, FUNFAMOCU, FUNFAMTEL, FUNFAMOBS, FUNFAMAUS, FUNFAMAFH, FUNFAMAIP) VALUES (?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'PARENTESCO' AND DOMFICEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            
+            $sql00  = "INSERT INTO FUNFAM (FUNFAMEST, FUNFAMTPC, FUNFAMTCC, FUNFAMTTC, FUNFAMFUC, FUNFAMNOM, FUNFAMAPE, FUNFAMFHA, FUNFAMCIC, FUNFAMEMP, FUNFAMOCU, FUNFAMCEL, FUNFAMTEL, FUNFAMOBS, FUNFAMAUS, FUNFAMAFH, FUNFAMAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$FUNFAMEST, $FUNFAMTPC, $FUNFAMFUC, $FUNFAMNOM, $FUNFAMEMP, $FUNFAMOCU, $FUNFAMTEL, $FUNFAMOBS, $FUNFAMAUS, $FUNFAMAFH, $FUNFAMAIP]); 
+                $stmtMYSQL->execute([$FUNFAMEST, $FUNFAMTPC, $FUNFAMTCC, $FUNFAMTTC, $FUNFAMFUC, $FUNFAMNOM, $FUNFAMAPE, $FUNFAMFHA, $FUNFAMCIC, $FUNFAMEMP, $FUNFAMOCU, $FUNFAMCEL, $FUNFAMTEL, $FUNFAMOBS, $FUNFAMAUS, $FUNFAMAFH, $FUNFAMAIP]);
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
