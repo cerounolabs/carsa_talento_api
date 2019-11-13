@@ -1754,6 +1754,7 @@
             a.FUNFICNOM         AS          funcionario_datos_nombre,
             a.FUNFICAPE         AS          funcionario_datos_apellido,
             a.FUNFICDOC         AS          funcionario_datos_documento_numero,
+            a.FUNFICDOF         AS          funcionario_datos_documento_vencimiento,
             a.FUNFICFHA         AS          funcionario_datos_fecha_nacimiento,
             a.FUNFICEMA         AS          funcionario_datos_email,
             a.FUNFICFOT         AS          funcionario_datos_foto,
@@ -1766,11 +1767,14 @@
             c.DOMFICCOD         AS          funcionario_datos_sexo_codigo,
             c.DOMFICNOM         AS          funcionario_datos_sexo_nombre,
             d.DOMFICCOD         AS          funcionario_datos_estado_civil_codigo,
-            d.DOMFICNOM         AS          funcionario_datos_estado_civil_nombre
+            d.DOMFICNOM         AS          funcionario_datos_estado_civil_nombre,
+            e.DOMFICCOD         AS          funcionario_datos_nacionalidad_codigo,
+            e.DOMFICNOM         AS          funcionario_datos_nacionalidad_nombre
             FROM FUNFIC a
             INNER JOIN DOMFIC b ON a.FUNFICTDC = b.DOMFICCOD
             INNER JOIN DOMFIC c ON a.FUNFICTSC = c.DOMFICCOD
             INNER JOIN DOMFIC d ON a.FUNFICECC = d.DOMFICCOD
+            INNER JOIN DOMFIC e ON a.FUNFICTNC = e.DOMFICCOD
             WHERE a.FUNFICCFU =  ?
             ORDER BY a.FUNFICAFH DESC";
 
@@ -2302,10 +2306,13 @@
                         'funcionario_datos_observacion'                             => strtoupper($rowMYSQL09['funcionario_datos_observacion']),
                         'funcionario_datos_documento_codigo'                        => $rowMYSQL09['funcionario_datos_documento_codigo'],
                         'funcionario_datos_documento_nombre'                        => strtoupper($rowMYSQL09['funcionario_datos_documento_nombre']),
+                        'funcionario_datos_documento_vencimiento'                   => date("Y-m-d", strtotime($rowMYSQL09['funcionario_datos_documento_vencimiento'])),
                         'funcionario_datos_sexo_codigo'                             => $rowMYSQL09['funcionario_datos_sexo_codigo'],
                         'funcionario_datos_sexo_nombre'                             => strtoupper($rowMYSQL09['funcionario_datos_sexo_nombre']),
                         'funcionario_datos_estado_civil_codigo'                     => $rowMYSQL09['funcionario_datos_estado_civil_codigo'],
                         'funcionario_datos_estado_civil_nombre'                     => strtoupper($rowMYSQL09['funcionario_datos_estado_civil_nombre']),
+                        'funcionario_datos_nacionalidad_codigo'                     => $rowMYSQL09['funcionario_datos_nacionalidad_codigo'],
+                        'funcionario_datos_nacionalidad_nombre'                     => strtoupper($rowMYSQL09['funcionario_datos_nacionalidad_nombre']),
                         'auditoria_usuario'                                         => strtoupper($rowMYSQL09['auditoria_usuario']),
                         'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL09['auditoria_fecha'])),
                         'auditoria_ip'                                              => strtoupper($rowMYSQL09['auditoria_ip'])      
@@ -2324,6 +2331,7 @@
                         'funcionario_datos_apellido_1'                              => '',
                         'funcionario_datos_apellido_2'                              => '',
                         'funcionario_datos_documento_numero'                        => '',
+                        'funcionario_datos_documento_vencimiento'                   => '',
                         'funcionario_datos_fecha_nacimiento'                        => '',
                         'funcionario_datos_email'                                   => '',
                         'funcionario_datos_foto'                                    => '',
@@ -2334,6 +2342,8 @@
                         'funcionario_datos_sexo_nombre'                             => '',
                         'funcionario_datos_estado_civil_codigo'                     => '',
                         'funcionario_datos_estado_civil_nombre'                     => '',
+                        'funcionario_datos_nacionalidad_codigo'                     => '',
+                        'funcionario_datos_nacionalidad_nombre'                     => '',
                         'auditoria_usuario'                                         => '',
                         'auditoria_fecha'                                           => '',
                         'auditoria_ip'                                              => ''
