@@ -494,6 +494,58 @@
         $connMYSQL  = null;
     }
 
+    function setNacionalidad(){
+        $DOMFICEST  = 'H';
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'NACIONALIDAD';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.AhPais AS nacionalidad_codigo, a.AhGent AS nacionalidad_nombre FROM FST002 a WHERE a.AhGent IS NOT NULL ORDER BY a.AhGent";
+        $sql01      = "SELECT * FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU = $rowMSSQL['nacionalidad_codigo'];
+                $DOMFICNOM = trim($rowMSSQL['nacionalidad_nombre']);
+
+                $stmtMYSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMYSQL1){
+                    $stmtMYSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAFH, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setNacionalidad(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
@@ -548,6 +600,10 @@
     setColFamiliares();
     echo "\n";
     echo "FIN setColFamiliares() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    setNacionalidad();
+    echo "\n";
+    echo "FIN setNacionalidad() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
