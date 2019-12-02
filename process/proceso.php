@@ -586,7 +586,7 @@
             $stmtMYSQL1 = null;
             $stmtMYSQL2 = null;
         } catch (PDOException $e) {
-            echo 'Error setCiudad(): '.$e;
+            echo 'Error setBarrio(): '.$e;
         }
 
         $connMSSQL  = null;
@@ -640,17 +640,25 @@
     echo "\n";
     echo "FIN setCargo() => ".date('Y-m-d H:i:s');
     echo "\n";
+    echo "INICIO setPrefijo() => ".date('Y-m-d H:i:s');
+    echo "\n";
     setPrefijo();
     echo "\n";
     echo "FIN setPrefijo() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    echo "INICIO setColFamiliares() => ".date('Y-m-d H:i:s');
     echo "\n";
     setColFamiliares();
     echo "\n";
     echo "FIN setColFamiliares() => ".date('Y-m-d H:i:s');
     echo "\n";
+    echo "INICIO setNacionalidad() => ".date('Y-m-d H:i:s');
+    echo "\n";
     setNacionalidad();
     echo "\n";
     echo "FIN setNacionalidad() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    echo "INICIO setBarrio() => ".date('Y-m-d H:i:s');
     echo "\n";
     setBarrio();
     echo "\n";
