@@ -2667,6 +2667,147 @@
         return $json;
     });
 
+    $app->get('/v1/650', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        a.AjBarr            AS          barrio_codigo,
+        a.AjNomb            AS          barrio_nombre,
+
+        b.ApCiud            AS          ciudad_codigo,
+        b.ApNomb            AS          ciudad_nombre,
+
+        c.AiDept            AS          departamento_codigo,
+        c.AiNomb            AS          departamento_nombre
+
+        FROM FST0051 a
+        INNER JOIN FST003 b ON a.ApCiud = b.ApCiud
+        INNER JOIN FST004 c ON b.AiDept = c.AiDept
+        
+        ORDER BY c.AiNomb, b.ApNomb, a.AjNomb";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute(); 
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $detalle    = array(
+                    'departamento_codigo'           => $rowMSSQL['departamento_codigo'],
+                    'departamento_nombre'           => strtoupper($rowMSSQL['departamento_nombre']),
+                    'ciudad_codigo'                 => $rowMSSQL['ciudad_codigo'],
+                    'ciudad_nombre'                 => strtoupper($rowMSSQL['ciudad_nombre']),
+                    'barrio_codigo'                 => $rowMSSQL['barrio_codigo'],
+                    'barrio_nombre'                 => strtoupper($rowMSSQL['barrio_nombre'])
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'departamento_codigo'           => '',
+                    'departamento_nombre'           => '',
+                    'ciudad_codigo'                 => '',
+                    'ciudad_nombre'                 => '',
+                    'barrio_codigo'                 => '',
+                    'barrio_nombre'                 => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMSSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
+
+    $app->get('/v1/650/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01      = $request->getAttribute('codigo');
+        
+        if (isset($val01)) {
+            $sql00  = "SELECT
+            a.AjBarr            AS          barrio_codigo,
+            a.AjNomb            AS          barrio_nombre,
+
+            b.ApCiud            AS          ciudad_codigo,
+            b.ApNomb            AS          ciudad_nombre,
+
+            c.AiDept            AS          departamento_codigo,
+            c.AiNomb            AS          departamento_nombre
+
+            FROM FST0051 a
+            INNER JOIN FST003 b ON a.ApCiud = b.ApCiud
+            INNER JOIN FST004 c ON b.AiDept = c.AiDept
+
+            WHERE a.AjBarr = ?
+            
+            ORDER BY c.AiNomb, b.ApNomb, a.AjNomb";
+
+            try {
+                $connMSSQL  = getConnectionMSSQL();
+                $stmtMSSQL  = $connMSSQL->prepare($sql00);
+                $stmtMSSQL->execute([$val01]); 
+
+                while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                    $detalle    = array(
+                        'departamento_codigo'           => $rowMSSQL['departamento_codigo'],
+                        'departamento_nombre'           => strtoupper($rowMSSQL['departamento_nombre']),
+                        'ciudad_codigo'                 => $rowMSSQL['ciudad_codigo'],
+                        'ciudad_nombre'                 => strtoupper($rowMSSQL['ciudad_nombre']),
+                        'barrio_codigo'                 => $rowMSSQL['barrio_codigo'],
+                        'barrio_nombre'                 => strtoupper($rowMSSQL['barrio_nombre'])
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle = array(
+                        'departamento_codigo'           => '',
+                        'departamento_nombre'           => '',
+                        'ciudad_codigo'                 => '',
+                        'ciudad_nombre'                 => '',
+                        'barrio_codigo'                 => '',
+                        'barrio_nombre'                 => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtMSSQL->closeCursor();
+                $stmtMSSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
+
     $app->get('/v1/700', function($request) {
         require __DIR__.'/../src/connect.php';
 
