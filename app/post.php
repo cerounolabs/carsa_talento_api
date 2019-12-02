@@ -648,7 +648,7 @@
         $FUNPARFUC  = $val00;
         $FUNPARDEC  = $val02;
         $FUNPARCIC  = $val03;
-        $FUNPARBAR  = trim(strtoupper($val04));
+        $FUNPARBAC  = $val04;
         $FUNPARCAS  = trim(strtoupper($val05));
         $FUNPARCA1  = trim(strtoupper($val06));
         $FUNPARCA2  = trim(strtoupper($val07));
@@ -664,12 +664,12 @@
         $FUNPARAIP  = trim(strtoupper($aud03));
         
         if (isset($val00) && isset($val01)) {
-            $sql00  = "INSERT INTO FUNPAR (FUNPAREST, FUNPARTVC, FUNPARTCC, FUNPARTEC, FUNPARTTC, FUNPARFUC, FUNPARCIC, FUNPARBAR, FUNPARCAS, FUNPARCA1, FUNPARCA2, FUNPARCA3, FUNPARUBI, FUNPARTE1, FUNPARCE1, FUNPARCE2, FUNPAREMA, FUNPAROBS, FUNPARAUS, FUNPARAFH, FUNPARAIP) VALUES (?, ?, ?, ?, ?, ?, (SELECT LOCCIUCOD FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO FUNPAR (FUNPAREST, FUNPARTVC, FUNPARTCC, FUNPARTEC, FUNPARTTC, FUNPARFUC, FUNPARCIC, FUNPARBAC, FUNPARCAS, FUNPARCA1, FUNPARCA2, FUNPARCA3, FUNPARUBI, FUNPARTE1, FUNPARCE1, FUNPARCE2, FUNPAREMA, FUNPAROBS, FUNPARAUS, FUNPARAFH, FUNPARAIP) VALUES (?, ?, ?, ?, ?, ?, (SELECT LOCCIUCOD FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$FUNPAREST, $FUNPARTVC, $FUNPARTCC, $FUNPARTEC, $FUNPARTTC, $FUNPARFUC, $FUNPARCIC, $FUNPARDEC, $FUNPARBAR, $FUNPARCAS, $FUNPARCA1, $FUNPARCA2, $FUNPARCA3, $FUNPARUBI, $FUNPARTE1, $FUNPARCE1, $FUNPARCE2, $FUNPAREMA, $FUNPAROBS, $FUNPARAUS, $FUNPARAFH, $FUNPARAIP]); 
+                $stmtMYSQL->execute([$FUNPAREST, $FUNPARTVC, $FUNPARTCC, $FUNPARTEC, $FUNPARTTC, $FUNPARFUC, $FUNPARCIC, $FUNPARDEC, $FUNPARBAC, $FUNPARCAS, $FUNPARCA1, $FUNPARCA2, $FUNPARCA3, $FUNPARUBI, $FUNPARTE1, $FUNPARCE1, $FUNPARCE2, $FUNPAREMA, $FUNPAROBS, $FUNPARAUS, $FUNPARAFH, $FUNPARAIP]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
