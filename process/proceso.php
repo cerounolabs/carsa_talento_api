@@ -546,6 +546,53 @@
         $connMYSQL  = null;
     }
 
+    function setBarrio(){
+        $sql00  = "SELECT a.AiDept AS departamento_codigo, a.ApCiud AS ciudad_codigo, a.AjBarr AS barrio_codigo, a.AjNomb AS barrio_nombre FROM FST0051 a ORDER BY a.AiDept, a.ApCiud, a.AjBarr, a.AjNomb";
+        $sql01  = "SELECT * FROM LOCBAR a INNER JOIN LOCCIU b ON a.LOCBARCIC = b.LOCCIUCOD INNER JOIN LOCDEP c ON b.LOCCIUDEC = c.LOCDEPCOD WHERE a.LOCBAREQU = ? AND b.LOCCIUEQU = ? AND c.LOCDEPEQU = ?";
+
+        $sql02  = "INSERT INTO LOCBAR(LOCBAREST, LOCBARCIC, LOCBARNOM, LOCBAREQU, LOCBAROBS, LOCBARAUS, LOCBARAFH, LOCBARAIP) 
+        VALUES ('A', (SELECT LOCCIUCOD FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?), ?, ?, '', 'MIGRACION', NOW(), '192.168.16.92')";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $codDepto   = $rowMSSQL['departamento_codigo'];
+                $codCiudad  = $rowMSSQL['ciudad_codigo'];
+                $codBarrio  = $rowMSSQL['barrio_codigo'];
+                $nomBarrio  = $rowMSSQL['barrio_nombre'];
+
+                $stmtMYSQL1->execute([$codBarrio, $codCiudad, $codDepto]);
+
+                $rowMSYQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMSYQL1){
+                    $stmtMYSQL2->execute([$codCiudad, $codDepto, $nomBarrio, $codBarrio]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setCiudad(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
@@ -604,6 +651,10 @@
     setNacionalidad();
     echo "\n";
     echo "FIN setNacionalidad() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    setBarrio();
+    echo "\n";
+    echo "FIN setBarrio() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
