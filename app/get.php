@@ -2228,7 +2228,7 @@
                         'funcionario_familiares_estado_nombre'                      => $estado_nombre,
                         'funcionario_familiares_nombre'                             => strtoupper($rowMYSQL07['funcionario_familiares_nombre']),
                         'funcionario_familiares_apellido'                           => strtoupper($rowMYSQL07['funcionario_familiares_apellido']),
-                        'funcionario_familiares_completo'                           => strtoupper($rowMYSQL07['funcionario_familiares_apellido']).', '.strtoupper($rowMYSQL07['funcionario_familiares_nombre']),
+                        'funcionario_familiares_completo'                           => strtoupper($rowMYSQL07['funcionario_familiares_nombre']).', '.strtoupper($rowMYSQL07['funcionario_familiares_apellido']),
                         'funcionario_familiares_documento_numero'                   => strtoupper($rowMYSQL07['funcionario_familiares_documento_numero']),
                         'funcionario_familiares_fecha_nacimiento'                   => date("d/m/Y", strtotime($rowMYSQL07['funcionario_familiares_fecha_nacimiento'])),
                         'funcionario_familiares_empresa'                            => strtoupper($rowMYSQL07['funcionario_familiares_empresa']),
