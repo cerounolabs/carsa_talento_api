@@ -2452,7 +2452,7 @@
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
                 $detalle    = array(
                     'departamento_codigo'           => $rowMSSQL['departamento_codigo'],
-                    'departamento_nombre'           => strtoupper($rowMSSQL['departamento_nombre'])
+                    'departamento_nombre'           => trim(strtoupper($rowMSSQL['departamento_nombre']))
                 );
 
                 $result[]   = $detalle;
@@ -2507,7 +2507,7 @@
                 while ($rowMSSQL = $stmtMSSQL->fetch()) {
                     $detalle    = array(
                         'departamento_codigo'           => $rowMSSQL['departamento_codigo'],
-                        'departamento_nombre'           => strtoupper($rowMSSQL['departamento_nombre'])
+                        'departamento_nombre'           => trim(strtoupper($rowMSSQL['departamento_nombre']))
                     );
 
                     $result[]   = $detalle;
@@ -2565,9 +2565,9 @@
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
                 $detalle    = array(
                     'departamento_codigo'           => $rowMSSQL['departamento_codigo'],
-                    'departamento_nombre'           => strtoupper($rowMSSQL['departamento_nombre']),
+                    'departamento_nombre'           => trim(strtoupper($rowMSSQL['departamento_nombre'])),
                     'ciudad_codigo'                 => $rowMSSQL['ciudad_codigo'],
-                    'ciudad_nombre'                 => strtoupper($rowMSSQL['ciudad_nombre'])
+                    'ciudad_nombre'                 => trim(strtoupper($rowMSSQL['ciudad_nombre']))
                 );
 
                 $result[]   = $detalle;
@@ -2628,9 +2628,9 @@
                 while ($rowMSSQL = $stmtMSSQL->fetch()) {
                     $detalle    = array(
                         'departamento_codigo'           => $rowMSSQL['departamento_codigo'],
-                        'departamento_nombre'           => strtoupper($rowMSSQL['departamento_nombre']),
+                        'departamento_nombre'           => trim(strtoupper($rowMSSQL['departamento_nombre'])),
                         'ciudad_codigo'                 => $rowMSSQL['ciudad_codigo'],
-                        'ciudad_nombre'                 => strtoupper($rowMSSQL['ciudad_nombre'])
+                        'ciudad_nombre'                 => trim(strtoupper($rowMSSQL['ciudad_nombre']))
                     );
 
                     $result[]   = $detalle;
@@ -2694,11 +2694,11 @@
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
                 $detalle    = array(
                     'departamento_codigo'           => $rowMSSQL['departamento_codigo'],
-                    'departamento_nombre'           => strtoupper($rowMSSQL['departamento_nombre']),
+                    'departamento_nombre'           => trim(strtoupper($rowMSSQL['departamento_nombre'])),
                     'ciudad_codigo'                 => $rowMSSQL['ciudad_codigo'],
-                    'ciudad_nombre'                 => strtoupper($rowMSSQL['ciudad_nombre']),
+                    'ciudad_nombre'                 => trim(strtoupper($rowMSSQL['ciudad_nombre'])),
                     'barrio_codigo'                 => $rowMSSQL['barrio_codigo'],
-                    'barrio_nombre'                 => strtoupper($rowMSSQL['barrio_nombre'])
+                    'barrio_nombre'                 => trim(strtoupper($rowMSSQL['barrio_nombre']))
                 );
 
                 $result[]   = $detalle;
@@ -2765,11 +2765,11 @@
                 while ($rowMSSQL = $stmtMSSQL->fetch()) {
                     $detalle    = array(
                         'departamento_codigo'           => $rowMSSQL['departamento_codigo'],
-                        'departamento_nombre'           => strtoupper($rowMSSQL['departamento_nombre']),
+                        'departamento_nombre'           => trim(strtoupper($rowMSSQL['departamento_nombre'])),
                         'ciudad_codigo'                 => $rowMSSQL['ciudad_codigo'],
-                        'ciudad_nombre'                 => strtoupper($rowMSSQL['ciudad_nombre']),
+                        'ciudad_nombre'                 => trim(strtoupper($rowMSSQL['ciudad_nombre'])),
                         'barrio_codigo'                 => $rowMSSQL['barrio_codigo'],
-                        'barrio_nombre'                 => strtoupper($rowMSSQL['barrio_nombre'])
+                        'barrio_nombre'                 => trim(strtoupper($rowMSSQL['barrio_nombre']))
                     );
 
                     $result[]   = $detalle;
@@ -2841,11 +2841,11 @@
                 while ($rowMSSQL = $stmtMSSQL->fetch()) {
                     $detalle    = array(
                         'departamento_codigo'           => $rowMSSQL['departamento_codigo'],
-                        'departamento_nombre'           => strtoupper($rowMSSQL['departamento_nombre']),
+                        'departamento_nombre'           => trim(strtoupper($rowMSSQL['departamento_nombre'])),
                         'ciudad_codigo'                 => $rowMSSQL['ciudad_codigo'],
-                        'ciudad_nombre'                 => strtoupper($rowMSSQL['ciudad_nombre']),
+                        'ciudad_nombre'                 => trim(strtoupper($rowMSSQL['ciudad_nombre'])),
                         'barrio_codigo'                 => $rowMSSQL['barrio_codigo'],
-                        'barrio_nombre'                 => strtoupper($rowMSSQL['barrio_nombre'])
+                        'barrio_nombre'                 => trim(strtoupper($rowMSSQL['barrio_nombre']))
                     );
 
                     $result[]   = $detalle;
