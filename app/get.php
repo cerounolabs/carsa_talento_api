@@ -1632,7 +1632,6 @@
             $sql04  = "SELECT
             a.FUNPARCOD         AS          funcionario_particulares_codigo,
             a.FUNPAREST         AS          funcionario_particulares_estado_codigo,
-            a.FUNPARBAR         AS          funcionario_particulares_barrio,
             a.FUNPARCAS         AS          funcionario_particulares_casa_numero,
             a.FUNPARCA1         AS          funcionario_particulares_calle_1,
             a.FUNPARCA2         AS          funcionario_particulares_calle_2,
@@ -1659,14 +1658,21 @@
             e.DOMFICNOM         AS          funcionario_particulares_telefono_nombre_1,
 
             f.LOCCIUCOD         AS          funcionario_particulares_ciudad_codigo,
-            f.LOCCIUNOM         AS          funcionario_particulares_ciudad_nombre
+            f.LOCCIUNOM         AS          funcionario_particulares_ciudad_nombre,
+
+            g.LOCBARCOD         AS          funcionario_particulares_barrio_codigo,
+            g.LOCBARNOM         AS          funcionario_particulares_barrio_nombre
+
             FROM FUNPAR a
             INNER JOIN DOMFIC b ON a.FUNPARTVC = b.DOMFICCOD
             INNER JOIN DOMFIC c ON a.FUNPARTCC = c.DOMFICCOD
             INNER JOIN DOMFIC d ON a.FUNPARTEC = d.DOMFICCOD
             INNER JOIN DOMFIC e ON a.FUNPARTTC = e.DOMFICCOD
             INNER JOIN LOCCIU f ON a.FUNPARCIC = f.LOCCIUCOD
+            INNER JOIN LOCBAR g ON a.FUNPARBAC = f.LOCBARCOD
+
             WHERE a.FUNPARFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
+
             ORDER BY a.FUNPARAFH DESC";
 
             $sql05  = "SELECT
@@ -2002,7 +2008,6 @@
                         'funcionario_particulares_codigo'                           => $rowMYSQL04['funcionario_particulares_codigo'],
                         'funcionario_particulares_estado_codigo'                    => $rowMYSQL04['funcionario_particulares_estado_codigo'],
                         'funcionario_particulares_estado_nombre'                    => $estado_nombre,
-                        'funcionario_particulares_barrio'                           => strtoupper($rowMYSQL04['funcionario_particulares_barrio']),
                         'funcionario_particulares_casa_numero'                      => strtoupper($rowMYSQL04['funcionario_particulares_casa_numero']),
                         'funcionario_particulares_calle_1'                          => strtoupper($rowMYSQL04['funcionario_particulares_calle_1']),
                         'funcionario_particulares_calle_2'                          => strtoupper($rowMYSQL04['funcionario_particulares_calle_2']),
@@ -2020,6 +2025,8 @@
                         'funcionario_particulares_vivienda_nombre'                  => strtoupper($rowMYSQL04['funcionario_particulares_vivienda_nombre']),
                         'funcionario_particulares_ciudad_codigo'                    => $rowMYSQL04['funcionario_particulares_ciudad_codigo'],
                         'funcionario_particulares_ciudad_nombre'                    => strtoupper($rowMYSQL04['funcionario_particulares_ciudad_nombre']),
+                        'funcionario_particulares_barrio_codigo'                    => $rowMYSQL04['funcionario_particulares_barrio_codigo'],
+                        'funcionario_particulares_barrio_nombre'                    => strtoupper($rowMYSQL04['funcionario_particulares_barrio_nombre']),
                         'auditoria_usuario'                                         => strtoupper($rowMYSQL04['auditoria_usuario']),
                         'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL04['auditoria_fecha'])),
                         'auditoria_ip'                                              => strtoupper($rowMYSQL04['auditoria_ip'])
@@ -2033,7 +2040,6 @@
                         'funcionario_particulares_codigo'                           => '',
                         'funcionario_particulares_estado_codigo'                    => '',
                         'funcionario_particulares_estado_nombre'                    => '',
-                        'funcionario_particulares_barrio'                           => '',
                         'funcionario_particulares_casa_numero'                      => '',
                         'funcionario_particulares_calle_1'                          => '',
                         'funcionario_particulares_calle_2'                          => '',
@@ -2051,6 +2057,8 @@
                         'funcionario_particulares_vivienda_nombre'                  => '',
                         'funcionario_particulares_ciudad_codigo'                    => '',
                         'funcionario_particulares_ciudad_nombre'                    => '',
+                        'funcionario_particulares_barrio_codigo'                    => '',
+                        'funcionario_particulares_barrio_nombre'                    => '',
                         'auditoria_usuario'                                         => '',
                         'auditoria_fecha'                                           => '',
                         'auditoria_ip'                                              => ''
