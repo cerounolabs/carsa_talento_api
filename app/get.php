@@ -1792,6 +1792,12 @@
                 $stmtMSSQL->execute([$val01]);
 
                 while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                    if (isset($rowMSSQL['funcionario_foto'])) {
+                        $funcionario_foto = strtolower($rowMSSQL['funcionario_foto']);
+                    } else {
+                        $funcionario_foto = '../assets/images/users/photo.png';
+                    }
+                    
                     $detalle    = array(
                         'funcionario_codigo'                                        => $rowMSSQL['funcionario_codigo'],
                         'funcionario_usuario'                                       => strtoupper($rowMSSQL['funcionario_usuario']),
@@ -1807,7 +1813,7 @@
                         'funcionario_gerencia'                                      => strtoupper($rowMSSQL['funcionario_gerencia']),
                         'funcionario_deparmento'                                    => strtoupper($rowMSSQL['funcionario_deparmento']),
                         'funcionario_cargo'                                         => strtoupper($rowMSSQL['funcionario_cargo']),
-                        'funcionario_foto'                                          => strtolower($rowMSSQL['funcionario_foto']),
+                        'funcionario_foto'                                          => $funcionario_foto,
                         'funcionario_antiguedad'                                    => strtoupper($rowMSSQL['funcionario_antiguedad'])
                     );
 
@@ -1830,7 +1836,7 @@
                         'funcionario_gerencia'                                      => '',
                         'funcionario_deparmento'                                    => '',
                         'funcionario_cargo'                                         => '',
-                        'funcionario_foto'                                          => '',
+                        'funcionario_foto'                                          => '../assets/images/users/photo.png',
                         'funcionario_antiguedad'                                    => ''
                     );
 
@@ -2398,7 +2404,7 @@
                         'funcionario_gerencia'                  => '',
                         'funcionario_deparmento'                => '',
                         'funcionario_cargo'                     => '',
-                        'funcionario_foto'                      => '',
+                        'funcionario_foto'                      => '../assets/images/users/photo.png',
                         'funcionario_antiguedad'                => ''
                     );
 
