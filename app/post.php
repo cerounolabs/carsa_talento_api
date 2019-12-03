@@ -920,4 +920,56 @@
         
         return $json;
     });
+
+    $app->post('/v1/2100/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val00      = $request->getAttribute('codigo');
+        $val01      = $request->getParsedBody()['datos_academicos_universidad_codigo'];
+        $val02      = $request->getParsedBody()['datos_academicos_carrera_codigo'];
+        $val03      = $request->getParsedBody()['datos_academicos_grado_codigo'];
+        $val04      = $request->getParsedBody()['datos_academicos_estado_codigo'];
+        $val05      = $request->getParsedBody()['datos_academicos_observacion'];
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        $FUNACAEST  = 'A';
+        $FUNACATUC  = $val01;
+        $FUNACATCC  = $val02;
+        $FUNACATGC  = $val03;
+        $FUNACATEC  = $val04;
+        $FUNACAFUC  = $val00;
+        $FUNACAOBS  = $val05;
+        $FUNACAAUS  = trim(strtoupper($aud01));
+        $FUNACAAFH  = $aud02;
+        $FUNACAAIP  = $aud03;
+        
+        if (isset($val00) && isset($val01)) {
+            $sql00  = "INSERT INTO FUNACA (FUNACAEST, FUNACATUC, FUNACATCC, FUNACATGC, FUNACATEC, FUNACAFUC, FUNACAOBS, FUNACAAUS, FUNACAAFH, FUNACAAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            try {
+                $connMYSQL  = getConnectionMYSQL();
+                $stmtMYSQL  = $connMYSQL->prepare($sql00);
+                $stmtMYSQL->execute([$FUNACAEST, $FUNACATUC, $FUNACATCC, $FUNACATGC, $FUNACATEC, $FUNACAFUC, $FUNACAOBS, $FUNACAAUS, $FUNACAAFH, $FUNACAAIP]); 
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtMYSQL->closeCursor();
+                $stmtMYSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMYSQL  = null;
+        
+        return $json;
+    });
     
