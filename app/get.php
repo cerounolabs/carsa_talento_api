@@ -1784,6 +1784,29 @@
             WHERE a.FUNFICCFU =  ?
             ORDER BY a.FUNFICAFH DESC";
 
+            $sql10  = "SELECT
+            a.FUNACACOD         AS          funcionario_academico_codigo,
+            a.FUNACAEST         AS          funcionario_academico_estado_codigo,
+            a.FUNACAOBS         AS          funcionario_academico_observacion,
+            a.FUNACAAUS         AS          auditoria_usuario,
+            a.FUNACAAFH         AS          auditoria_fecha,
+            a.FUNACAAIP         AS          auditoria_ip,
+            b.DOMFICCOD         AS          funcionario_academico_universidad_codigo,
+            b.DOMFICNOM         AS          funcionario_academico_universidad_nombre,
+            c.DOMFICCOD         AS          funcionario_academico_carrera_codigo,
+            c.DOMFICNOM         AS          funcionario_academico_carrera_nombre,
+            d.DOMFICCOD         AS          funcionario_academico_grado_academico_codigo,
+            d.DOMFICNOM         AS          funcionario_academico_grado_academico_nombre,
+            e.DOMFICCOD         AS          funcionario_academico_grado_estado_codigo,
+            e.DOMFICNOM         AS          funcionario_academico_grado_estado_nombre
+            FROM FUNACA a
+            INNER JOIN DOMFIC b ON a.FUNACATUC = b.DOMFICCOD
+            INNER JOIN DOMFIC c ON a.FUNACATCC = c.DOMFICCOD
+            INNER JOIN DOMFIC d ON a.FUNACATGC = d.DOMFICCOD
+            INNER JOIN DOMFIC e ON a.FUNACATEC = e.DOMFICCOD
+            WHERE a.FUNACAFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
+            ORDER BY a.FUNACAAFH DESC";
+
             try {
                 $connMSSQL  = getConnectionMSSQL();
                 $connMYSQL  = getConnectionMYSQL();
@@ -2372,6 +2395,59 @@
                     $result_funcionario_datos[]   = $detalle;
                 }
 
+                $stmtMYSQL10= $connMYSQL->prepare($sql10);
+                $stmtMYSQL10->execute([$val01]);
+
+                while ($rowMYSQL10 = $stmtMYSQL10->fetch()) {
+                    if($rowMYSQL10['funcionario_academico_estado_codigo'] === 'A'){
+                        $estado_nombre = 'ACTIVO';
+                    } else {
+                        $estado_nombre = 'INACTIVO';
+                    }
+
+                    $detalle    = array(
+                        'funcionario_academico_codigo'                              => $rowMYSQL10['funcionario_academico_codigo'],
+                        'funcionario_academico_estado_codigo'                       => $rowMYSQL10['funcionario_academico_estado_codigo'],
+                        'funcionario_academico_estado_nombre'                       => $estado_nombre,
+                        'funcionario_academico_observacion'                         => strtoupper($rowMYSQL10['funcionario_academico_observacion']),
+                        'funcionario_academico_universidad_codigo'                  => $rowMYSQL10['funcionario_academico_universidad_codigo'],
+                        'funcionario_academico_universidad_nombre'                  => strtoupper($rowMYSQL10['funcionario_academico_universidad_nombre']),
+                        'funcionario_academico_carrera_codigo'                      => $rowMYSQL10['funcionario_academico_carrera_codigo'],
+                        'funcionario_academico_carrera_nombre'                      => strtoupper($rowMYSQL10['funcionario_academico_carrera_nombre']),
+                        'funcionario_academico_grado_academico_codigo'              => $rowMYSQL10['funcionario_academico_grado_academico_codigo'],
+                        'funcionario_academico_grado_academico_nombre'              => strtoupper($rowMYSQL10['funcionario_academico_grado_academico_nombre']),
+                        'funcionario_academico_grado_estado_codigo'                 => $rowMYSQL10['funcionario_academico_grado_estado_codigo'],
+                        'funcionario_academico_grado_estado_nombre'                 => strtoupper($rowMYSQL10['funcionario_academico_grado_estado_nombre']),
+                        'auditoria_usuario'                                         => strtoupper($rowMYSQL10['auditoria_usuario']),
+                        'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL10['auditoria_fecha'])),
+                        'auditoria_ip'                                              => strtoupper($rowMYSQL10['auditoria_ip'])       
+                    );
+
+                    $result_funcionario_academico[]   = $detalle;
+                }
+
+                if (!isset($result_funcionario_academico)){
+                    $detalle    = array(
+                        'funcionario_academico_codigo'                              => '',
+                        'funcionario_academico_estado_codigo'                       => '',
+                        'funcionario_academico_estado_nombre'                       => '',
+                        'funcionario_academico_observacion'                         => '',
+                        'funcionario_academico_universidad_codigo'                  => '',
+                        'funcionario_movil_marca_nombre'                            => '',
+                        'funcionario_academico_carrera_codigo'                      => '',
+                        'funcionario_academico_carrera_nombre'                      => '',
+                        'funcionario_academico_grado_academico_nombre'              => '',
+                        'funcionario_academico_grado_academico_codigo'              => '',
+                        'funcionario_academico_grado_estado_codigo'                 => '',
+                        'funcionario_academico_grado_estado_nombre'                 => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => ''
+                    );
+
+                    $result_funcionario_academico[]   = $detalle;
+                }
+
                 $result = array(
                     'funcionario'                       => $result_funcionario,
                     'funcionario_datos'                 => $result_funcionario_datos,
@@ -2382,7 +2458,8 @@
                     'funcionario_referencia'            => $result_funcionario_referencia,
                     'funcionario_actividad'             => $result_funcionario_actividad,
                     'funcionario_familiares'            => $result_funcionario_familiares,
-                    'funcionario_movil'                 => $result_funcionario_movil
+                    'funcionario_movil'                 => $result_funcionario_movil,
+                    'funcionario_academico'             => $result_funcionario_academico
                 );
 
                 if (isset($result)){
@@ -2438,6 +2515,12 @@
 
                 $stmtMYSQL08->closeCursor();
                 $stmtMYSQL08 = null;
+
+                $stmtMYSQL09->closeCursor();
+                $stmtMYSQL09 = null;
+
+                $stmtMYSQL10->closeCursor();
+                $stmtMYSQL10 = null;
             } catch (PDOException $e) {
                 header("Content-Type: application/json; charset=utf-8");
                 $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
