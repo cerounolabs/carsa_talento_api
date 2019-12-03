@@ -1647,22 +1647,16 @@
             a.FUNPARAIP         AS          auditoria_ip,
             b.DOMFICCOD         AS          funcionario_particulares_vivienda_codigo,
             b.DOMFICNOM         AS          funcionario_particulares_vivienda_nombre,
-
             c.DOMFICCOD         AS          funcionario_particulares_celular_codigo_1,
             c.DOMFICNOM         AS          funcionario_particulares_celular_nombre_1,
-
             d.DOMFICCOD         AS          funcionario_particulares_celular_codigo_2,
             d.DOMFICNOM         AS          funcionario_particulares_celular_nombre_2,
-
             e.DOMFICCOD         AS          funcionario_particulares_telefono_codigo_1,
             e.DOMFICNOM         AS          funcionario_particulares_telefono_nombre_1,
-
             f.LOCCIUCOD         AS          funcionario_particulares_ciudad_codigo,
             f.LOCCIUNOM         AS          funcionario_particulares_ciudad_nombre,
-
             g.LOCBARCOD         AS          funcionario_particulares_barrio_codigo,
             g.LOCBARNOM         AS          funcionario_particulares_barrio_nombre
-
             FROM FUNPAR a
             INNER JOIN DOMFIC b ON a.FUNPARTVC = b.DOMFICCOD
             INNER JOIN DOMFIC c ON a.FUNPARTCC = c.DOMFICCOD
@@ -1670,9 +1664,7 @@
             INNER JOIN DOMFIC e ON a.FUNPARTTC = e.DOMFICCOD
             INNER JOIN LOCCIU f ON a.FUNPARCIC = f.LOCCIUCOD
             INNER JOIN LOCBAR g ON a.FUNPARBAC = g.LOCBARCOD
-
             WHERE a.FUNPARFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
-
             ORDER BY a.FUNPARAFH DESC";
 
             $sql05  = "SELECT
@@ -1722,17 +1714,27 @@
             a.FUNFAMCOD         AS          funcionario_familiares_codigo,
             a.FUNFAMEST         AS          funcionario_familiares_estado_codigo,
             a.FUNFAMNOM         AS          funcionario_familiares_nombre,
+            a.FUNFAMAPE         AS          funcionario_familiares_apellido,
+            a.FUNFAMCIC         AS          funcionario_familiares_documento_numero,
+            a.FUNFAMFHA         AS          funcionario_familiares_fecha_nacimiento,
             a.FUNFAMEMP         AS          funcionario_familiares_empresa,
             a.FUNFAMOCU         AS          funcionario_familiares_ocupacion,
-            a.FUNFAMTEL         AS          funcionario_familiares_telefono,
+            a.FUNFAMCEL         AS          funcionario_familiares_celular_numero,
+            a.FUNFAMTEL         AS          funcionario_familiares_telefono_numero,
             a.FUNFAMOBS         AS          funcionario_familiares_observacion,
             a.FUNFAMAUS         AS          auditoria_usuario,
             a.FUNFAMAFH         AS          auditoria_fecha,
             a.FUNFAMAIP         AS          auditoria_ip,
             b.DOMFICCOD         AS          funcionario_familiares_parentezco_codigo,
-            b.DOMFICNOM         AS          funcionario_familiares_parentezco_nombre
+            b.DOMFICNOM         AS          funcionario_familiares_parentezco_nombre,
+            c.DOMFICCOD         AS          funcionario_familiares_celular_codigo,
+            c.DOMFICNOM         AS          funcionario_familiares_celular_nombre,
+            d.DOMFICCOD         AS          funcionario_familiares_telefono_codigo,
+            d.DOMFICNOM         AS          funcionario_familiares_telefono_nombre
             FROM FUNFAM a
             INNER JOIN DOMFIC b ON a.FUNFAMTPC = b.DOMFICCOD
+            INNER JOIN DOMFIC c ON a.FUNFAMTCC = c.DOMFICCOD
+            INNER JOIN DOMFIC d ON a.FUNRPPTTC = d.DOMFICCOD
             WHERE a.FUNFAMFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
             ORDER BY a.FUNFAMAFH DESC";
 
@@ -2225,9 +2227,18 @@
                         'funcionario_familiares_estado_codigo'                      => $rowMYSQL07['funcionario_familiares_estado_codigo'],
                         'funcionario_familiares_estado_nombre'                      => $estado_nombre,
                         'funcionario_familiares_nombre'                             => strtoupper($rowMYSQL07['funcionario_familiares_nombre']),
+                        'funcionario_familiares_apellido'                           => strtoupper($rowMYSQL07['funcionario_familiares_apellido']),
+                        'funcionario_familiares_completo'                           => strtoupper($rowMYSQL07['funcionario_familiares_apellido']).', '.strtoupper($rowMYSQL07['funcionario_familiares_nombre']),
+                        'funcionario_familiares_documento_numero'                   => strtoupper($rowMYSQL07['funcionario_familiares_documento_numero']),
+                        'funcionario_familiares_fecha_nacimiento'                   => date("d/m/Y", strtotime($rowMYSQL07['funcionario_familiares_fecha_nacimiento'])),
                         'funcionario_familiares_empresa'                            => strtoupper($rowMYSQL07['funcionario_familiares_empresa']),
                         'funcionario_familiares_ocupacion'                          => strtoupper($rowMYSQL07['funcionario_familiares_ocupacion']),
-                        'funcionario_familiares_telefono'                           => strtoupper($rowMYSQL07['funcionario_familiares_telefono']),
+                        'funcionario_familiares_celular_codigo'                     => $rowMYSQL07['funcionario_familiares_celular_codigo'],
+                        'funcionario_familiares_celular_nombre'                     => strtoupper($rowMYSQL07['funcionario_familiares_celular_nombre']),
+                        'funcionario_familiares_celular_numero,'                    => strtoupper($rowMYSQL07['funcionario_familiares_celular_numero']),
+                        'funcionario_familiares_telefono_codigo'                    => $rowMYSQL07['funcionario_familiares_telefono_codigo'],
+                        'funcionario_familiares_telefono_nombre'                    => strtoupper($rowMYSQL07['funcionario_familiares_telefono_nombre']),
+                        'funcionario_familiares_telefono_numero,'                   => strtoupper($rowMYSQL07['funcionario_familiares_telefono_numero,']),
                         'funcionario_familiares_observacion'                        => strtoupper($rowMYSQL07['funcionario_familiares_observacion']),
                         'funcionario_familiares_parentezco_codigo'                  => $rowMYSQL07['funcionario_familiares_parentezco_codigo'],
                         'funcionario_familiares_parentezco_nombre'                  => strtoupper($rowMYSQL07['funcionario_familiares_parentezco_nombre']),
@@ -2245,15 +2256,24 @@
                         'funcionario_familiares_estado_codigo'                      => '',
                         'funcionario_familiares_estado_nombre'                      => '',
                         'funcionario_familiares_nombre'                             => '',
+                        'funcionario_familiares_apellido'                           => '',
+                        'funcionario_familiares_completo'                           => '',
+                        'funcionario_familiares_documento_numero'                   => '',
+                        'funcionario_familiares_fecha_nacimiento'                   => '',
                         'funcionario_familiares_empresa'                            => '',
                         'funcionario_familiares_ocupacion'                          => '',
-                        'funcionario_familiares_telefono'                           => '',
+                        'funcionario_familiares_celular_codigo'                     => '',
+                        'funcionario_familiares_celular_nombre'                     => '',
+                        'funcionario_familiares_celular_numero,'                    => '',
+                        'funcionario_familiares_telefono_codigo'                    => '',
+                        'funcionario_familiares_telefono_nombre'                    => '',
+                        'funcionario_familiares_telefono_numero,'                   => '',
                         'funcionario_familiares_observacion'                        => '',
                         'funcionario_familiares_parentezco_codigo'                  => '',
                         'funcionario_familiares_parentezco_nombre'                  => '',
                         'auditoria_usuario'                                         => '',
                         'auditoria_fecha'                                           => '',
-                        'auditoria_ip'                                              => '' 
+                        'auditoria_ip'                                              => ''
                     );
 
                     $result_funcionario_familiares[]   = $detalle;
