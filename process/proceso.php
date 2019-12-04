@@ -736,6 +736,9 @@
                     $FUNACATGC  = 'NO DEFINIDO';
                 }
 
+                echo $FUNACATGC;
+                echo '\n';
+
                 $stmtMYSQL1->execute([$FUNACAFUC, $FUNACATUC, $FUNACATCC, $FUNACATGC]);
 
                 $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
