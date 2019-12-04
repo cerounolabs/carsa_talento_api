@@ -730,7 +730,7 @@
                 $FUNACATCC  = $rowMSSQL['acamedico_carrera'];
                 $FUNACAFUC  = $rowMSSQL['acamedico_funcionario'];
 
-                if (isset($rowMSSQL['acamedico_grado']) && $rowMSSQL['acamedico_grado'] != '0'){
+                if (isset($rowMSSQL['acamedico_grado']) && $rowMSSQL['acamedico_grado'] != '0' && $rowMSSQL['acamedico_grado'] != ''){
                     $FUNACATGC  = trim(strtoupper($rowMSSQL['acamedico_grado']));
                 } else {
                     $FUNACATGC  = 'NO DEFINIDO';
