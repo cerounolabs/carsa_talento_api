@@ -728,8 +728,13 @@
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
                 $FUNACATUC  = $rowMSSQL['acamedico_universidad'];
                 $FUNACATCC  = $rowMSSQL['acamedico_carrera'];
-                $FUNACATGC  = trim(strtoupper($rowMSSQL['acamedico_grado']));
                 $FUNACAFUC  = $rowMSSQL['acamedico_funcionario'];
+
+                if (isset($rowMSSQL['acamedico_grado'])){
+                    $FUNACATGC  = trim(strtoupper($rowMSSQL['acamedico_grado']));
+                } else {
+                    $FUNACATGC  = 'NO DEFINIDO';
+                }
 
                 $stmtMYSQL1->execute([$FUNACAFUC, $FUNACATUC, $FUNACATCC, $FUNACATGC]);
 
