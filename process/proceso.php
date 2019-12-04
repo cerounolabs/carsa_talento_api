@@ -615,6 +615,8 @@
         $connMYSQL  = null;
     }
 
+    /*-----------------------------------------------------------*/
+    
     function setColFamiliares(){
         $FUNFAMEST = 'A';
         $FUNFAMTPC = '';
@@ -691,6 +693,63 @@
             $stmtMYSQL2 = null;
         } catch (PDOException $e) {
             echo 'Error setDepartamento(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
+    function setColAcamedico(){
+        $FUNACAEST  = 'A';
+        $FUNACATUC  = 0;
+        $FUNACATCC  = 0;
+        $FUNACATGC  = 0;
+        $FUNACATEC  = 0;
+        $FUNACAFUC  = 0;
+        $FUNACAOBS  = '';
+        $FUNACAAUS  = 'MIGRACION';
+        $FUNACAAFH  = date('Y-m-d H:i:s');
+        $FUNACAAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.FuCod AS acamedico_funcionario, a.AyUniv AS acamedico_universidad, a.AqCarr AS acamedico_carrera, a.FesTdesc AS acamedico_estado, a.FesTfrAc AS acamedico_grado FROM FUNCIONAR4 a INNER JOIN FUNCIONARI b ON a.FuCod = b.FuCod AND b.FEst = 'A' ORDER BY a.FuCod";
+        $sql01      = "SELECT FUNACACOD FROM FUNACA WHERE FUNACAFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?) AND FUNACATUC = (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'UNIVERSIDAD') AND FUNACATCC = (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'CARRERA') AND FUNACATGC = (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'GRADOACADEMICO')";
+        $sql02      = "INSERT INTO FUNACA (FUNACAEST, FUNACATUC, FUNACATCC, FUNACATGC, FUNACATEC, FUNACAFUC, FUNACAOBS, FUNACAAUS, FUNACAAFH, FUNACAAIP) VALUES (?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'UNIVERSIDAD'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = 'CARRERA'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'GRADOACADEMICO'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'ESTADOADEMICO'), (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?), ?, ?, ?, ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $FUNACATUC  = $rowMSSQL['acamedico_universidad'];
+                $FUNACATCC  = $rowMSSQL['acamedico_carrera'];
+                $FUNACATGC  = trim(strtoupper($rowMSSQL['acamedico_grado']));
+                $FUNACATEC  = trim(strtoupper($rowMSSQL['acamedico_estado']));
+                $FUNACAFUC  = $rowMSSQL['acamedico_funcionario'];
+
+                $stmtMYSQL1->execute([$FUNACAFUC, $FUNACATUC, $FUNACATCC, $FUNACATGC]);
+
+                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMYSQL1){
+                    $stmtMYSQL2->execute([$FUNACAEST, $FUNACATUC, $FUNACATCC, $FUNACATGC, $FUNACATEC, $FUNACAFUC, $FUNACAOBS, $FUNACAAUS, $FUNACAAFH, $FUNACAAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setColAcamedico(): '.$e;
         }
 
         $connMSSQL  = null;
@@ -785,6 +844,12 @@
     echo "\n";
     setColFamiliares();
     echo "FIN setColFamiliares() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    echo "\n";
+    echo "INICIO setColAcamedico() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    setColAcamedico();
+    echo "FIN setColAcamedico() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
