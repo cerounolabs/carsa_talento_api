@@ -94,6 +94,53 @@
         $connMYSQL  = null;
     }
 
+    function setBarrio(){
+        $sql00  = "SELECT a.AiDept AS departamento_codigo, a.ApCiud AS ciudad_codigo, a.AjBarr AS barrio_codigo, a.AjNomb AS barrio_nombre FROM FST0051 a ORDER BY a.AiDept, a.ApCiud, a.AjBarr, a.AjNomb";
+        $sql01  = "SELECT * FROM LOCBAR a INNER JOIN LOCCIU b ON a.LOCBARCIC = b.LOCCIUCOD INNER JOIN LOCDEP c ON b.LOCCIUDEC = c.LOCDEPCOD WHERE a.LOCBAREQU = ? AND b.LOCCIUEQU = ? AND c.LOCDEPEQU = ?";
+
+        $sql02  = "INSERT INTO LOCBAR(LOCBAREST, LOCBARCIC, LOCBARNOM, LOCBAREQU, LOCBAROBS, LOCBARAUS, LOCBARAFH, LOCBARAIP) 
+        VALUES ('A', (SELECT LOCCIUCOD FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?), ?, ?, '', 'MIGRACION', NOW(), '192.168.16.92')";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $codDepto   = $rowMSSQL['departamento_codigo'];
+                $codCiudad  = $rowMSSQL['ciudad_codigo'];
+                $codBarrio  = $rowMSSQL['barrio_codigo'];
+                $nomBarrio  = $rowMSSQL['barrio_nombre'];
+
+                $stmtMYSQL1->execute([$codBarrio, $codCiudad, $codDepto]);
+
+                $rowMSYQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMSYQL1){
+                    $stmtMYSQL2->execute([$codCiudad, $codDepto, $nomBarrio, $codBarrio]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setBarrio(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
     function setEstadoCivil(){
         $DOMFICEST  = 'H';
         $DOMFICNOM  = '';
@@ -412,6 +459,162 @@
         $connMYSQL  = null;
     }
 
+    function setNacionalidad(){
+        $DOMFICEST  = 'H';
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'NACIONALIDAD';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.AhPais AS nacionalidad_codigo, a.AhGent AS nacionalidad_nombre FROM FST002 a WHERE a.AhGent IS NOT NULL ORDER BY a.AhGent";
+        $sql01      = "SELECT * FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU = $rowMSSQL['nacionalidad_codigo'];
+                $DOMFICNOM = trim($rowMSSQL['nacionalidad_nombre']);
+
+                $stmtMYSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMYSQL1){
+                    $stmtMYSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAFH, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setNacionalidad(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
+    function setUniversidad(){
+        $DOMFICEST  = 'H';
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'UNIVERSIDAD';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.AyUniv AS universidad_codigo, a.AyNomb AS universidad_nombre, a.AyCort AS universidad_abreviado FROM FST037 a ORDER BY a.AyNomb";
+        $sql01      = "SELECT * FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU = $rowMSSQL['universidad_codigo'];
+                $DOMFICNOM = trim($rowMSSQL['universidad_nombre']);
+
+                $stmtMYSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMYSQL1){
+                    $stmtMYSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAFH, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setUniversidad(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
+    function setCarrera(){
+        $DOMFICEST  = 'H';
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'CARRERA';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.aqcarr AS carrera_codigo, a.aqdesc AS carrera_nombre, a.csval8 AS carrera_abreviado FROM FST038 a ORDER BY a.aqdesc";
+        $sql01      = "SELECT * FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU = $rowMSSQL['carrera_codigo'];
+                $DOMFICNOM = trim($rowMSSQL['carrera_nombre']);
+
+                $stmtMYSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMYSQL1){
+                    $stmtMYSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAFH, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setCarrera(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
     function setColFamiliares(){
         $FUNFAMEST = 'A';
         $FUNFAMTPC = '';
@@ -494,105 +697,6 @@
         $connMYSQL  = null;
     }
 
-    function setNacionalidad(){
-        $DOMFICEST  = 'H';
-        $DOMFICNOM  = '';
-        $DOMFICEQU  = '';
-        $DOMFICVAL  = 'NACIONALIDAD';
-        $DOMFICOBS  = '';
-        $DOMFICAUS  = 'MIGRACION';
-        $DOMFICAFH  = date('Y-m-d H:i:s');
-        $DOMFICAIP  = '192.168.16.92';
-
-        $sql00      = "SELECT a.AhPais AS nacionalidad_codigo, a.AhGent AS nacionalidad_nombre FROM FST002 a WHERE a.AhGent IS NOT NULL ORDER BY a.AhGent";
-        $sql01      = "SELECT * FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
-        $sql02      = "INSERT INTO DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try {
-            $connMSSQL  = getConnectionMSSQL();
-            $connMYSQL  = getConnectionMYSQL();
-
-            $stmtMSSQL  = $connMSSQL->prepare($sql00);
-            $stmtMSSQL->execute();
-
-            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
-            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
-
-            while ($rowMSSQL = $stmtMSSQL->fetch()) {
-                $DOMFICEQU = $rowMSSQL['nacionalidad_codigo'];
-                $DOMFICNOM = trim($rowMSSQL['nacionalidad_nombre']);
-
-                $stmtMYSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
-
-                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
-                    
-                if (!$rowMYSQL1){
-                    $stmtMYSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAFH, $DOMFICAIP]);
-                }
-            }
-
-            $stmtMSSQL->closeCursor();
-            $stmtMYSQL1->closeCursor();
-            $stmtMYSQL2->closeCursor();
-
-            $stmtMSSQL  = null;
-            $stmtMYSQL1 = null;
-            $stmtMYSQL2 = null;
-        } catch (PDOException $e) {
-            echo 'Error setNacionalidad(): '.$e;
-        }
-
-        $connMSSQL  = null;
-        $connMYSQL  = null;
-    }
-
-    function setBarrio(){
-        $sql00  = "SELECT a.AiDept AS departamento_codigo, a.ApCiud AS ciudad_codigo, a.AjBarr AS barrio_codigo, a.AjNomb AS barrio_nombre FROM FST0051 a ORDER BY a.AiDept, a.ApCiud, a.AjBarr, a.AjNomb";
-        $sql01  = "SELECT * FROM LOCBAR a INNER JOIN LOCCIU b ON a.LOCBARCIC = b.LOCCIUCOD INNER JOIN LOCDEP c ON b.LOCCIUDEC = c.LOCDEPCOD WHERE a.LOCBAREQU = ? AND b.LOCCIUEQU = ? AND c.LOCDEPEQU = ?";
-
-        $sql02  = "INSERT INTO LOCBAR(LOCBAREST, LOCBARCIC, LOCBARNOM, LOCBAREQU, LOCBAROBS, LOCBARAUS, LOCBARAFH, LOCBARAIP) 
-        VALUES ('A', (SELECT LOCCIUCOD FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?), ?, ?, '', 'MIGRACION', NOW(), '192.168.16.92')";
-
-        try {
-            $connMSSQL  = getConnectionMSSQL();
-            $connMYSQL  = getConnectionMYSQL();
-
-            $stmtMSSQL  = $connMSSQL->prepare($sql00);
-            $stmtMSSQL->execute();
-
-            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
-            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
-
-            while ($rowMSSQL = $stmtMSSQL->fetch()) {
-                $codDepto   = $rowMSSQL['departamento_codigo'];
-                $codCiudad  = $rowMSSQL['ciudad_codigo'];
-                $codBarrio  = $rowMSSQL['barrio_codigo'];
-                $nomBarrio  = $rowMSSQL['barrio_nombre'];
-
-                $stmtMYSQL1->execute([$codBarrio, $codCiudad, $codDepto]);
-
-                $rowMSYQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
-                    
-                if (!$rowMSYQL1){
-                    $stmtMYSQL2->execute([$codCiudad, $codDepto, $nomBarrio, $codBarrio]);
-                }
-            }
-
-            $stmtMSSQL->closeCursor();
-            $stmtMYSQL1->closeCursor();
-            $stmtMYSQL2->closeCursor();
-
-            $stmtMSSQL = null;
-            $stmtMYSQL1 = null;
-            $stmtMYSQL2 = null;
-        } catch (PDOException $e) {
-            echo 'Error setBarrio(): '.$e;
-        }
-
-        $connMSSQL  = null;
-        $connMYSQL  = null;
-    }
-
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
@@ -609,6 +713,12 @@
     setCiudad();
     echo "\n";
     echo "FIN setCiudad() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    echo "INICIO setBarrio() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    setBarrio();
+    echo "\n";
+    echo "FIN setBarrio() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "INICIO setEstadoCivil() => ".date('Y-m-d H:i:s');
     echo "\n";
@@ -646,23 +756,36 @@
     echo "\n";
     echo "FIN setPrefijo() => ".date('Y-m-d H:i:s');
     echo "\n";
-    echo "INICIO setColFamiliares() => ".date('Y-m-d H:i:s');
-    echo "\n";
-    setColFamiliares();
-    echo "\n";
-    echo "FIN setColFamiliares() => ".date('Y-m-d H:i:s');
-    echo "\n";
     echo "INICIO setNacionalidad() => ".date('Y-m-d H:i:s');
     echo "\n";
     setNacionalidad();
     echo "\n";
     echo "FIN setNacionalidad() => ".date('Y-m-d H:i:s');
     echo "\n";
-    echo "INICIO setBarrio() => ".date('Y-m-d H:i:s');
+    echo "INICIO setUniversidad() => ".date('Y-m-d H:i:s');
     echo "\n";
-    setBarrio();
+    setUniversidad();
     echo "\n";
-    echo "FIN setBarrio() => ".date('Y-m-d H:i:s');
+    echo "FIN setUniversidad() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    echo "INICIO setCarrera() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    setCarrera();
+    echo "\n";
+    echo "FIN setCarrera() => ".date('Y-m-d H:i:s');
+    echo "\n";
+
+
+
+
+
+    
+
+    echo "INICIO setColFamiliares() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    setColFamiliares();
+    echo "\n";
+    echo "FIN setColFamiliares() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
