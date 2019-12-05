@@ -97,7 +97,6 @@
     function setBarrio(){
         $sql00  = "SELECT a.AiDept AS departamento_codigo, a.ApCiud AS ciudad_codigo, a.AjBarr AS barrio_codigo, a.AjNomb AS barrio_nombre FROM FST0051 a ORDER BY a.AiDept, a.ApCiud, a.AjBarr, a.AjNomb";
         $sql01  = "SELECT * FROM LOCBAR a INNER JOIN LOCCIU b ON a.LOCBARCIC = b.LOCCIUCOD INNER JOIN LOCDEP c ON b.LOCCIUDEC = c.LOCDEPCOD WHERE a.LOCBAREQU = ? AND b.LOCCIUEQU = ? AND c.LOCDEPEQU = ?";
-
         $sql02  = "INSERT INTO LOCBAR(LOCBAREST, LOCBARCIC, LOCBARNOM, LOCBAREQU, LOCBAROBS, LOCBARAUS, LOCBARAFH, LOCBARAIP) 
         VALUES ('A', (SELECT LOCCIUCOD FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?), ?, ?, '', 'MIGRACION', NOW(), '192.168.16.92')";
 
@@ -405,7 +404,7 @@
         $DOMFICEST  = 'H';
         $DOMFICNOM  = '';
         $DOMFICEQU  = '';
-        $DOMFICVAL  = 'PREFIJOTELEFONIA PREFIJOCELULAR';
+        $DOMFICVAL  = 'PREFIJOTELEFONIA';
         $DOMFICOBS  = '';
         $DOMFICAUS  = 'MIGRACION';
         $DOMFICAFH  = date('Y-m-d H:i:s');
@@ -699,7 +698,7 @@
         $connMYSQL  = null;
     }
 
-    function setColAcamedico(){
+    function setColAcamedicos(){
         $FUNACAEST  = 'A';
         $FUNACATUC  = 0;
         $FUNACATCC  = 0;
@@ -752,7 +751,97 @@
             $stmtMYSQL1 = null;
             $stmtMYSQL2 = null;
         } catch (PDOException $e) {
-            echo 'Error setColAcamedico(): '.$e;
+            echo 'Error setColAcamedicos(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
+    function setColDirecciones(){
+        $FUNPAREST  = 'A';
+        $FUNPARTVC  = 17;
+        $FUNPARTCC  = '';
+        $FUNPARTEC  = '';
+        $FUNPARTTC  = '';
+        $FUNPARFUC  = 0;
+        $FUNPARCIC  = 0;
+        $FUNPARBAC  = 0;
+        $FUNPARCAS  = '';
+        $FUNPARCA1  = '';
+        $FUNPARCA2  = '';
+        $FUNPARCA3  = '';
+        $FUNPARUBI  = '-25.2827954,-57.6367892,19z';
+        $FUNPARTE1  = '';
+        $FUNPARCE1  = '';
+        $FUNPARCE2  = '';
+        $FUNPAREMA  = '';
+        $FUNPAROBS  = '';
+        $FUNPARAUS  = 'MIGRACION';
+        $FUNPARAFH  = date('Y-m-d H:i:s');
+        $FUNPARAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.FuCod AS direccion_funcionario, a.FuCodCel1 AS direccion_celular_1_codigo, a.FuCel1 AS direccion_celular_1_numero, a.FuCodCel2 AS direccion_celular_2_codigo, a.FuCel2 AS direccion_celular_2_numero, a.FuPreTelPa AS direccion_telefono_1_codigo, a.FuTelPar AS direccion_telefono_1_numero, a.AiDept AS direccion_departamento, a.ApCiud AS direccion_ciudad, a.AjBarr AS direccion_barrio, a.FuDirPar AS direccion_direccion, a.fumail AS direccion_mail FROM FUNCIONARI a WHERE a.FEst = 'A'";
+        $sql01      = "SELECT FUNPARCOD FROM FUNPAR WHERE FUNPARFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)";
+        $sql02      = "INSERT INTO FUNPAR (FUNPAREST, FUNPARTVC, FUNPARTCC, FUNPARTEC, FUNPARTTC, FUNPARFUC, FUNPARCIC, FUNPARBAC, FUNPARCAS, FUNPARCA1, FUNPARCA2, FUNPARCA3, FUNPARUBI, FUNPARTE1, FUNPARCE1, FUNPARCE2, FUNPAREMA, FUNPAROBS, FUNPARAUS, FUNPARAFH, FUNPARAIP) VALUES (?, ?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'PREFIJOCELULAR'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'PREFIJOCELULAR'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'PREFIJOTELEFONIA'), ?, (SELECT LOCCIUCOD FROM LOCCIU a INNER JOIN LOCDEP b ON a.LOCCIUDEC = b.LOCDEPCOD WHERE a.LOCCIUEQU = ? AND b.LOCDEPEQU = ?), (SELECT LOCBARCOD FROM LOCBAR a INNER JOIN LOCCIU b ON a.LOCBARCIC = b.LOCCIUCOD INNER JOIN LOCDEP c ON b.LOCCIUDEC = c.LOCDEPCOD WHERE a.LOCBAREQU = ? AND b.LOCCIUEQU = ? AND c.LOCDEPEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                if($rowMSSQL['direccion_celular_1_codigo'] == '0'){
+                    $FUNPARTCC = '0';
+                } else {
+                    $FUNPARTCC = '+595 '.substr(trim($rowMSSQL['direccion_celular_1_codigo']), 1);
+                }
+
+                if($rowMSSQL['direccion_celular_2_codigo'] == '0'){
+                    $FUNPARTEC = '0';
+                } else {
+                    $FUNPARTEC = '+595 '.substr(trim($rowMSSQL['direccion_celular_2_codigo']), 1);
+                }
+
+                if($rowMSSQL['direccion_telefono_1_codigo'] == '0' || empty(['direccion_telefono_1_codigo'])){
+                    $FUNPARTTC = '0';
+                } else {
+                    $FUNPARTTC = '+595 '.substr(trim($rowMSSQL['direccion_telefono_1_codigo']), 1);
+                }
+
+                $FUNPARFUC = $rowMSSQL['direccion_funcionario'];
+                $FUNPARDEC = $rowMSSQL['direccion_departamento'];
+                $FUNPARCIC = $rowMSSQL['direccion_ciudad'];
+                $FUNPARBAC = $rowMSSQL['direccion_barrio'];
+                $FUNPARCA1 = trim(strtoupper($rowMSSQL['direccion_direccion']));
+                $FUNPARTE1 = trim(strtoupper($rowMSSQL['direccion_telefono_1_numero']));
+                $FUNPARCE1 = trim(strtoupper($rowMSSQL['direccion_celular_1_numero']));
+                $FUNPARCE2 = trim(strtoupper($rowMSSQL['direccion_celular_2_numero']));
+                $FUNPAREMA = trim(strtolower($rowMSSQL['direccion_mail']));
+
+                $stmtMYSQL1->execute([$FUNPARFUC]);
+
+                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMYSQL1){
+                    $stmtMYSQL2->execute([$FUNPAREST, $FUNPARTVC, $FUNPARTCC, $FUNPARTEC, $FUNPARTTC, $FUNPARFUC, $FUNPARCIC, $FUNPARDEC, $FUNPARBAC, $FUNPARCIC, $FUNPARDEC, $FUNPARCAS, $FUNPARCA1, $FUNPARCA2, $FUNPARCA3, $FUNPARUBI, $FUNPARTE1, $FUNPARCE1, $FUNPARCE2, $FUNPAREMA, $FUNPAROBS, $FUNPARAUS, $FUNPARAFH, $FUNPARAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setColDirecciones(): '.$e;
         }
 
         $connMSSQL  = null;
@@ -836,23 +925,22 @@
     echo "FIN setCarrera() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "\n";
-
-
-
-
-
-
-
     echo "INICIO setColFamiliares() => ".date('Y-m-d H:i:s');
     echo "\n";
     setColFamiliares();
     echo "FIN setColFamiliares() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "\n";
-    echo "INICIO setColAcamedico() => ".date('Y-m-d H:i:s');
+    echo "INICIO setColAcamedicos() => ".date('Y-m-d H:i:s');
     echo "\n";
-    setColAcamedico();
-    echo "FIN setColAcamedico() => ".date('Y-m-d H:i:s');
+    setColAcamedicos();
+    echo "FIN setColAcamedicos() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    echo "\n";
+    echo "INICIO setColDirecciones() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    setColDirecciones();
+    echo "FIN setColDirecciones() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
