@@ -821,7 +821,7 @@
                 if (empty($FUNPARTEC || trim($FUNPARTEC) == '+595')){
                     $FUNPARTEC = '0';
                 }
-
+echo $FUNPARTEC.' => ';
                 if (empty($FUNPARTTC || trim($FUNPARTTC) == '+595')){
                     $FUNPARTTC = '0';
                 }
