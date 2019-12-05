@@ -801,19 +801,22 @@
                 } else {
                     $FUNPARTCC = '+595 '.substr(trim($rowMSSQL['direccion_celular_1_codigo']), 1);
                 }
-
+echo $FUNPARTCC;
+echo " => ";
                 if($rowMSSQL['direccion_celular_2_codigo'] == '0' || empty(['direccion_celular_2_codigo'])){
                     $FUNPARTEC = '0';
                 } else {
                     $FUNPARTEC = '+595 '.substr(trim($rowMSSQL['direccion_celular_2_codigo']), 1);
                 }
-
+                echo $FUNPARTEC;
+                echo " => ";
                 if($rowMSSQL['direccion_telefono_1_codigo'] == '0' || empty(['direccion_telefono_1_codigo'])){
                     $FUNPARTTC = '0';
                 } else {
                     $FUNPARTTC = '+595 '.substr(trim($rowMSSQL['direccion_telefono_1_codigo']), 1);
                 }
-
+                echo $FUNPARTTC;
+                echo " => ";
                 if (empty($FUNPARTCC)){
                     $FUNPARTCC = '0';
                 }
