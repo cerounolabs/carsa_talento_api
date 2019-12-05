@@ -814,6 +814,18 @@
                     $FUNPARTTC = '+595 '.substr(trim($rowMSSQL['direccion_telefono_1_codigo']), 1);
                 }
 
+                if (empty($FUNPARTCC)){
+                    $FUNPARTCC = '0';
+                }
+
+                if (empty($FUNPARTEC)){
+                    $FUNPARTEC = '0';
+                }
+
+                if (empty($FUNPARTTC)){
+                    $FUNPARTTC = '0';
+                }
+
                 $FUNPARFUC = $rowMSSQL['direccion_funcionario'];
                 $FUNPARDEC = $rowMSSQL['direccion_departamento'];
                 $FUNPARCIC = $rowMSSQL['direccion_ciudad'];
