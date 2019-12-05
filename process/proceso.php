@@ -814,15 +814,15 @@
                     $FUNPARTTC = '+595 '.substr(trim($rowMSSQL['direccion_telefono_1_codigo']), 1);
                 }
 
-                if (empty($FUNPARTCC) || trim($FUNPARTCC) == '+595'){
+                if (empty($FUNPARTCC) || trim($FUNPARTCC) == '+595 '){
                     $FUNPARTCC = '0';
                 }
 
-                if (empty($FUNPARTEC || trim($FUNPARTEC) == '+595')){
+                if (empty($FUNPARTEC || trim($FUNPARTEC) == '+595 ')){
                     $FUNPARTEC = '0';
                 }
-echo $FUNPARTEC.' => ';
-                if (empty($FUNPARTTC || trim($FUNPARTTC) == '+595')){
+
+                if (empty($FUNPARTTC || trim($FUNPARTTC) == '+595 ')){
                     $FUNPARTTC = '0';
                 }
 
