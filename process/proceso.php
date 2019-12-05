@@ -796,13 +796,13 @@
             $stmtMYSQL2 = $connMYSQL->prepare($sql02);
 
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
-                if($rowMSSQL['direccion_celular_1_codigo'] == '0'){
+                if($rowMSSQL['direccion_celular_1_codigo'] == '0'  || empty(['direccion_celular_1_codigo'])){
                     $FUNPARTCC = '0';
                 } else {
                     $FUNPARTCC = '+595 '.substr(trim($rowMSSQL['direccion_celular_1_codigo']), 1);
                 }
 
-                if($rowMSSQL['direccion_celular_2_codigo'] == '0'){
+                if($rowMSSQL['direccion_celular_2_codigo'] == '0' || empty(['direccion_celular_2_codigo'])){
                     $FUNPARTEC = '0';
                 } else {
                     $FUNPARTEC = '+595 '.substr(trim($rowMSSQL['direccion_celular_2_codigo']), 1);
