@@ -796,36 +796,33 @@
             $stmtMYSQL2 = $connMYSQL->prepare($sql02);
 
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
-                if($rowMSSQL['direccion_celular_1_codigo'] == '0'  || empty(['direccion_celular_1_codigo'])){
+                if($rowMSSQL['direccion_celular_1_codigo'] == '0'){
                     $FUNPARTCC = '0';
                 } else {
                     $FUNPARTCC = '+595 '.substr(trim($rowMSSQL['direccion_celular_1_codigo']), 1);
                 }
-echo $FUNPARTCC;
-echo " => ";
-                if($rowMSSQL['direccion_celular_2_codigo'] == '0' || empty(['direccion_celular_2_codigo'])){
+
+                if($rowMSSQL['direccion_celular_2_codigo'] == '0'){
                     $FUNPARTEC = '0';
                 } else {
                     $FUNPARTEC = '+595 '.substr(trim($rowMSSQL['direccion_celular_2_codigo']), 1);
                 }
-                echo $FUNPARTEC;
-                echo " => ";
-                if($rowMSSQL['direccion_telefono_1_codigo'] == '0' || empty(['direccion_telefono_1_codigo'])){
+
+                if($rowMSSQL['direccion_telefono_1_codigo'] == '0'){
                     $FUNPARTTC = '0';
                 } else {
                     $FUNPARTTC = '+595 '.substr(trim($rowMSSQL['direccion_telefono_1_codigo']), 1);
                 }
-                echo $FUNPARTTC;
-                echo " => ";
-                if (empty($FUNPARTCC)){
+
+                if (empty($FUNPARTCC) || trim($FUNPARTCC) == '+595'){
                     $FUNPARTCC = '0';
                 }
 
-                if (empty($FUNPARTEC)){
+                if (empty($FUNPARTEC || trim($FUNPARTEC) == '+595')){
                     $FUNPARTEC = '0';
                 }
 
-                if (empty($FUNPARTTC)){
+                if (empty($FUNPARTTC || trim($FUNPARTTC) == '+595')){
                     $FUNPARTTC = '0';
                 }
 
