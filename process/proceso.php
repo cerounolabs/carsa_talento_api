@@ -802,11 +802,15 @@
                     $FUNPARTCC = '+595 '.substr(trim($rowMSSQL['direccion_celular_1_codigo']), 1);
                 }
 
+                echo '$FUNPARTCC => '.$FUNPARTCC;
+
                 if($rowMSSQL['direccion_celular_2_codigo'] == '0'){
                     $FUNPARTEC = '0';
                 } else {
                     $FUNPARTEC = '+595 '.substr(trim($rowMSSQL['direccion_celular_2_codigo']), 1);
                 }
+
+                echo ', $FUNPARTEC => '.$FUNPARTEC;
 
                 if($rowMSSQL['direccion_telefono_1_codigo'] == '0'){
                     $FUNPARTTC = '0';
@@ -814,27 +818,38 @@
                     $FUNPARTTC = '+595 '.substr(trim($rowMSSQL['direccion_telefono_1_codigo']), 1);
                 }
 
+                echo ', $FUNPARTTC => '.$FUNPARTTC;
+
                 if (empty($FUNPARTCC) || trim($FUNPARTCC) == '+595 '){
                     $FUNPARTCC = '0';
                 }
-
+                echo ', $FUNPARTCC => '.$FUNPARTCC;
                 if (empty($FUNPARTEC || trim($FUNPARTEC) == '+595 ')){
                     $FUNPARTEC = '0';
                 }
-
+                echo ', $FUNPARTEC => '.$FUNPARTEC;
                 if (empty($FUNPARTTC || trim($FUNPARTTC) == '+595 ')){
                     $FUNPARTTC = '0';
                 }
-
+                echo ', $FUNPARTTC => '.$FUNPARTTC;
                 $FUNPARFUC = $rowMSSQL['direccion_funcionario'];
+                echo ', $FUNPARFUC => '.$FUNPARFUC;
                 $FUNPARDEC = $rowMSSQL['direccion_departamento'];
+                echo ', $FUNPARDEC => '.$FUNPARDEC;
                 $FUNPARCIC = $rowMSSQL['direccion_ciudad'];
+                echo ', $FUNPARCIC => '.$FUNPARCIC;
                 $FUNPARBAC = $rowMSSQL['direccion_barrio'];
+                echo ', $FUNPARBAC => '.$FUNPARBAC;
                 $FUNPARCA1 = trim(strtoupper($rowMSSQL['direccion_direccion']));
+                echo ', $FUNPARCA1 => '.$FUNPARCA1;
                 $FUNPARTE1 = trim(strtoupper($rowMSSQL['direccion_telefono_1_numero']));
+                echo ', $FUNPARTE1 => '.$FUNPARTE1;
                 $FUNPARCE1 = trim(strtoupper($rowMSSQL['direccion_celular_1_numero']));
+                echo ', $FUNPARCE1 => '.$FUNPARCE1;
                 $FUNPARCE2 = trim(strtoupper($rowMSSQL['direccion_celular_2_numero']));
+                echo ', $FUNPARCE2 => '.$FUNPARCE2;
                 $FUNPAREMA = trim(strtolower($rowMSSQL['direccion_mail']));
+                echo ', $FUNPAREMA => '.$FUNPAREMA;
 
                 $stmtMYSQL1->execute([$FUNPARFUC]);
 
