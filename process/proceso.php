@@ -860,6 +860,82 @@
         $connMYSQL  = null;
     }
 
+    function setColRefParticular(){
+        $FUNRPPEST  = 'A';
+        $FUNRPPTCC  = '';
+        $FUNRPPTTC  = '';
+        $FUNRPPFUC  = '';
+        $FUNRPPNOM  = '';
+        $FUNRPPTCN  = '';
+        $FUNRPPTTN  = '';
+        $FUNRPPOBS  = '';
+        $FUNRPPAUS  = 'MIGRACION';
+        $FUNRPPAFH  = date('Y-m-d H:i:s');
+        $FUNRPPAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.FuCod AS referencia_funcionario, a.FuContac AS referencia_persona, a.FuPreTelCo AS referencia_telefono_codigo, a.FuTelCont AS referencia_telefono_numero, a.FuCodCelC AS referencia_celular_codigo, a.FuCelCont AS referencia_celular_numero FROM FUNCIONARI a WHERE a.FEst = 'A' AND a.FuCod NOT IN (62)";
+        $sql01      = "SELECT FUNRPPCOD FROM FUNRPP WHERE FUNRPPFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)";
+        $sql02      = "INSERT INTO FUNRPP (FUNRPPEST, FUNRPPTCC, FUNRPPTTC, FUNRPPFUC, FUNRPPNOM, FUNRPPTCN, FUNRPPTTN, FUNRPPOBS, FUNRPPAUS, FUNRPPAFH, FUNRPPAIP) VALUES (?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'PREFIJOCELULAR' AND DOMFICEST = 'H'), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICNOM = ? AND DOMFICVAL = 'PREFIJOTELEFONIA' AND DOMFICEST = 'H'), (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?), ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connMYSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtMYSQL1 = $connMYSQL->prepare($sql01);
+            $stmtMYSQL2 = $connMYSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                if($rowMSSQL['referencia_celular_codigo'] == '0'){
+                    $FUNRPPTCC = '0';
+                } else {
+                    $FUNRPPTCC = '+595 '.substr(trim($rowMSSQL['referencia_celular_codigo']), 1);
+                }
+
+                if($rowMSSQL['referencia_telefono_codigo'] == '0'){
+                    $FUNRPPTTC = '0';
+                } else {
+                    $FUNRPPTTC = '+595 '.substr(trim($rowMSSQL['referencia_telefono_codigo']), 1);
+                }
+
+                if (empty($FUNRPPTCC) || trim($FUNRPPTCC) == '+595'){
+                    $FUNRPPTCC = '0';
+                }
+
+                if (empty($FUNRPPTTC) || trim($FUNRPPTTC) == '+595'){
+                    $FUNRPPTTC = '0';
+                }
+
+                $FUNRPPFUC = $rowMSSQL['referencia_funcionario'];
+                $FUNRPPTCN = trim(strtoupper($rowMSSQL['referencia_celular_numero']));
+                $FUNRPPTTN = trim(strtoupper($rowMSSQL['referencia_telefono_numero']));
+
+                $stmtMYSQL1->execute([$FUNRPPFUC]);
+
+                $rowMYSQL1 = $stmtMYSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowMYSQL1){
+                    $stmtMYSQL2->execute([$FUNRPPEST, $FUNRPPTCC, $FUNRPPTTC, $FUNRPPFUC, $FUNRPPNOM, $FUNRPPTCN, $FUNRPPTTN, $FUNRPPOBS, $FUNRPPAUS, $FUNRPPAFH, $FUNRPPAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMYSQL1->closeCursor();
+            $stmtMYSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtMYSQL1 = null;
+            $stmtMYSQL2 = null;
+        } catch (PDOException $e) {
+            echo 'Error setColRefParticular(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connMYSQL  = null;
+    }
+
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
@@ -953,6 +1029,12 @@
     echo "\n";
     setColDirecciones();
     echo "FIN setColDirecciones() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    echo "\n";
+    echo "INICIO setColRefParticular() => ".date('Y-m-d H:i:s');
+    echo "\n";
+    setColRefParticular();
+    echo "FIN setColRefParticular() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "\n";
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
