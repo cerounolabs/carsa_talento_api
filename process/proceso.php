@@ -850,8 +850,7 @@
                 echo ', $FUNPARCE2 => '.$FUNPARCE2;
                 $FUNPAREMA = trim(strtolower($rowMSSQL['direccion_mail']));
                 echo ', $FUNPAREMA => '.$FUNPAREMA;
-                echo '<br>';
-                echo '\n';
+                echo "\n";
 
                 $stmtMYSQL1->execute([$FUNPARFUC]);
 
