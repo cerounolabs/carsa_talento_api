@@ -909,6 +909,7 @@
                 }
 
                 $FUNRPPFUC = $rowMSSQL['referencia_funcionario'];
+                $FUNRPPNOM = trim(strtoupper($rowMSSQL['referencia_persona']));
                 $FUNRPPTCN = trim(strtoupper($rowMSSQL['referencia_celular_numero']));
                 $FUNRPPTTN = trim(strtoupper($rowMSSQL['referencia_telefono_numero']));
 
