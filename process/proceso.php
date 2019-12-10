@@ -824,11 +824,11 @@
                     $FUNPARTCC = '0';
                 }
                 echo ', $FUNPARTCC => '.$FUNPARTCC;
-                if (empty($FUNPARTEC || trim($FUNPARTEC) == '+595 ')){
+                if (empty($FUNPARTEC) || trim($FUNPARTEC) == '+595 '){
                     $FUNPARTEC = '0';
                 }
                 echo ', $FUNPARTEC => '.$FUNPARTEC;
-                if (empty($FUNPARTTC || trim($FUNPARTTC) == '+595 ')){
+                if (empty($FUNPARTTC) || trim($FUNPARTTC) == '+595 '){
                     $FUNPARTTC = '0';
                 }
                 echo ', $FUNPARTTC => '.$FUNPARTTC;
@@ -858,6 +858,8 @@
                 if (!$rowMYSQL1){
                     $stmtMYSQL2->execute([$FUNPAREST, $FUNPARTVC, $FUNPARTCC, $FUNPARTEC, $FUNPARTTC, $FUNPARFUC, $FUNPARCIC, $FUNPARDEC, $FUNPARBAC, $FUNPARCIC, $FUNPARDEC, $FUNPARCAS, $FUNPARCA1, $FUNPARCA2, $FUNPARCA3, $FUNPARUBI, $FUNPARTE1, $FUNPARCE1, $FUNPARCE2, $FUNPAREMA, $FUNPAROBS, $FUNPARAUS, $FUNPARAFH, $FUNPARAIP]);
                 }
+                echo '<br>';
+                echo '\n';
             }
 
             $stmtMSSQL->closeCursor();
