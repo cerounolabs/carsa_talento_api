@@ -1066,14 +1066,14 @@
     echo "FIN setCarrera() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "\n";
-//
+/*
     echo "INICIO setEmpresa() => ".date('Y-m-d H:i:s');
     echo "\n";
     setEmpresa();
     echo "FIN setEmpresa() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "\n";
-//
+
     echo "INICIO setColFamiliares() => ".date('Y-m-d H:i:s');
     echo "\n";
     setColFamiliares();
@@ -1098,6 +1098,7 @@
     echo "FIN setColRefParticular() => ".date('Y-m-d H:i:s');
     echo "\n";
     echo "\n";
+*/
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
 ?>
