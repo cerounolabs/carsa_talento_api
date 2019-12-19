@@ -1822,7 +1822,7 @@
 
             FROM FUNCAP a
             WHERE a.FUNCAPFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
-            ORDER BY a.FUNACAAFH DESC";
+            ORDER BY a.FUNCAPAFH DESC";
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
