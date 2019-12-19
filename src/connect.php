@@ -5,7 +5,7 @@
         $serverDb   = "DESTRASJUD";
         $serverUser = "czelaya";
         $serverPass = "carsa_2019";
-
+        
         try {
             $conn = new PDO("sqlsrv:Server=$serverName,$serverPort;Database=$serverDb;ConnectionPooling=0", $serverUser, $serverPass,
                 array(
