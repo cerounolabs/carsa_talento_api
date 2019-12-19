@@ -1809,6 +1809,21 @@
             WHERE a.FUNACAFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
             ORDER BY a.FUNACAAFH DESC";
 
+            $sql11  = "SELECT
+            a.FUNCAPCOD         AS          funcionario_capacitacion_codigo,
+            a.FUNCAPEST         AS          funcionario_capacitacion_estado_codigo,
+            a.FUNCAPEMP         AS          funcionario_capacitacion_empresa,
+            a.FUNCAPCAP         AS          funcionario_capacitacion_curso,
+            a.FUNCAPPER         AS          funcionario_capacitacion_periodo,
+            a.FUNCAPOBS         AS          funcionario_capacitacion_observacion,
+            a.FUNCAPAUS         AS          auditoria_usuario,
+            a.FUNCAPAFH         AS          auditoria_fecha,
+            a.FUNCAPAIP         AS          auditoria_ip
+
+            FROM FUNCAP a
+            WHERE a.FUNCAPFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
+            ORDER BY a.FUNACAAFH DESC";
+
             try {
                 $connMSSQL  = getConnectionMSSQL();
                 $connMYSQL  = getConnectionMYSQL();
@@ -2468,6 +2483,49 @@
                     $result_funcionario_academico[]   = $detalle;
                 }
 
+                $stmtMYSQL11= $connMYSQL->prepare($sql11);
+                $stmtMYSQL11->execute([$val01]);
+
+                while ($rowMYSQL11 = $stmtMYSQL11->fetch()) {
+                    if($rowMYSQL11['funcionario_capacitacion_estado_codigo'] === 'A'){
+                        $estado_nombre = 'ACTIVO';
+                    } else {
+                        $estado_nombre = 'INACTIVO';
+                    }
+
+                    $detalle    = array(
+                        'funcionario_capacitacion_codigo'                           => $rowMYSQL11['funcionario_capacitacion_codigo'],
+                        'funcionario_capacitacion_estado_codigo'                    => $rowMYSQL11['funcionario_capacitacion_estado_codigo'],
+                        'funcionario_capacitacion_estado_nombre'                    => $estado_nombre,
+                        'funcionario_capacitacion_empresa'                          => strtoupper($rowMYSQL11['funcionario_capacitacion_empresa']),
+                        'funcionario_capacitacion_curso'                            => strtoupper($rowMYSQL11['funcionario_capacitacion_curso']),
+                        'funcionario_capacitacion_periodo'                          => strtoupper($rowMYSQL11['funcionario_capacitacion_periodo']),
+                        'funcionario_capacitacion_observacion'                      => strtoupper($rowMYSQL11['funcionario_capacitacion_observacion']),
+                        'auditoria_usuario'                                         => strtoupper($rowMYSQL11['auditoria_usuario']),
+                        'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL11['auditoria_fecha'])),
+                        'auditoria_ip'                                              => strtoupper($rowMYSQL11['auditoria_ip'])
+                    );
+
+                    $result_funcionario_capacitacion[]   = $detalle;
+                }
+
+                if (!isset($result_funcionario_capacitacion)){
+                    $detalle    = array(
+                        'funcionario_capacitacion_codigo'                           => '',
+                        'funcionario_capacitacion_estado_codigo'                    => '',
+                        'funcionario_capacitacion_estado_nombre'                    => '',
+                        'funcionario_capacitacion_empresa'                          => '',
+                        'funcionario_capacitacion_curso'                            => '',
+                        'funcionario_capacitacion_periodo'                          => '',
+                        'funcionario_capacitacion_observacion'                      => '',
+                        'auditoria_usuario'                                         => '',
+                        'auditoria_fecha'                                           => '',
+                        'auditoria_ip'                                              => ''
+                    );
+
+                    $result_funcionario_capacitacion[]   = $detalle;
+                }
+
                 $result = array(
                     'funcionario'                       => $result_funcionario,
                     'funcionario_datos'                 => $result_funcionario_datos,
@@ -2479,7 +2537,8 @@
                     'funcionario_actividad'             => $result_funcionario_actividad,
                     'funcionario_familiares'            => $result_funcionario_familiares,
                     'funcionario_movil'                 => $result_funcionario_movil,
-                    'funcionario_academico'             => $result_funcionario_academico
+                    'funcionario_academico'             => $result_funcionario_academico,
+                    'funcionario_capacitacion'          => $result_funcionario_capacitacion,
                 );
 
                 if (isset($result)){
