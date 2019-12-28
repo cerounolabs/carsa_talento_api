@@ -3624,3 +3624,128 @@
         
         return $json;
     });
+
+    $app->get('/v1/1200', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT 
+        a.BDEMPCO       AS empresa_codigo, 
+        a.BDNOMBE       AS empresa_nombre 
+        
+        FROM FST067 a 
+        
+        WHERE LTRIM(RTRIM(a.BDNOMBE)) != '' AND (BDFECALT >= GETDATE() OR BDFECMOD >= GETDATE())
+        
+        ORDER BY a.BDNOMBE";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute(); 
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $empresa_nombre = trim($rowMSSQL['empresa_nombre']);
+                $empresa_nombre = str_replace('"', '', $empresa_nombre);
+                $empresa_nombre = str_replace('´', '', $empresa_nombre);
+                $empresa_nombre = str_replace('`', '', $empresa_nombre);
+                $empresa_nombre = str_replace('.', '', $empresa_nombre);
+                $empresa_nombre = str_replace("'", '', $empresa_nombre);
+
+                $detalle    = array(
+                    'empresa_codigo'            => $rowMSSQL['empresa_codigo'],
+                    'empresa_nombre'            => strtoupper($empresa_nombre)
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'empresa_codigo'            => '',
+                    'empresa_nombre'            => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtMSSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
+
+    $app->get('/v1/1200/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01      = $request->getAttribute('codigo');
+        
+        if (isset($val01)) {
+            $sql00  = "SELECT 
+            a.BDEMPCO       AS empresa_codigo, 
+            a.BDNOMBE       AS empresa_nombre 
+            
+            FROM FST067 a 
+            
+            WHERE a.BDEMPCO = ? AND LTRIM(RTRIM(a.BDNOMBE)) != '' AND (BDFECALT >= GETDATE() OR BDFECMOD >= GETDATE())
+            
+            ORDER BY a.BDNOMBE";
+
+            try {
+                $connMSSQL  = getConnectionMSSQL();
+                $stmtMSSQL  = $connMSSQL->prepare($sql00);
+                $stmtMSSQL->execute([$val01]); 
+
+                while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                    $empresa_nombre = trim($rowMSSQL['empresa_nombre']);
+                    $empresa_nombre = str_replace('"', '', $empresa_nombre);
+                    $empresa_nombre = str_replace('´', '', $empresa_nombre);
+                    $empresa_nombre = str_replace('`', '', $empresa_nombre);
+                    $empresa_nombre = str_replace('.', '', $empresa_nombre);
+                    $empresa_nombre = str_replace("'", '', $empresa_nombre);
+
+                    $detalle    = array(
+                        'empresa_codigo'            => $rowMSSQL['empresa_codigo'],
+                        'empresa_nombre'            => strtoupper($empresa_nombre)
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle = array(
+                        'empresa_codigo'            => '',
+                        'empresa_nombre'            => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtMSSQL->closeCursor();
+                $stmtMSSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
