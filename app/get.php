@@ -3634,7 +3634,7 @@
         
         FROM FST067 a 
         
-        WHERE LTRIM(RTRIM(a.BDNOMBE)) != '' AND (BDFECALT >= GETDATE() OR BDFECMOD >= GETDATE())
+        WHERE LTRIM(RTRIM(a.BDNOMBE)) != ''
         
         ORDER BY a.BDNOMBE";
 
