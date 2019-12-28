@@ -3649,6 +3649,11 @@
                 $empresa_nombre = str_replace('´', '', $empresa_nombre);
                 $empresa_nombre = str_replace('`', '', $empresa_nombre);
                 $empresa_nombre = str_replace('.', '', $empresa_nombre);
+                $empresa_nombre = str_replace('*', '', $empresa_nombre);
+                $empresa_nombre = str_replace('+', '', $empresa_nombre);
+                $empresa_nombre = str_replace(':', '', $empresa_nombre);
+                $empresa_nombre = str_replace('\n', '', $empresa_nombre);
+                $empresa_nombre = str_replace('\r', '', $empresa_nombre);
                 $empresa_nombre = str_replace("'", '', $empresa_nombre);
 
                 $detalle    = array(
