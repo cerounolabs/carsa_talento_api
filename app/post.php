@@ -17,8 +17,16 @@
             a.FuCod                 AS      login_funcionario_codigo,
             a.ClNom                 AS      login_funcionario_nombre,
 
-            b.CARGO                 AS      login_cargo,
-            b.GERENCIA              AS      login_gerencia,
+            b.COD_CARGO             AS      login_cargo_codigo,
+            b.CARGO                 AS      login_cargo_nombre,
+            b.COD_GERENCIA          AS      login_gerencia_codigo,
+            b.GERENCIA              AS      login_gerencia_nombre,
+            b.COD_DEPARTAMENTO_AREA AS      login_departamento_codigo,
+            b.DEPARTAMENTO          AS      login_departamento_nombre,
+            b.COD_UNIDAD            AS      login_unidad_codigo,
+            b.UNIDAD                AS      login_unidad_nombre,
+            b.COD_SUPERVISION       AS      login_supervision_codigo,
+            b.SUPERVISION           AS      login_supervision_nombre,
             b.FOTO_TARGET           AS      login_foto,
             b.CORREO_ELECTRONICO    AS      login_email
 
@@ -46,12 +54,20 @@
                     $val00      = 'E';
                     $detalle    = array(
                         'login_usuario'             => '',
-                        'login_foto'                => '',
                         'login_funcionario_codigo'  => '',
                         'login_funcionario_nombre'  => '',
-                        'login_cargo'               => '',
-                        'login_gerencia'            => '',
-                        'login_email'               => ''
+                        'login_cargo_codigo'        => '',
+                        'login_cargo_nombre'        => '',
+                        'login_gerencia_codigo'     => '',
+                        'login_gerencia_nombre'     => '',
+                        'login_departamento_codigo' => '',
+                        'login_departamento_nombre' => '',
+                        'login_unidad_codigo'       => '',
+                        'login_unidad_nombre'       => '',
+                        'login_supervision_codigo'  => '',
+                        'login_supervision_nombre'  => '',
+                        'login_foto'                => '',
+                        'login_emai'                => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
@@ -62,12 +78,20 @@
                         $val00      = 'O';
                         $detalle    = array(
                             'login_usuario'             => $row_mssql['login_usuario'],
-                            'login_foto'                => $row_mssql['login_foto'],
                             'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
                             'login_funcionario_nombre'  => $row_mssql['login_funcionario_nombre'],
-                            'login_cargo'               => $row_mssql['login_cargo'],
-                            'login_gerencia'            => $row_mssql['login_gerencia'],
-                            'login_email'               => $row_mssql['login_email']
+                            'login_cargo_codigo'        => $row_mssql['login_cargo_codigo'],
+                            'login_cargo_nombre'        => $row_mssql['login_cargo_nombre'],
+                            'login_gerencia_codigo'     => $row_mssql['login_gerencia_codigo'],
+                            'login_gerencia_nombre'     => $row_mssql['login_gerencia_nombre'],
+                            'login_departamento_codigo' => $row_mssql['login_departamento_codigo'],
+                            'login_departamento_nombre' => $row_mssql['login_departamento_nombre'],
+                            'login_unidad_codigo'       => $row_mssql['login_unidad_codigo'],
+                            'login_unidad_nombre'       => $row_mssql['login_unidad_nombre'],
+                            'login_supervision_codigo'  => $row_mssql['login_supervision_codigo'],
+                            'login_supervision_nombre'  => $row_mssql['login_supervision_nombre'],
+                            'login_foto'                => $row_mssql['login_foto'],
+                            'login_emai'                => $row_mssql['login_emai'],
                         );
 
                         header("Content-Type: application/json; charset=utf-8");
@@ -76,12 +100,20 @@
                         $val00      = 'I';
                         $detalle    = array(
                             'login_usuario'             => $row_mssql['login_usuario'],
-                            'login_foto'                => $row_mssql['login_foto'],
                             'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
                             'login_funcionario_nombre'  => $row_mssql['login_funcionario_nombre'],
-                            'login_cargo'               => $row_mssql['login_cargo'],
-                            'login_gerencia'            => $row_mssql['login_gerencia'],
-                            'login_email'               => $row_mssql['login_email']
+                            'login_cargo_codigo'        => $row_mssql['login_cargo_codigo'],
+                            'login_cargo_nombre'        => $row_mssql['login_cargo_nombre'],
+                            'login_gerencia_codigo'     => $row_mssql['login_gerencia_codigo'],
+                            'login_gerencia_nombre'     => $row_mssql['login_gerencia_nombre'],
+                            'login_departamento_codigo' => $row_mssql['login_departamento_codigo'],
+                            'login_departamento_nombre' => $row_mssql['login_departamento_nombre'],
+                            'login_unidad_codigo'       => $row_mssql['login_unidad_codigo'],
+                            'login_unidad_nombre'       => $row_mssql['login_unidad_nombre'],
+                            'login_supervision_codigo'  => $row_mssql['login_supervision_codigo'],
+                            'login_supervision_nombre'  => $row_mssql['login_supervision_nombre'],
+                            'login_foto'                => $row_mssql['login_foto'],
+                            'login_emai'                => $row_mssql['login_emai'],
                         );
 
                         header("Content-Type: application/json; charset=utf-8");
