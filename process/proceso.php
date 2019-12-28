@@ -645,6 +645,12 @@
                 $DOMFICNOM = str_replace('´', '', $DOMFICNOM);
                 $DOMFICNOM = str_replace('`', '', $DOMFICNOM);
                 $DOMFICNOM = str_replace('.', '', $DOMFICNOM);
+                $DOMFICNOM = str_replace('*', '', $DOMFICNOM);
+                $DOMFICNOM = str_replace('+', '', $DOMFICNOM);
+                $DOMFICNOM = str_replace(':', '', $DOMFICNOM);
+                $DOMFICNOM = str_replace("\n", '', $DOMFICNOM);
+                $DOMFICNOM = str_replace("\r", '', $DOMFICNOM);
+                $DOMFICNOM = str_replace("\n\r", '', $DOMFICNOM);
                 $DOMFICNOM = str_replace("'", '', $DOMFICNOM);
 
                 $stmtMYSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
