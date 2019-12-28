@@ -1597,7 +1597,6 @@
             $sql02  = "SELECT
             a.FUNTRACOD         AS          funcionario_trabajo_anterior_codigo,
             a.FUNTRAEST         AS          funcionario_trabajo_anterior_estado_codigo,
-            a.FUNTRAEMP         AS          funcionario_trabajo_anterior_empresa,
             a.FUNTRAFDE         AS          funcionario_trabajo_anterior_fecha_desde,
             a.FUNTRAFHA         AS          funcionario_trabajo_anterior_fecha_hasta,
             a.FUNTRAOBS         AS          funcionario_trabajo_anterior_observacion,
@@ -1607,10 +1606,13 @@
             b.DOMFICCOD         AS          funcionario_trabajo_anterior_cargo_codigo,
             b.DOMFICNOM         AS          funcionario_trabajo_anterior_cargo_nombre,
             c.DOMFICCOD         AS          funcionario_trabajo_anterior_motivo_salida_codigo,
-            c.DOMFICNOM         AS          funcionario_trabajo_anterior_motivo_salida_nombre
+            c.DOMFICNOM         AS          funcionario_trabajo_anterior_motivo_salida_nombre,
+            d.DOMFICCOD         AS          funcionario_trabajo_anterior_empresa_codigo,
+            d.DOMFICNOM         AS          funcionario_trabajo_anterior_empresa_nombre
             FROM FUNTRA a
             INNER JOIN DOMFIC b ON a.FUNTRATCC = b.DOMFICCOD
             INNER JOIN DOMFIC c ON a.FUNTRAMSC = c.DOMFICCOD
+            INNER JOIN DOMFIC d ON a.FUNTRAEMP = d.DOMFICCOD
             WHERE a.FUNTRAFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
             ORDER BY a.FUNTRAAFH DESC";
 
@@ -1960,7 +1962,8 @@
                         'funcionario_trabajo_anterior_codigo'                       => $rowMYSQL02['funcionario_trabajo_anterior_codigo'],
                         'funcionario_trabajo_anterior_estado_codigo'                => $rowMYSQL02['funcionario_trabajo_anterior_estado_codigo'],
                         'funcionario_trabajo_anterior_estado_nombre'                => $estado_nombre,
-                        'funcionario_trabajo_anterior_empresa'                      => strtoupper($rowMYSQL02['funcionario_trabajo_anterior_empresa']),
+                        'funcionario_trabajo_anterior_empresa_codigo'               => $rowMYSQL02['funcionario_trabajo_anterior_empresa_codigo'],
+                        'funcionario_trabajo_anterior_empresa_nombre'               => strtoupper($rowMYSQL02['funcionario_trabajo_anterior_empresa_nombre']),
                         'funcionario_trabajo_anterior_fecha_desde'                  => date("Y-m-d", strtotime($rowMYSQL02['funcionario_trabajo_anterior_fecha_desde'])),
                         'funcionario_trabajo_anterior_fecha_hasta'                  => date("Y-m-d", strtotime($rowMYSQL02['funcionario_trabajo_anterior_fecha_hasta'])),
                         'funcionario_trabajo_anterior_observacion'                  => strtoupper($rowMYSQL02['funcionario_trabajo_anterior_observacion']),
@@ -1981,7 +1984,8 @@
                         'funcionario_trabajo_anterior_codigo'                       => '',
                         'funcionario_trabajo_anterior_estado_codigo'                => '',
                         'funcionario_trabajo_anterior_estado_nombre'                => '',
-                        'funcionario_trabajo_anterior_empresa'                      => '',
+                        'funcionario_trabajo_anterior_empresa_codigo'               => '',
+                        'funcionario_trabajo_anterior_empresa_nombre'               => '',
                         'funcionario_trabajo_anterior_fecha_desde'                  => '',
                         'funcionario_trabajo_anterior_fecha_hasta'                  => '',
                         'funcionario_trabajo_anterior_observacion'                  => '',
