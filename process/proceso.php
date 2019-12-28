@@ -624,8 +624,7 @@
         $DOMFICAFH  = date('Y-m-d H:i:s');
         $DOMFICAIP  = '192.168.16.92';
 
-        $sql00      = "SELECT a.BDEMPCO AS empresa_codigo, a.BDNOMBE AS empresa_nombre FROM FST067 a WHERE LTRIM(RTRIM(a.BDNOMBE)) != '' ORDER BY a.BDNOMBE";
-//        $sql00      = "SELECT a.BDEMPCO AS empresa_codigo, a.BDNOMBE AS empresa_nombre FROM FST067 a WHERE LTRIM(RTRIM(a.BDNOMBE)) != '' AND (BDFECALT >= GETDATE() OR BDFECMOD >= GETDATE()) ORDER BY a.BDNOMBE";
+        $sql00      = "SELECT a.BDEMPCO AS empresa_codigo, a.BDNOMBE AS empresa_nombre FROM FST067 a WHERE LTRIM(RTRIM(a.BDNOMBE)) != '' AND (BDFECALT >= GETDATE() OR BDFECMOD >= GETDATE()) ORDER BY a.BDNOMBE";
         $sql01      = "SELECT * FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
         $sql02      = "INSERT INTO DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
