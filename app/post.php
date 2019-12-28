@@ -551,7 +551,7 @@
         require __DIR__.'/../src/connect.php';
 
         $val00      = $request->getAttribute('codigo');
-        $val01      = $request->getParsedBody()['datos_laborales_empresa_nombre'];
+        $val01      = $request->getParsedBody()['datos_laborales_empresa_codigo'];
         $val02      = $request->getParsedBody()['datos_laborales_empresa_fecha_desde'];
         $val03      = $request->getParsedBody()['datos_laborales_empresa_fecha_hasta'];
         $val04      = $request->getParsedBody()['datos_laborales_empresa_cargo'];
@@ -564,7 +564,7 @@
         $FUNTRATCC  = $val04;
         $FUNTRAMSC  = $val05;
         $FUNTRAFUC  = $val00;
-        $FUNTRAEMP  = trim(strtoupper($val01));
+        $FUNTRAEMP  = $val01;
         $FUNTRAFDE  = $val02;
         $FUNTRAFHA  = $val03;
         $FUNTRAOBS  = '';
