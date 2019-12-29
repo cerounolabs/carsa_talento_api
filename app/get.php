@@ -1625,7 +1625,7 @@
             a.FUNOAEAFH         AS          auditoria_fecha,
             a.FUNOAEAIP         AS          auditoria_ip,
             b.DOMFICCOD         AS          funcionario_actividad_economica_tipo_codigo,
-            b.DOMFICNOM         AS          funcionario_actividad_economica_tigo_nombre
+            b.DOMFICNOM         AS          funcionario_actividad_economica_tipo_nombre
             FROM FUNOAE a
             INNER JOIN DOMFIC b ON a.FUNOAEAEC = b.DOMFICCOD
             WHERE a.FUNOAEFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
@@ -2019,7 +2019,7 @@
                         'funcionario_actividad_economica_nombre'                    => strtoupper($rowMYSQL03['funcionario_actividad_economica_nombre']),
                         'funcionario_actividad_economica_observacion'               => strtoupper($rowMYSQL03['funcionario_actividad_economica_observacion']),
                         'funcionario_actividad_economica_tipo_codigo'               => $rowMYSQL03['funcionario_actividad_economica_tipo_codigo'],
-                        'funcionario_actividad_economica_tigo_nombre'               => strtoupper($rowMYSQL03['funcionario_actividad_economica_tigo_nombre']),
+                        'funcionario_actividad_economica_tipo_nombre'               => strtoupper($rowMYSQL03['funcionario_actividad_economica_tipo_nombre']),
                         'auditoria_usuario'                                         => strtoupper($rowMYSQL03['auditoria_usuario']),
                         'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL03['auditoria_fecha'])),
                         'auditoria_ip'                                              => strtoupper($rowMYSQL03['auditoria_ip'])       
@@ -2036,7 +2036,7 @@
                         'funcionario_actividad_economica_nombre'                    => '',
                         'funcionario_actividad_economica_observacion'               => '',
                         'funcionario_actividad_economica_tipo_codigo'               => '',
-                        'funcionario_actividad_economica_tigo_nombre'               => '',
+                        'funcionario_actividad_economica_tipo_nombre'               => '',
                         'auditoria_usuario'                                         => '',
                         'auditoria_fecha'                                           => '',
                         'auditoria_ip'                                              => ''
