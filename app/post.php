@@ -911,6 +911,7 @@
         $val01      = $request->getParsedBody()['datos_movil_marca_codigo'];
         $val02      = $request->getParsedBody()['datos_movil_color_codigo'];
         $val03      = $request->getParsedBody()['datos_movil_modelo_nombre'];
+        $val04      = $request->getParsedBody()['datos_movil_anho_compra'];
 
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
         $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
@@ -921,18 +922,19 @@
         $FUNCELTCC  = $val02;
         $FUNCELFUC  = $val00;
         $FUNCELMOD  = trim(strtoupper($val03));
+        $FUNCELANO  = trim(strtoupper($val04));
         $FUNCELOBS  = '';
         $FUNCELAUS  = trim(strtoupper($aud01));
         $FUNCELAFH  = $aud02;
         $FUNCELAIP  = $aud03;
         
         if (isset($val00) && isset($val01)) {
-            $sql00  = "INSERT INTO FUNCEL (FUNCELEST, FUNCELTMC, FUNCELTCC, FUNCELFUC, FUNCELMOD, FUNCELOBS, FUNCELAUS, FUNCELAFH, FUNCELAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql00  = "INSERT INTO FUNCEL (FUNCELEST, FUNCELTMC, FUNCELTCC, FUNCELFUC, FUNCELMOD, FUNCELANO, FUNCELOBS, FUNCELAUS, FUNCELAFH, FUNCELAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$FUNCELEST, $FUNCELTMC, $FUNCELTCC, $FUNCELFUC, $FUNCELMOD, $FUNCELOBS, $FUNCELAUS, $FUNCELAFH, $FUNCELAIP]); 
+                $stmtMYSQL->execute([$FUNCELEST, $FUNCELTMC, $FUNCELTCC, $FUNCELFUC, $FUNCELMOD, $FUNCELANO, $FUNCELOBS, $FUNCELAUS, $FUNCELAFH, $FUNCELAIP]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connMYSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
