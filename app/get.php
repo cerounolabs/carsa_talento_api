@@ -1482,32 +1482,69 @@
             
             ORDER BY a.CAMFUCCAC";
 
+            $sql01  = "SELECT
+            a.COD_CARGO             AS      funcionario_cargo_codigo,
+            a.CARGO                 AS      funcionario_cargo_nombre,
+            a.COD_GERENCIA          AS      funcionario_gerencia_codigo,
+            a.GERENCIA              AS      funcionario_gerencia_nombre,
+            a.COD_DEPARTAMENTO_AREA AS      funcionario_departamento_codigo,
+            a.DEPARTAMENTO          AS      funcionario_departamento_nombre,
+            a.COD_UNIDAD            AS      funcionario_unidad_codigo,
+            a.UNIDAD                AS      funcionario_unidad_nombre,
+            a.COD_SUPERVISION       AS      funcionario_supervision_codigo,
+            a.SUPERVISION           AS      funcionario_supervision_nombre
+
+            FROM COLABORADOR_BASICOS a
+
+            WHERE a.COD_FUNC = ?
+
+            ORDER BY a.COD_FUNC";
+
             try {
+                $connMSSQL  = getConnectionMSSQL();
                 $connMYSQL  = getConnectionMYSQL();
+
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
+                $stmtMSSQL  = $connMSSQL->prepare($sql01);
+
                 $stmtMYSQL->execute([$val01]);
 
                 while ($rowMYSQL = $stmtMYSQL->fetch()) {
-                    if ($rowMYSQL['funcionario_estado_codigo'] === 'P') {
-                        $funcionario_estado_nombre = 'PENDIENTE';
-                    } elseif ($rowMYSQL['funcionario_estado_codigo'] === 'C') {
-                        $funcionario_estado_nombre = 'CARGADO';
-                    } elseif ($rowMYSQL['funcionario_estado_codigo'] === 'F') {
-                        $funcionario_estado_nombre = 'CONFIRMADO';
-                    }
+                    $stmtMSSQL->execute([$rowMYSQL['funcionario_sistema_codigo']]);
+                    $row_mssql  = $stmtMSSQL->fetch(PDO::FETCH_ASSOC);
 
-                    $detalle    = array(
-                        'campanha_codigo'               => $rowMYSQL['campanha_codigo'],
-                        'campanha_nombre'               => $rowMYSQL['campanha_nombre'],
-                        'funcionario_codigo'            => $rowMYSQL['funcionario_codigo'],
-                        'funcionario_sistema_codigo'    => $rowMYSQL['funcionario_sistema_codigo'],
-                        'funcionario_nombre'            => $rowMYSQL['funcionario_nombre'],
-                        'funcionario_apellido'          => $rowMYSQL['funcionario_apellido'],
-                        'funcionario_persona'           => $rowMYSQL['funcionario_nombre'].' '.$rowMYSQL['funcionario_apellido'],
-                        'funcionario_foto'              => $rowMYSQL['funcionario_foto'],
-                        'funcionario_estado_codigo'     => $rowMYSQL['funcionario_estado_codigo'],
-                        'funcionario_estado_nombre'     => $funcionario_estado_nombre
-                    );
+                    if ($row_mssql){
+                        if ($rowMYSQL['funcionario_estado_codigo'] === 'P') {
+                            $funcionario_estado_nombre = 'PENDIENTE';
+                        } elseif ($rowMYSQL['funcionario_estado_codigo'] === 'C') {
+                            $funcionario_estado_nombre = 'CARGADO';
+                        } elseif ($rowMYSQL['funcionario_estado_codigo'] === 'F') {
+                            $funcionario_estado_nombre = 'CONFIRMADO';
+                        }
+
+                        $detalle    = array(
+                            'campanha_codigo'                   => $rowMYSQL['campanha_codigo'],
+                            'campanha_nombre'                   => $rowMYSQL['campanha_nombre'],
+                            'funcionario_codigo'                => $rowMYSQL['funcionario_codigo'],
+                            'funcionario_sistema_codigo'        => $rowMYSQL['funcionario_sistema_codigo'],
+                            'funcionario_nombre'                => $rowMYSQL['funcionario_nombre'],
+                            'funcionario_apellido'              => $rowMYSQL['funcionario_apellido'],
+                            'funcionario_persona'               => $rowMYSQL['funcionario_nombre'].' '.$rowMYSQL['funcionario_apellido'],
+                            'funcionario_foto'                  => $rowMYSQL['funcionario_foto'],
+                            'funcionario_estado_codigo'         => $rowMYSQL['funcionario_estado_codigo'],
+                            'funcionario_estado_nombre'         => $funcionario_estado_nombre,
+                            'funcionario_cargo_codigo'          => $row_mssql['funcionario_cargo_codigo'],
+                            'funcionario_cargo_nombre'          => $row_mssql['funcionario_cargo_nombre'],
+                            'funcionario_gerencia_codigo'       => $row_mssql['funcionario_gerencia_codigo'],
+                            'funcionario_gerencia_nombre'       => $row_mssql['funcionario_gerencia_nombre'],
+                            'funcionario_departamento_codigo'   => $row_mssql['funcionario_departamento_codigo'],
+                            'funcionario_departamento_nombre'   => $row_mssql['funcionario_departamento_nombre'],
+                            'funcionario_unidad_codigo'         => $row_mssql['funcionario_unidad_codigo'],
+                            'funcionario_unidad_nombre'         => $row_mssql['funcionario_unidad_nombre'],
+                            'funcionario_supervision_codigo'    => $row_mssql['funcionario_supervision_codigo'],
+                            'funcionario_supervision_nombre'    => $row_mssql['funcionario_supervision_nombre']
+                        );
+                    }
 
                     $result[]   = $detalle;
                 }
@@ -1517,16 +1554,26 @@
                     $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
                 } else {
                     $detalle = array(
-                        'campanha_codigo'               => '',
-                        'campanha_nombre'               => '',
-                        'funcionario_codigo'            => '',
-                        'funcionario_sistema_codigo'    => '',
-                        'funcionario_nombre'            => '',
-                        'funcionario_apellido'          => '',
-                        'funcionario_persona'           => '',
-                        'funcionario_foto'              => '',
-                        'funcionario_estado_codigo'     => '',
-                        'funcionario_estado_nombre'     => ''
+                        'campanha_codigo'                   => '',
+                        'campanha_nombre'                   => '',
+                        'funcionario_codigo'                => '',
+                        'funcionario_sistema_codigo'        => '',
+                        'funcionario_nombre'                => '',
+                        'funcionario_apellido'              => '',
+                        'funcionario_persona'               => '',
+                        'funcionario_foto'                  => '',
+                        'funcionario_estado_codigo'         => '',
+                        'funcionario_estado_nombre'         => '',
+                        'funcionario_cargo_codigo'          => '',
+                        'funcionario_cargo_nombre'          => '',
+                        'funcionario_gerencia_codigo'       => '',
+                        'funcionario_gerencia_nombre'       => '',
+                        'funcionario_departamento_codigo'   => '',
+                        'funcionario_departamento_nombre'   => '',
+                        'funcionario_unidad_codigo'         => '',
+                        'funcionario_unidad_nombre'         => '',
+                        'funcionario_supervision_codigo'    => '',
+                        'funcionario_supervision_nombre'    => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
