@@ -1630,7 +1630,7 @@
             b.CAMFICNOM         AS      campanha_nombre,
 
             c.FUNFICCOD         AS      funcionario_codigo,
-            c.FUNFICCFU         AS      funcionario_sistema_codigo,
+            c.FUNFICCFU         AS      funcionario_codigo_sistema,
             c.FUNFICNOM         AS      funcionario_nombre,
             c.FUNFICAPE         AS      funcionario_apellido,
             c.FUNFICFOT         AS      funcionario_foto,
@@ -1673,7 +1673,7 @@
                 $stmtMYSQL->execute([$val01]);
 
                 while ($rowMYSQL = $stmtMYSQL->fetch()) {
-                    $stmtMSSQL->execute([$rowMYSQL['funcionario_sistema_codigo']]);
+                    $stmtMSSQL->execute([$rowMYSQL['funcionario_codigo_sistema']]);
                     $row_mssql  = $stmtMSSQL->fetch(PDO::FETCH_ASSOC);
 
                     if ($row_mssql){
@@ -1689,7 +1689,7 @@
                             'campanha_codigo'                   => $rowMYSQL['campanha_codigo'],
                             'campanha_nombre'                   => $rowMYSQL['campanha_nombre'],
                             'funcionario_codigo'                => $rowMYSQL['funcionario_codigo'],
-                            'funcionario_sistema_codigo'        => $rowMYSQL['funcionario_sistema_codigo'],
+                            'funcionario_codigo_sistema'        => $rowMYSQL['funcionario_codigo_sistema'],
                             'funcionario_nombre'                => $rowMYSQL['funcionario_nombre'],
                             'funcionario_apellido'              => $rowMYSQL['funcionario_apellido'],
                             'funcionario_persona'               => $rowMYSQL['funcionario_nombre'].' '.$rowMYSQL['funcionario_apellido'],
@@ -1720,7 +1720,7 @@
                         'campanha_codigo'                   => '',
                         'campanha_nombre'                   => '',
                         'funcionario_codigo'                => '',
-                        'funcionario_sistema_codigo'        => '',
+                        'funcionario_codigo_sistema'        => '',
                         'funcionario_nombre'                => '',
                         'funcionario_apellido'              => '',
                         'funcionario_persona'               => '',
