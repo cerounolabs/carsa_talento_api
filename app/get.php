@@ -393,6 +393,7 @@
         a.CAMFICFO6                     AS      campanha_formulario_6,
         a.CAMFICFO7                     AS      campanha_formulario_7,
         a.CAMFICFO8                     AS      campanha_formulario_8,
+        a.CAMFICFO9                     AS      campanha_formulario_9,
         a.CAMFICOBS                     AS      campanha_observacion,
         a.CAMFICAUS                     AS      campanha_usuario,
         a.CAMFICAFH                     AS      campanha_fecha_hora,
@@ -460,6 +461,12 @@
                     $campanha_formulario_8 = '';
                 }
 
+                if($rowMYSQL['campanha_formulario_9'] === 'S'){
+                    $campanha_formulario_9 = 'checked';
+                } else {
+                    $campanha_formulario_9 = '';
+                }
+
                 $detalle    = array(
                     'campanha_codigo'           => $rowMYSQL['campanha_codigo'],
                     'campanha_estado_codigo'    => $rowMYSQL['campanha_estado_codigo'],
@@ -478,6 +485,7 @@
                     'campanha_formulario_6'     => $campanha_formulario_6,
                     'campanha_formulario_7'     => $campanha_formulario_7,
                     'campanha_formulario_8'     => $campanha_formulario_8,
+                    'campanha_formulario_9'     => $campanha_formulario_9,
                     'campanha_observacion'      => $rowMYSQL['campanha_observacion'],
                     'campanha_usuario'          => $rowMYSQL['campanha_usuario'],
                     'campanha_fecha_hora'       => $rowMYSQL['campanha_fecha_hora'],
@@ -509,6 +517,7 @@
                     'campanha_formulario_6'     => '',
                     'campanha_formulario_7'     => '',
                     'campanha_formulario_8'     => '',
+                    'campanha_formulario_9'     => '',
                     'campanha_observacion'      => '',
                     'campanha_usuario'          => '',
                     'campanha_fecha_hora'       => '',
@@ -551,6 +560,7 @@
             a.CAMFICFO6                     AS      campanha_formulario_6,
             a.CAMFICFO7                     AS      campanha_formulario_7,
             a.CAMFICFO8                     AS      campanha_formulario_8,
+            a.CAMFICFO9                     AS      campanha_formulario_9,
             a.CAMFICOBS                     AS      campanha_observacion,
             a.CAMFICAUS                     AS      campanha_usuario,
             a.CAMFICAFH                     AS      campanha_fecha_hora,
@@ -618,6 +628,12 @@
                     } else {
                         $campanha_formulario_8 = '';
                     }
+
+                    if($rowMYSQL['campanha_formulario_9'] === 'S'){
+                        $campanha_formulario_9 = 'checked';
+                    } else {
+                        $campanha_formulario_9 = '';
+                    }
     
                     $detalle    = array(
                         'campanha_codigo'           => $rowMYSQL['campanha_codigo'],
@@ -637,6 +653,7 @@
                         'campanha_formulario_6'     => $campanha_formulario_6,
                         'campanha_formulario_7'     => $campanha_formulario_7,
                         'campanha_formulario_8'     => $campanha_formulario_8,
+                        'campanha_formulario_9'     => $campanha_formulario_9,
                         'campanha_observacion'      => $rowMYSQL['campanha_observacion'],
                         'campanha_usuario'          => $rowMYSQL['campanha_usuario'],
                         'campanha_fecha_hora'       => $rowMYSQL['campanha_fecha_hora'],
@@ -668,6 +685,7 @@
                         'campanha_formulario_6'     => '',
                         'campanha_formulario_7'     => '',
                         'campanha_formulario_8'     => '',
+                        'campanha_formulario_9'     => '',
                         'campanha_observacion'      => '',
                         'campanha_usuario'          => '',
                         'campanha_fecha_hora'       => '',
@@ -714,6 +732,7 @@
             a.CAMFICFO6                     AS      campanha_formulario_6,
             a.CAMFICFO7                     AS      campanha_formulario_7,
             a.CAMFICFO8                     AS      campanha_formulario_8,
+            a.CAMFICFO9                     AS      campanha_formulario_9,
             a.CAMFICOBS                     AS      campanha_observacion,
             a.CAMFICAUS                     AS      campanha_usuario,
             a.CAMFICAFH                     AS      campanha_fecha_hora,
@@ -781,6 +800,12 @@
                     } else {
                         $campanha_formulario_8 = '';
                     }
+
+                    if($rowMYSQL['campanha_formulario_9'] === 'S'){
+                        $campanha_formulario_9 = 'checked';
+                    } else {
+                        $campanha_formulario_9 = '';
+                    }
     
                     $detalle    = array(
                         'campanha_codigo'           => $rowMYSQL['campanha_codigo'],
@@ -800,6 +825,7 @@
                         'campanha_formulario_6'     => $campanha_formulario_6,
                         'campanha_formulario_7'     => $campanha_formulario_7,
                         'campanha_formulario_8'     => $campanha_formulario_8,
+                        'campanha_formulario_9'     => $campanha_formulario_9,
                         'campanha_observacion'      => $rowMYSQL['campanha_observacion'],
                         'campanha_usuario'          => $rowMYSQL['campanha_usuario'],
                         'campanha_fecha_hora'       => $rowMYSQL['campanha_fecha_hora'],
@@ -831,6 +857,7 @@
                         'campanha_formulario_6'     => '',
                         'campanha_formulario_7'     => '',
                         'campanha_formulario_8'     => '',
+                        'campanha_formulario_9'     => '',
                         'campanha_observacion'      => '',
                         'campanha_usuario'          => '',
                         'campanha_fecha_hora'       => '',
