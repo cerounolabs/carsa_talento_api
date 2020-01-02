@@ -94,18 +94,18 @@
         $val00      = $request->getAttribute('campanha');
         $val01      = $request->getAttribute('colaborador');
         $val02      = $request->getAttribute('estado');
+        
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
         $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
         $aud03      = $request->getParsedBody()['auditoria_ip'];
 
-        
         if (isset($val00) && isset($val01) && isset($val02) && isset($aud01) && isset($aud02) && isset($aud03)) {
             $sql00  = "UPDATE CAMFUC SET CAMFUCEST = ?, CAMFUCAUS = ?, CAMFUCAFH = ?, CAMFUCAIP = ? WHERE CAMFUCCAC = ? AND CAMFUCFUC = ?";
             
             try {
                 $connMYSQL  = getConnectionMYSQL();
                 $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$val03, $aud01, $aud02, $aud03, $val00, $val01]); 
+                $stmtMYSQL->execute([$val02, $aud01, $aud02, $aud03, $val00, $val01]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success, se actualizo la carga de registro del COLABORADOR', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
