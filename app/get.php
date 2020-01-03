@@ -1813,24 +1813,6 @@
             WHERE a.COD_FUNC = ?
             ORDER BY a.COD_FUNC";
 
-            $sql01  = "SELECT
-            a.FUNCONCOD         AS          funcionario_conyuge_codigo,
-            a.FUNCONEST         AS          funcionario_conyuge_estado_codigo,
-            a.FUNCONNOM         AS          funcionario_conyuge_nombre,
-            a.FUNCONAPE         AS          funcionario_conyuge_apellido,
-            a.FUNCONFHA         AS          funcionario_conyuge_fecha_nacimiento,
-            a.FUNCONEMP         AS          funcionario_conyuge_empresa,
-            a.FUNCONOBS         AS          funcionario_conyuge_observacion,
-            a.FUNCONAUS         AS          auditoria_usuario,
-            a.FUNCONAFH         AS          auditoria_fecha,
-            a.FUNCONAIP         AS          auditoria_ip,
-            b.DOMFICCOD         AS          funcionario_conyuge_sexo_codigo,
-            b.DOMFICNOM         AS          funcionario_conyuge_sexo_nombre
-            FROM FUNCON a
-            INNER JOIN DOMFIC b ON a.FUNCONTSC = b.DOMFICCOD
-            WHERE a.FUNCONFUC = (SELECT FUNFICCOD FROM FUNFIC WHERE FUNFICCFU = ?)
-            ORDER BY a.FUNCONAFH DESC";
-
             $sql02  = "SELECT
             a.FUNTRACOD         AS          funcionario_trabajo_anterior_codigo,
             a.FUNTRAEST         AS          funcionario_trabajo_anterior_estado_codigo,
@@ -2121,69 +2103,6 @@
                     );
 
                     $result_funcionario[]   = $detalle;
-                }
-
-                $stmtMYSQL01= $connMYSQL->prepare($sql01);
-                $stmtMYSQL01->execute([$val01]);
-
-                while ($rowMYSQL01 = $stmtMYSQL01->fetch()) {
-                    if($rowMYSQL01['funcionario_conyuge_estado_codigo'] === 'A'){
-                        $estado_nombre = 'ACTIVO';
-                    } else {
-                        $estado_nombre = 'INACTIVO';
-                    }
-
-                    $str                            = trim($rowMYSQL01['funcionario_conyuge_nombre']);
-                    $pos                            = strpos($str, ' ');
-                    $funcionario_conyuge_nombre_1   = substr($str, 0, $pos);
-                    $funcionario_conyuge_nombre_2   = substr($str, ($pos + 1));
-
-                    $str                            = trim($rowMYSQL01['funcionario_conyuge_apellido']);
-                    $pos                            = strpos($str, ' ');
-                    $funcionario_conyuge_apellido_1 = substr($str, 0, $pos);
-                    $funcionario_conyuge_apellido_2 = substr($str, ($pos + 1));
-
-                    $detalle    = array(
-                        'funcionario_conyuge_codigo'                                => $rowMYSQL01['funcionario_conyuge_codigo'],
-                        'funcionario_conyuge_estado_codigo'                         => $rowMYSQL01['funcionario_conyuge_estado_codigo'],
-                        'funcionario_conyuge_estado_nombre'                         => $estado_nombre,
-                        'funcionario_conyuge_nombre_1'                              => strtoupper($funcionario_conyuge_nombre_1),
-                        'funcionario_conyuge_nombre_2'                              => strtoupper($funcionario_conyuge_nombre_2),
-                        'funcionario_conyuge_apellido_1'                            => strtoupper($funcionario_conyuge_apellido_1),
-                        'funcionario_conyuge_apellido_2'                            => strtoupper($funcionario_conyuge_apellido_2),
-                        'funcionario_conyuge_fecha_nacimiento'                      => date("Y-m-d", strtotime($rowMYSQL01['funcionario_conyuge_fecha_nacimiento'])),
-                        'funcionario_conyuge_empresa'                               => strtoupper($rowMYSQL01['funcionario_conyuge_empresa']),
-                        'funcionario_conyuge_observacion'                           => strtoupper($rowMYSQL01['funcionario_conyuge_observacion']),
-                        'funcionario_conyuge_sexo_codigo'                           => $rowMYSQL01['funcionario_conyuge_sexo_codigo'],
-                        'funcionario_conyuge_sexo_nombre'                           => strtoupper($rowMYSQL01['funcionario_conyuge_sexo_nombre']),
-                        'auditoria_usuario'                                         => strtoupper($rowMYSQL01['auditoria_usuario']),
-                        'auditoria_fecha'                                           => date("d/m/Y", strtotime($rowMYSQL01['auditoria_fecha'])),
-                        'auditoria_ip'                                              => strtoupper($rowMYSQL01['auditoria_ip'])      
-                    );
-
-                    $result_funcionario_conyuge[]   = $detalle;
-                }
-
-                if (!isset($result_funcionario_conyuge)){
-                    $detalle    = array(
-                        'funcionario_conyuge_codigo'                                => '',
-                        'funcionario_conyuge_estado_codigo'                         => '',
-                        'funcionario_conyuge_estado_nombre'                         => '',
-                        'funcionario_conyuge_nombre_1'                              => '',
-                        'funcionario_conyuge_nombre_2'                              => '',
-                        'funcionario_conyuge_apellido_1'                            => '',
-                        'funcionario_conyuge_apellido_2'                            => '',
-                        'funcionario_conyuge_fecha_nacimiento'                      => '',
-                        'funcionario_conyuge_empresa'                               => '',
-                        'funcionario_conyuge_observacion'                           => '',
-                        'funcionario_conyuge_sexo_codigo'                           => '',
-                        'funcionario_conyuge_sexo_nombre'                           => '',
-                        'auditoria_usuario'                                         => '',
-                        'auditoria_fecha'                                           => '',
-                        'auditoria_ip'                                              => ''
-                    );
-
-                    $result_funcionario_conyuge[]   = $detalle;
                 }
 
                 $stmtMYSQL02= $connMYSQL->prepare($sql02);
@@ -2773,7 +2692,6 @@
                 $result = array(
                     'funcionario'                       => $result_funcionario,
                     'funcionario_datos'                 => $result_funcionario_datos,
-                    'funcionario_conyuge'               => $result_funcionario_conyuge,
                     'funcionario_trabajo_anterior'      => $result_funcionario_trabajo_anterior,
                     'funcionario_actividad_economica'   => $result_funcionario_actividad_economica,
                     'funcionario_particulares'          => $result_funcionario_particulares,
@@ -2814,9 +2732,6 @@
 
                 $stmtMSSQL->closeCursor();
                 $stmtMSSQL = null;
-
-                $stmtMYSQL01->closeCursor();
-                $stmtMYSQL01 = null;
 
                 $stmtMYSQL02->closeCursor();
                 $stmtMYSQL02 = null;
