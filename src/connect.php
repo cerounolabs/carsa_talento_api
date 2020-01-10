@@ -2,7 +2,7 @@
     function getConnectionMSSQL(){
         $serverName = "SRVDESA01";
         $serverPort = "1433";
-        $serverDb   = "DESTRASJUD";
+        $serverDb   = "PRODUCCION_AYER";
         $serverUser = "czelaya";
         $serverPass = "carsa_2019";
         
