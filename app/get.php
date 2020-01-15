@@ -712,171 +712,164 @@
         return $json;
     });
 
-    $app->get('/v1/100/anho/{codigo}', function($request) {
+    $app->get('/v1/100/listado', function($request) {
         require __DIR__.'/../src/connect.php';
 
-        $val01      = $request->getAttribute('codigo');
+        $sql00  = "SELECT TOP 3
+        a.CAMFICCOD                     AS      campanha_codigo,
+        a.CAMFICNOM                     AS      campanha_nombre,
+        a.CAMFICFDE                     AS      campanha_fecha_inicio,
+        a.CAMFICFHA                     AS      campanha_fecha_final,
+        a.CAMFICCOL                     AS      campanha_color,
+        a.CAMFICFO1                     AS      campanha_formulario_1,
+        a.CAMFICFO2                     AS      campanha_formulario_2,
+        a.CAMFICFO3                     AS      campanha_formulario_3,
+        a.CAMFICFO4                     AS      campanha_formulario_4,
+        a.CAMFICFO5                     AS      campanha_formulario_5,
+        a.CAMFICFO6                     AS      campanha_formulario_6,
+        a.CAMFICFO7                     AS      campanha_formulario_7,
+        a.CAMFICFO8                     AS      campanha_formulario_8,
+        a.CAMFICFO9                     AS      campanha_formulario_9,
+        a.CAMFICOBS                     AS      campanha_observacion,
+        a.CAMFICAUS                     AS      campanha_usuario,
+        a.CAMFICAFH                     AS      campanha_fecha_hora,
+        a.CAMFICAIP                     AS      campanha_ip,
+        b.DOMFICCOD                     AS      campanha_estado_codigo,
+        b.DOMFICNOM                     AS      campanha_estado_nombre
+        
+        FROM CAMFIC a
+        INNER JOIN DOMFIC b ON a.CAMFICEST = b.DOMFICCOD
 
-        if (isset($val01)) {
-            $sql00  = "SELECT
-            a.CAMFICCOD                     AS      campanha_codigo,
-            a.CAMFICNOM                     AS      campanha_nombre,
-            a.CAMFICFDE                     AS      campanha_fecha_inicio,
-            a.CAMFICFHA                     AS      campanha_fecha_final,
-            a.CAMFICCOL                     AS      campanha_color,
-            a.CAMFICFO1                     AS      campanha_formulario_1,
-            a.CAMFICFO2                     AS      campanha_formulario_2,
-            a.CAMFICFO3                     AS      campanha_formulario_3,
-            a.CAMFICFO4                     AS      campanha_formulario_4,
-            a.CAMFICFO5                     AS      campanha_formulario_5,
-            a.CAMFICFO6                     AS      campanha_formulario_6,
-            a.CAMFICFO7                     AS      campanha_formulario_7,
-            a.CAMFICFO8                     AS      campanha_formulario_8,
-            a.CAMFICFO9                     AS      campanha_formulario_9,
-            a.CAMFICOBS                     AS      campanha_observacion,
-            a.CAMFICAUS                     AS      campanha_usuario,
-            a.CAMFICAFH                     AS      campanha_fecha_hora,
-            a.CAMFICAIP                     AS      campanha_ip,
-            b.DOMFICCOD                     AS      campanha_estado_codigo,
-            b.DOMFICNOM                     AS      campanha_estado_nombre
-            
-            FROM CAMFIC a
-            INNER JOIN DOMFIC b ON a.CAMFICEST = b.DOMFICCOD
+        WHERE a.CAMFICEST IN (4, 5) 
+        
+        ORDER BY a.CAMFICFDE DESC";
 
-            WHERE YEAR(a.CAMFICFDE) = ? AND a.CAMFICEST IN (3, 4, 5) 
-            
-            ORDER BY a.CAMFICFDE DESC";
+        try {
+            $connMYSQL  = getConnectionMYSQL();
+            $stmtMYSQL  = $connMYSQL->prepare($sql00);
+            $stmtMYSQL->execute(); 
 
-            try {
-                $connMYSQL  = getConnectionMYSQL();
-                $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$val01]); 
-
-                while ($rowMYSQL = $stmtMYSQL->fetch()) {
-                    if($rowMYSQL['campanha_formulario_1'] === 'S'){
-                        $campanha_formulario_1 = 'checked';
-                    } else {
-                        $campanha_formulario_1 = '';
-                    }
-    
-                    if($rowMYSQL['campanha_formulario_2'] === 'S'){
-                        $campanha_formulario_2 = 'checked';
-                    } else {
-                        $campanha_formulario_2 = '';
-                    }
-    
-                    if($rowMYSQL['campanha_formulario_3'] === 'S'){
-                        $campanha_formulario_3 = 'checked';
-                    } else {
-                        $campanha_formulario_3 = '';
-                    }
-    
-                    if($rowMYSQL['campanha_formulario_4'] === 'S'){
-                        $campanha_formulario_4 = 'checked';
-                    } else {
-                        $campanha_formulario_4 = '';
-                    }
-    
-                    if($rowMYSQL['campanha_formulario_5'] === 'S'){
-                        $campanha_formulario_5 = 'checked';
-                    } else {
-                        $campanha_formulario_5 = '';
-                    }
-    
-                    if($rowMYSQL['campanha_formulario_6'] === 'S'){
-                        $campanha_formulario_6 = 'checked';
-                    } else {
-                        $campanha_formulario_6 = '';
-                    }
-    
-                    if($rowMYSQL['campanha_formulario_7'] === 'S'){
-                        $campanha_formulario_7 = 'checked';
-                    } else {
-                        $campanha_formulario_7 = '';
-                    }
-    
-                    if($rowMYSQL['campanha_formulario_8'] === 'S'){
-                        $campanha_formulario_8 = 'checked';
-                    } else {
-                        $campanha_formulario_8 = '';
-                    }
-
-                    if($rowMYSQL['campanha_formulario_9'] === 'S'){
-                        $campanha_formulario_9 = 'checked';
-                    } else {
-                        $campanha_formulario_9 = '';
-                    }
-    
-                    $detalle    = array(
-                        'campanha_codigo'           => $rowMYSQL['campanha_codigo'],
-                        'campanha_estado_codigo'    => $rowMYSQL['campanha_estado_codigo'],
-                        'campanha_estado_nombre'    => $rowMYSQL['campanha_estado_nombre'],
-                        'campanha_nombre'           => $rowMYSQL['campanha_nombre'],
-                        'campanha_fecha_inicio'     => $rowMYSQL['campanha_fecha_inicio'],
-                        'campanha_fecha_inicio_2'   => date('d/m/Y', strtotime($rowMYSQL['campanha_fecha_inicio'])),
-                        'campanha_fecha_final'      => $rowMYSQL['campanha_fecha_final'],
-                        'campanha_fecha_final_2'    => date("d/m/Y", strtotime($rowMYSQL['campanha_fecha_final'])),
-                        'campanha_color'            => $rowMYSQL['campanha_color'],
-                        'campanha_formulario_1'     => $campanha_formulario_1,
-                        'campanha_formulario_2'     => $campanha_formulario_2,
-                        'campanha_formulario_3'     => $campanha_formulario_3,
-                        'campanha_formulario_4'     => $campanha_formulario_4,
-                        'campanha_formulario_5'     => $campanha_formulario_5,
-                        'campanha_formulario_6'     => $campanha_formulario_6,
-                        'campanha_formulario_7'     => $campanha_formulario_7,
-                        'campanha_formulario_8'     => $campanha_formulario_8,
-                        'campanha_formulario_9'     => $campanha_formulario_9,
-                        'campanha_observacion'      => $rowMYSQL['campanha_observacion'],
-                        'campanha_usuario'          => $rowMYSQL['campanha_usuario'],
-                        'campanha_fecha_hora'       => $rowMYSQL['campanha_fecha_hora'],
-                        'campanha_ip'               => $rowMYSQL['campanha_ip']
-                    );
-
-                    $result[]   = $detalle;
-                }
-
-                if (isset($result)){
-                    header("Content-Type: application/json; charset=utf-8");
-                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            while ($rowMYSQL = $stmtMYSQL->fetch()) {
+                if($rowMYSQL['campanha_formulario_1'] === 'S'){
+                    $campanha_formulario_1 = 'checked';
                 } else {
-                    $detalle = array(
-                        'campanha_codigo'           => '',
-                        'campanha_estado_codigo'    => '',
-                        'campanha_estado_nombre'    => '',
-                        'campanha_nombre'           => '',
-                        'campanha_fecha_inicio'     => '',
-                        'campanha_fecha_inicio_2'   => '',
-                        'campanha_fecha_final'      => '',
-                        'campanha_fecha_final_2'    => '',
-                        'campanha_color'            => '',
-                        'campanha_formulario_1'     => '',
-                        'campanha_formulario_2'     => '',
-                        'campanha_formulario_3'     => '',
-                        'campanha_formulario_4'     => '',
-                        'campanha_formulario_5'     => '',
-                        'campanha_formulario_6'     => '',
-                        'campanha_formulario_7'     => '',
-                        'campanha_formulario_8'     => '',
-                        'campanha_formulario_9'     => '',
-                        'campanha_observacion'      => '',
-                        'campanha_usuario'          => '',
-                        'campanha_fecha_hora'       => '',
-                        'campanha_ip'               => ''
-                    );
-
-                    header("Content-Type: application/json; charset=utf-8");
-                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                    $campanha_formulario_1 = '';
                 }
 
-                $stmtMYSQL->closeCursor();
-                $stmtMYSQL = null;
-            } catch (PDOException $e) {
-                header("Content-Type: application/json; charset=utf-8");
-                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                if($rowMYSQL['campanha_formulario_2'] === 'S'){
+                    $campanha_formulario_2 = 'checked';
+                } else {
+                    $campanha_formulario_2 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_3'] === 'S'){
+                    $campanha_formulario_3 = 'checked';
+                } else {
+                    $campanha_formulario_3 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_4'] === 'S'){
+                    $campanha_formulario_4 = 'checked';
+                } else {
+                    $campanha_formulario_4 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_5'] === 'S'){
+                    $campanha_formulario_5 = 'checked';
+                } else {
+                    $campanha_formulario_5 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_6'] === 'S'){
+                    $campanha_formulario_6 = 'checked';
+                } else {
+                    $campanha_formulario_6 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_7'] === 'S'){
+                    $campanha_formulario_7 = 'checked';
+                } else {
+                    $campanha_formulario_7 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_8'] === 'S'){
+                    $campanha_formulario_8 = 'checked';
+                } else {
+                    $campanha_formulario_8 = '';
+                }
+
+                if($rowMYSQL['campanha_formulario_9'] === 'S'){
+                    $campanha_formulario_9 = 'checked';
+                } else {
+                    $campanha_formulario_9 = '';
+                }
+
+                $detalle    = array(
+                    'campanha_codigo'           => $rowMYSQL['campanha_codigo'],
+                    'campanha_estado_codigo'    => $rowMYSQL['campanha_estado_codigo'],
+                    'campanha_estado_nombre'    => $rowMYSQL['campanha_estado_nombre'],
+                    'campanha_nombre'           => $rowMYSQL['campanha_nombre'],
+                    'campanha_fecha_inicio'     => $rowMYSQL['campanha_fecha_inicio'],
+                    'campanha_fecha_inicio_2'   => date('d/m/Y', strtotime($rowMYSQL['campanha_fecha_inicio'])),
+                    'campanha_fecha_final'      => $rowMYSQL['campanha_fecha_final'],
+                    'campanha_fecha_final_2'    => date("d/m/Y", strtotime($rowMYSQL['campanha_fecha_final'])),
+                    'campanha_color'            => $rowMYSQL['campanha_color'],
+                    'campanha_formulario_1'     => $campanha_formulario_1,
+                    'campanha_formulario_2'     => $campanha_formulario_2,
+                    'campanha_formulario_3'     => $campanha_formulario_3,
+                    'campanha_formulario_4'     => $campanha_formulario_4,
+                    'campanha_formulario_5'     => $campanha_formulario_5,
+                    'campanha_formulario_6'     => $campanha_formulario_6,
+                    'campanha_formulario_7'     => $campanha_formulario_7,
+                    'campanha_formulario_8'     => $campanha_formulario_8,
+                    'campanha_formulario_9'     => $campanha_formulario_9,
+                    'campanha_observacion'      => $rowMYSQL['campanha_observacion'],
+                    'campanha_usuario'          => $rowMYSQL['campanha_usuario'],
+                    'campanha_fecha_hora'       => $rowMYSQL['campanha_fecha_hora'],
+                    'campanha_ip'               => $rowMYSQL['campanha_ip']
+                );
+
+                $result[]   = $detalle;
             }
-        } else {
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'campanha_codigo'           => '',
+                    'campanha_estado_codigo'    => '',
+                    'campanha_estado_nombre'    => '',
+                    'campanha_nombre'           => '',
+                    'campanha_fecha_inicio'     => '',
+                    'campanha_fecha_inicio_2'   => '',
+                    'campanha_fecha_final'      => '',
+                    'campanha_fecha_final_2'    => '',
+                    'campanha_color'            => '',
+                    'campanha_formulario_1'     => '',
+                    'campanha_formulario_2'     => '',
+                    'campanha_formulario_3'     => '',
+                    'campanha_formulario_4'     => '',
+                    'campanha_formulario_5'     => '',
+                    'campanha_formulario_6'     => '',
+                    'campanha_formulario_7'     => '',
+                    'campanha_formulario_8'     => '',
+                    'campanha_formulario_9'     => '',
+                    'campanha_observacion'      => '',
+                    'campanha_usuario'          => '',
+                    'campanha_fecha_hora'       => '',
+                    'campanha_ip'               => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMYSQL->closeCursor();
+            $stmtMYSQL = null;
+        } catch (PDOException $e) {
             header("Content-Type: application/json; charset=utf-8");
-            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
         }
 
         $connMYSQL  = null;
