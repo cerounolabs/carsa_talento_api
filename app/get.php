@@ -741,10 +741,10 @@
         INNER JOIN DOMFIC b ON a.CAMFICEST = b.DOMFICCOD
 
         WHERE a.CAMFICEST IN (4, 5) 
-
-        LIMIT 3
         
-        ORDER BY a.CAMFICFDE DESC";
+        ORDER BY a.CAMFICEST, a.CAMFICFDE DESC 
+        
+        LIMIT 3";
 
         try {
             $connMYSQL  = getConnectionMYSQL();
