@@ -540,7 +540,7 @@
         return $json;
     });
 
-    $app->get('/v1/100/{codigo}', function($request) {
+    $app->get('/v1/100/campanha/{codigo}', function($request) {
         require __DIR__.'/../src/connect.php';
 
         $val01      = $request->getAttribute('codigo');
