@@ -715,7 +715,7 @@
     $app->get('/v1/100/listado', function($request) {
         require __DIR__.'/../src/connect.php';
 
-        $sql00  = "SELECT TOP 3
+        $sql00  = "SELECT
         a.CAMFICCOD                     AS      campanha_codigo,
         a.CAMFICNOM                     AS      campanha_nombre,
         a.CAMFICFDE                     AS      campanha_fecha_inicio,
@@ -741,6 +741,8 @@
         INNER JOIN DOMFIC b ON a.CAMFICEST = b.DOMFICCOD
 
         WHERE a.CAMFICEST IN (4, 5) 
+
+        LIMIT 3
         
         ORDER BY a.CAMFICFDE DESC";
 
