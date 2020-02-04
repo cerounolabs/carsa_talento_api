@@ -1,8 +1,10 @@
 <?php
     function getConnectionMSSQL(){
         $serverName = "SRVDESA01";
+        $serverName = "192.168.16.9";
         $serverPort = "1433";
         $serverDb   = "DESTRASJUD";
+        $serverDb   = "PRODUCCION_AYER";
         $serverUser = "czelaya";
         $serverPass = "carsa_2019";
         
