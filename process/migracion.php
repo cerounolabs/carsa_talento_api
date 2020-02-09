@@ -5,7 +5,7 @@
         $DOMFICEST  = 1;
         $DOMFICNOM  = '';
         $DOMFICEQU  = '';
-        $DOMFICVAL  = 'ESTADOCIVIL';
+        $DOMFICVAL  = 'PERSONAESTADOCIVIL';
         $DOMFICOBS  = '';
         $DOMFICAUS  = 'MIGRACION';
         $DOMFICAFH  = date('Y-m-d H:i:s');

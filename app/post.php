@@ -1203,116 +1203,92 @@
     });
 
     /*-------------------------------------------------------------------------*/
-    $app->post('/v1/colaborador/migracion', function($request) {
+    $app->post('/v1/200/migracion', function($request) {
         require __DIR__.'/../src/connect.php';
 
-        $val00      = $request->getAttribute('codigo');
-        $val01      = $request->getParsedBody()['campanha_usuario'];
-        $val02      = $request->getParsedBody()['campanha_fecha_hora'];
-        $val03      = $request->getParsedBody()['campanha_ip'];
+        $aud01  = $request->getParsedBody()['auditoria_usuario'];
+        $aud02  = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03  = $request->getParsedBody()['auditoria_ip'];
         
-        if (isset($val00)) {
-            $sql00  = "SELECT
-            a.FuSexo                        AS      funcionario_sexo_codigo,
-            a.ECCod                         AS      funcionario_estado_civil_codigo,
-            a.FuCIC                         AS      funcionario_documento,
-            a.FuNom                         AS      funcionario_nombre_1,
-            a.FNomb2                        AS      funcionario_nombre_2,
-            a.FuApe                         AS      funcionario_apellido_1,
-            a.Apell2                        AS      funcionario_apellido_2,
-            a.FuCod                         AS      funcionario_codigo,
-            CONVERT(date, a.FuFchNac, 23)   AS      funcionario_fecha_nacimiento,
-            a.FuMail                        AS      funcionario_email,
-            b.FOTO_TARGET                   AS      funcionario_foto
+        $sql00  = "SELECT
+        a.FuSexo                        AS      funcionario_sexo_codigo,
+        a.ECCod                         AS      funcionario_estado_civil_codigo,
+        a.FuCIC                         AS      funcionario_documento,
+        a.FuNom                         AS      funcionario_nombre_1,
+        a.FNomb2                        AS      funcionario_nombre_2,
+        a.FuApe                         AS      funcionario_apellido_1,
+        a.Apell2                        AS      funcionario_apellido_2,
+        a.FuCod                         AS      funcionario_codigo,
+        CONVERT(date, a.FuFchNac, 23)   AS      funcionario_fecha_nacimiento,
+        a.FuMail                        AS      funcionario_email,
+        b.FOTO_TARGET                   AS      funcionario_foto
+        
+        FROM FUNCIONARI a
+        INNER JOIN COLABORADOR_BASICOS b ON a.FuCod = b.COD_FUNC
+        
+        WHERE a.FEst = 'A'";
+
+        $sql01  = "SELECT a.FUNFICCFU AS funcionario_codigo FROM sistema.FUNFIC a WHERE a.FUNFICCFU = ?";
+        $sql02  = "INSERT INTO sistema.FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICNAC, FUNFICCFU, FUNFICNO1, FUNFICNO2, FUNFICAP1, FUNFICAP2, FUNFICAP3, FUNFICDNU, FUNFICDVE, FUNFICFNA, FUNFICEMA, FUNFICFOT, FUNFICOBS, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONADOCUMENTO' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONASEXO' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONAESTADOCIVIL' AND DOMFICEQU = ?), (SELECT LOCPAICOD FROM sistema.LOCPAI WHERE LOCPAICO1 = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+            $connPGSQL  = getConnectionMYSQL();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtPGSQL1 = $connPGSQL->prepare($sql01);
+            $stmtPGSQL2 = $connPGSQL->prepare($sql02);
+
+            $stmtMSSQL->execute();
             
-            FROM FUNCIONARI a
-            INNER JOIN COLABORADOR_BASICOS b ON a.FuCod = b.COD_FUNC
-            
-            WHERE a.FEst = 'A'";
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $FUNFICCOD  = 0;
+                $FUNFICEST  = 1;
+                $FUNFICTDC  = 1;
+                $FUNFICTSC  = strtoupper(strtolower(trim($rowMSSQL['funcionario_sexo_codigo'])));
+                $FUNFICECC  = $rowMSSQL['funcionario_estado_civil_codigo'];
+                $FUNFICNAC  = 586;
+                $FUNFICCFU  = $rowMSSQL['funcionario_codigo'];
+                $FUNFICNO1  = strtoupper(strtolower(trim($rowMSSQL['funcionario_nombre_1'])));
+                $FUNFICNO2  = strtoupper(strtolower(trim($rowMSSQL['funcionario_nombre_2'])));
+                $FUNFICAP1  = strtoupper(strtolower(trim($rowMSSQL['funcionario_apellido_1'])));
+                $FUNFICAP2  = strtoupper(strtolower(trim($rowMSSQL['funcionario_apellido_1'])));
+                $FUNFICAP3  = NULL;
+                $FUNFICDNU  = strtoupper(strtolower(trim($rowMSSQL['funcionario_documento'])));
+                $FUNFICDVE  = NULL;
+                $FUNFICFNA  = $rowMSSQL['funcionario_fecha_nacimiento'];
+                $FUNFICEMA  = strtolower(trim($rowMSSQL['funcionario_email']));
+                $FUNFICFOT  = strtolower(trim($rowMSSQL['funcionario_foto']));
+                $FUNFICOBS  = NULL;
+                $FUNFICAUS  = $aud01;
+                $FUNFICAFH  = $aud02;
+                $FUNFICAIP  = $aud03;
 
-            $sql01  = "SELECT a.FUNFICCOD AS funcionario_codigo FROM FUNFIC a WHERE a.FUNFICCFU = ?";
-            $sql02  = "INSERT INTO FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICTNC, FUNFICCFU, FUNFICNOM, FUNFICAPE, FUNFICDOC, FUNFICDOF, FUNFICFHA, FUNFICEMA, FUNFICFOT, FUNFICOBS, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, ?, (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'SEXO' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM DOMFIC WHERE DOMFICVAL = 'ESTADOCIVIL' AND DOMFICEQU = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $sql03  = "SELECT a.CAMFUCCAC AS campanha_codigo, a.CAMFUCFUC AS funcionari_codigo FROM CAMFUC a WHERE a.CAMFUCCAC = ? AND a.CAMFUCFUC = ?";
-            $sql04  = "INSERT INTO CAMFUC (CAMFUCCAC, CAMFUCFUC, CAMFUCEST, CAMFUCAUS, CAMFUCAFH, CAMFUCAIP) VALUES (?, ?, ?, ?, ?, ?)";
-            $sql05  = "UPDATE CAMFIC SET CAMFICEST = 3, CAMFICAUS = ?, CAMFICAFH = ?, CAMFICAIP = ? WHERE CAMFICCOD = ? AND CAMFICEST = 2";
-
-            try {
-                $connMSSQL  = getConnectionMSSQL();
-                $connMYSQL  = getConnectionMYSQL();
-
-                $stmtMSSQL  = $connMSSQL->prepare($sql00);
-                $stmtMYSQL  = $connMYSQL->prepare($sql01);
-                $stmtMYSQL2 = $connMYSQL->prepare($sql02);
-                $stmtMYSQL3 = $connMYSQL->prepare($sql03);
-                $stmtMYSQL4 = $connMYSQL->prepare($sql04);
-                $stmtMYSQL5 = $connMYSQL->prepare($sql05);
-
-                $stmtMSSQL->execute();
+                $stmtPGSQL1->execute([$FUNFICCFU]);
+                $row00_pgsql = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
                 
-                while ($rowMSSQL = $stmtMSSQL->fetch()) {
-                    $FUNFICEST  = 'A';
-                    $FUNFICTDC  = 15;
-                    $FUNFICTSC  = trim(strtoupper($rowMSSQL['funcionario_sexo_codigo']));
-                    $FUNFICECC  = $rowMSSQL['funcionario_estado_civil_codigo'];
-                    $FUNFICTNC  = 688;
-                    $FUNFICCFU  = trim(strtoupper($rowMSSQL['funcionario_codigo']));
-                    $FUNFICNOM  = trim(strtoupper($rowMSSQL['funcionario_nombre_1'])).' '.trim(strtoupper($rowMSSQL['funcionario_nombre_2']));
-                    $FUNFICAPE  = trim(strtoupper($rowMSSQL['funcionario_apellido_1'])).' '.trim(strtoupper($rowMSSQL['funcionario_apellido_2']));
-                    $FUNFICDOC  = trim(strtoupper($rowMSSQL['funcionario_documento']));
-                    $FUNFICDOF  = '1900-01-01';
-                    $FUNFICFHA  = $rowMSSQL['funcionario_fecha_nacimiento'];
-                    $FUNFICEMA  = trim(strtolower($rowMSSQL['funcionario_email']));
-                    $FUNFICFOT  = trim(strtolower($rowMSSQL['funcionario_foto']));
-                    $FUNFICOBS  = '';
-
-                    $stmtMYSQL->execute([$FUNFICCFU]);
-                    $row00_mysql = $stmtMYSQL->fetch(PDO::FETCH_ASSOC);
-                    
-                    if (!$row00_mysql){
-                        $stmtMYSQL2->execute([$FUNFICEST, $FUNFICTDC, $FUNFICTSC, $FUNFICECC, $FUNFICTNC, $FUNFICCFU, $FUNFICNOM, $FUNFICAPE, $FUNFICDOC, $FUNFICDOF, $FUNFICFHA, $FUNFICEMA, $FUNFICFOT, $FUNFICOBS, $val01, $val02, $val03]);
-                        $FUNFICCOD = $connMYSQL->lastInsertId();
-                    } else {
-                        $FUNFICCOD = $row00_mysql['funcionario_codigo'];
-                    }
-
-                    $stmtMYSQL3->execute([$val00, $FUNFICCOD]);
-                    $row01_mysql = $stmtMYSQL3->fetch(PDO::FETCH_ASSOC);
-
-                    if(!$row01_mysql){
-                        $CAMFUCEST = 'P';
-                        $stmtMYSQL4->execute([$val00, $FUNFICCOD, $CAMFUCEST, $val01, $val02, $val03]);
-                    }
+                if (!$row00_pgsql){
+                    $stmtPGSQL->execute([$FUNFICEST, $FUNFICTDC, $FUNFICTSC, $FUNFICECC, $FUNFICNAC, $FUNFICCFU, $FUNFICNO1, $FUNFICNO2, $FUNFICAP1, $FUNFICAP2, $FUNFICAP3, $FUNFICDNU, $FUNFICDVE, $FUNFICFNA, $FUNFICEMA, $FUNFICFOT, $FUNFICOBS, $FUNFICAUS, $FUNFICAIP]);
                 }
-
-                $stmtMYSQL5->execute([$val01, $val02, $val03, $val00]);
-
-                $stmtMSSQL->closeCursor();
-                $stmtMYSQL->closeCursor();
-                $stmtMYSQL2->closeCursor();
-                $stmtMYSQL3->closeCursor();
-                $stmtMYSQL4->closeCursor();
-                $stmtMYSQL5->closeCursor();
-                
-                $stmtMSSQL  = null;
-                $stmtMYSQL  = null;
-                $stmtMYSQL2 = null;
-                $stmtMYSQL3 = null;
-                $stmtMYSQL4 = null;
-                $stmtMYSQL5 = null;
-
-                header("Content-Type: application/json; charset=utf-8");
-                $json   = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success PROCESO', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-            } catch (PDOException $e) {
-                header("Content-Type: application/json; charset=utf-8");
-                $json   = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
             }
-        } else {
+
+            $stmtMSSQL->closeCursor();
+            $stmtPGSQL1->closeCursor();
+            $stmtPGSQL2->closeCursor();
+            
+            $stmtMSSQL  = null;
+            $stmtPGSQL1 = null;
+            $stmtPGSQL2 = null;
+
             header("Content-Type: application/json; charset=utf-8");
-            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            $json   = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success PROCESO', 'codigo' => 0), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json   = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
         }
 
         $connMSSQL  = null;
-        $connMYSQL  = null;
+        $connPGSQL  = null;
         
         return $json;
     });
