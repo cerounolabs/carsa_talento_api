@@ -12,8 +12,8 @@
         $DOMFICAIP  = '192.168.16.9';
 
         $sql00      = "SELECT a.ECCod AS estado_civil_codigo, a.ECDsc AS estado_civil_nombre FROM ESTCIV a ORDER BY a.ECDsc";
-        $sql01      = "SELECT * FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
-        $sql02      = "INSERT INTO DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+        $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
             $connMSSQL  = getConnectionMSSQLv2();
@@ -46,7 +46,7 @@
             $stmtPGSQL1 = null;
             $stmtPGSQL2 = null;
         } catch (PDOException $e) {
-            echo 'Error setDepartamento(): '.$e;
+            echo 'Error getEstadoCivil(): '.$e;
         }
 
         $connMSSQL  = null;
