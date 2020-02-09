@@ -1233,7 +1233,7 @@
 
         try {
             $connMSSQL  = getConnectionMSSQL();
-            $connPGSQL  = getConnectionMYSQL();
+            $connPGSQL  = getConnectionPGSQL();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
             $stmtPGSQL1 = $connPGSQL->prepare($sql01);
