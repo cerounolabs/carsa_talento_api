@@ -96,7 +96,7 @@
     }
 
     function getConnectionPGSQLv1(){
-        $serverName = "localhost";
+        $serverName = "127.0.0.1";
         $serverPort = "5432";
         $serverDb   = "thholox_v10";
         $serverUser = "user_thholox";
