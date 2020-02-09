@@ -9,7 +9,7 @@
         $DOMFICOBS  = '';
         $DOMFICAUS  = 'MIGRACION';
         $DOMFICAFH  = date('Y-m-d H:i:s');
-        $DOMFICAIP  = $_SERVER['REMOTE_ADDR'];
+        $DOMFICAIP  = '192.168.16.9';
 
         $sql00      = "SELECT a.ECCod AS estado_civil_codigo, a.ECDsc AS estado_civil_nombre FROM ESTCIV a ORDER BY a.ECDsc";
         $sql01      = "SELECT * FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
@@ -28,7 +28,7 @@
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
                 $DOMFICEQU = $rowMSSQL['estado_civil_codigo'];
                 $DOMFICNOM = trim($rowMSSQL['estado_civil_nombre']);
-
+echo "DOMFICEQU => ".$DOMFICEQU.", DOMFICNOM => ".$DOMFICNOM;
                 $stmtMPGSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
 
                 $rowPGSQL1 = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
