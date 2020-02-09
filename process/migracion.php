@@ -28,8 +28,8 @@
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
                 $DOMFICEQU = $rowMSSQL['estado_civil_codigo'];
                 $DOMFICNOM = trim($rowMSSQL['estado_civil_nombre']);
-echo "DOMFICEQU => ".$DOMFICEQU.", DOMFICNOM => ".$DOMFICNOM;
-                $stmtMPGSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $stmtPGSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
 
                 $rowPGSQL1 = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
                     
