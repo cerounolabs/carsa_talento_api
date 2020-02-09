@@ -1252,17 +1252,17 @@
                 $FUNFICNO1  = strtoupper(strtolower(trim($rowMSSQL['funcionario_nombre_1'])));
                 $FUNFICNO2  = strtoupper(strtolower(trim($rowMSSQL['funcionario_nombre_2'])));
                 $FUNFICAP1  = strtoupper(strtolower(trim($rowMSSQL['funcionario_apellido_1'])));
-                $FUNFICAP2  = strtoupper(strtolower(trim($rowMSSQL['funcionario_apellido_1'])));
+                $FUNFICAP2  = strtoupper(strtolower(trim($rowMSSQL['funcionario_apellido_2'])));
                 $FUNFICAP3  = NULL;
                 $FUNFICDNU  = strtoupper(strtolower(trim($rowMSSQL['funcionario_documento'])));
-                $FUNFICDVE  = NULL;
+                $FUNFICDVE  = '1900-01-01';
                 $FUNFICFNA  = $rowMSSQL['funcionario_fecha_nacimiento'];
                 $FUNFICEMA  = strtolower(trim($rowMSSQL['funcionario_email']));
                 $FUNFICFOT  = strtolower(trim($rowMSSQL['funcionario_foto']));
                 $FUNFICOBS  = NULL;
-                $FUNFICAUS  = $aud01;
+                $FUNFICAUS  = strtoupper(strtolower(trim($aud01)));
                 $FUNFICAFH  = $aud02;
-                $FUNFICAIP  = $aud03;
+                $FUNFICAIP  = strtoupper(strtolower(trim($aud03)));
 
                 $stmtPGSQL1->execute([$FUNFICCFU]);
                 $row00_pgsql = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
