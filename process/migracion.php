@@ -54,6 +54,65 @@
         $connPGSQL  = null;
     }
 
+    function getTelCelPrefijo(){
+        $DOMFICEST  = 1;
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'TELEFONIAPREFIJOTEL';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.9';
+
+        $sql00      = "SELECT a.CelLBId AS prefijo_codigo, a.CelLB AS prefijo_numero, a.CelLBTipo AS prefijo_tipo FROM PrefCelLB a ORDER BY a.CelLBTipo";
+        $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQLv2();
+            $connPGSQL  = getConnectionPGSQLv1();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtPGSQL1 = $connPGSQL->prepare($sql01);
+            $stmtPGSQL2 = $connPGSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU = $rowMSSQL['prefijo_codigo'];
+                $DOMFICNOM = '+595 '.substr(trim($rowMSSQL['prefijo_numero']), 1);
+
+                if (trim(strtoupper($rowMSSQL['prefijo_tipo'])) === 'TELEFONO'){
+                    $DOMFICVAL  = 'TELEFONIAPREFIJOTEL';
+                } else {
+                    $DOMFICVAL  = 'TELEFONIAPREFIJOCEL';
+                }
+
+                $stmtPGSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowPGSQL1 = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowPGSQL1){
+                    $stmtPGSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtPGSQL1->closeCursor();
+            $stmtPGSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtPGSQL1 = null;
+            $stmtPGSQL2 = null;
+        } catch (PDOException $e) {
+            echo "\n";
+            echo 'Error getTelCelPrefijo(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connPGSQL  = null;
+    }
+
     function getPais(){
         $LOCPAIEST  = 1;
         $LOCPAICO1  = 0;
@@ -114,15 +173,22 @@
     echo "++++++++++++++++++++++++++PROCESO DE MIGRACIÓN++++++++++++++++++++++++++";
     echo "\n";
     echo "++++++++++++++++ SISTEMA CORPORATIVO => SISTEMA TALENTO ++++++++++++++++";
+
     echo "\n";
     echo "INICIO getEstadoCivil() => ".date('Y-m-d H:i:s');
     getEstadoCivil();
     echo "\n";
     echo "FIN getEstadoCivil() => ".date('Y-m-d H:i:s');
+
+    echo "\n";
+    echo "INICIO getTelCelPrefijo() => ".date('Y-m-d H:i:s');
+    getTelCelPrefijo();
+    echo "\n";
+    echo "FIN getTelCelPrefijo() => ".date('Y-m-d H:i:s');
+
     echo "\n";
     echo "INICIO getPais() => ".date('Y-m-d H:i:s');
     getPais();
     echo "\n";
     echo "FIN getPais() => ".date('Y-m-d H:i:s');
-    echo "\n";
 ?>
