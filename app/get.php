@@ -8,9 +8,9 @@
         a.DOMFICEQU                     AS      tipo_equivalente,
         a.DOMFICVAL                     AS      tipo_dominio,
         a.DOMFICOBS                     AS      tipo_observacion,
-        a.DOMFICAUS                     AS      tipo_usuario,
-        a.DOMFICAFH                     AS      tipo_fecha_hora,
-        a.DOMFICAIP                     AS      tipo_ip,
+        a.DOMFICAUS                     AS      auditoria_usuario,
+        a.DOMFICAFH                     AS      auditoria_fecha_hora,
+        a.DOMFICAIP                     AS      auditoria_ip,
 
         b.DOMFICCOD                     AS      tipo_estado_codigo,
         b.DOMFICNOM                     AS      tipo_estado_nombre
@@ -29,14 +29,14 @@
                 $detalle    = array(
                     'tipo_codigo'           => $rowPGSQL['tipo_codigo'],
                     'tipo_estado_codigo'    => $rowPGSQL['tipo_estado_codigo'],
-                    'tipo_estado_nombre'    => $rowPGSQL['tipo_estado_nombre'],
-                    'tipo_nombre'           => $rowPGSQL['tipo_nombre'],
-                    'tipo_equivalente'      => $rowPGSQL['tipo_equivalente'],
-                    'tipo_dominio'          => $rowPGSQL['tipo_dominio'],
-                    'tipo_observacion'      => $rowPGSQL['tipo_observacion'],
-                    'tipo_usuario'          => $rowPGSQL['tipo_usuario'],
-                    'tipo_fecha_hora'       => $rowPGSQL['tipo_fecha_hora'],
-                    'tipo_ip'               => $rowPGSQL['tipo_ip']
+                    'tipo_estado_nombre'    => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+                    'tipo_nombre'           => strtoupper(strtolower(trim($rowPGSQL['tipo_nombre']))),
+                    'tipo_equivalente'      => strtoupper(strtolower(trim($rowPGSQL['tipo_equivalente']))),
+                    'tipo_dominio'          => strtoupper(strtolower(trim($rowPGSQL['tipo_dominio']))),
+                    'tipo_observacion'      => strtoupper(strtolower(trim($rowPGSQL['tipo_observacion']))),
+                    'auditoria_usuario'     => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
+                    'auditoria_fecha_hora'  => $rowPGSQL['auditoria_fecha_hora'],
+                    'auditoria_ip'          => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
                 );
 
                 $result[]   = $detalle;
@@ -54,9 +54,9 @@
                     'tipo_equivalente'      => '',
                     'tipo_dominio'          => '',
                     'tipo_observacion'      => '',
-                    'tipo_usuario'          => '',
-                    'tipo_fecha_hora'       => '',
-                    'tipo_ip'               => ''
+                    'auditoria_usuario'     => '',
+                    'auditoria_fecha_hora'  => '',
+                    'auditoria_ip'          => ''
                 );
 
                 header("Content-Type: application/json; charset=utf-8");
@@ -87,9 +87,9 @@
                 a.DOMFICEQU                     AS      tipo_equivalente,
                 a.DOMFICVAL                     AS      tipo_dominio,
                 a.DOMFICOBS                     AS      tipo_observacion,
-                a.DOMFICAUS                     AS      tipo_usuario,
-                a.DOMFICAFH                     AS      tipo_fecha_hora,
-                a.DOMFICAIP                     AS      tipo_ip,
+                a.DOMFICAUS                     AS      auditoria_usuario,
+                a.DOMFICAFH                     AS      auditoria_fecha_hora,
+                a.DOMFICAIP                     AS      auditoria_ip,
 
                 b.DOMFICCOD                     AS      tipo_estado_codigo,
                 b.DOMFICNOM                     AS      tipo_estado_nombre
@@ -110,14 +110,14 @@
                     $detalle    = array(
                         'tipo_codigo'           => $rowPGSQL['tipo_codigo'],
                         'tipo_estado_codigo'    => $rowPGSQL['tipo_estado_codigo'],
-                        'tipo_estado_nombre'    => $rowPGSQL['tipo_estado_nombre'],
-                        'tipo_nombre'           => $rowPGSQL['tipo_nombre'],
-                        'tipo_equivalente'      => $rowPGSQL['tipo_equivalente'],
-                        'tipo_dominio'          => $rowPGSQL['tipo_dominio'],
-                        'tipo_observacion'      => $rowPGSQL['tipo_observacion'],
-                        'tipo_usuario'          => $rowPGSQL['tipo_usuario'],
-                        'tipo_fecha_hora'       => $rowPGSQL['tipo_fecha_hora'],
-                        'tipo_ip'               => $rowPGSQL['tipo_ip']
+                        'tipo_estado_nombre'    => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+                        'tipo_nombre'           => strtoupper(strtolower(trim($rowPGSQL['tipo_nombre']))),
+                        'tipo_equivalente'      => strtoupper(strtolower(trim($rowPGSQL['tipo_equivalente']))),
+                        'tipo_dominio'          => strtoupper(strtolower(trim($rowPGSQL['tipo_dominio']))),
+                        'tipo_observacion'      => strtoupper(strtolower(trim($rowPGSQL['tipo_observacion']))),
+                        'auditoria_usuario'     => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
+                        'auditoria_fecha_hora'  => $rowPGSQL['auditoria_fecha_hora'],
+                        'auditoria_ip'          => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
                     );
 
                     $result[]   = $detalle;
@@ -135,9 +135,9 @@
                         'tipo_equivalente'      => '',
                         'tipo_dominio'          => '',
                         'tipo_observacion'      => '',
-                        'tipo_usuario'          => '',
-                        'tipo_fecha_hora'       => '',
-                        'tipo_ip'               => ''
+                        'auditoria_usuario'     => '',
+                        'auditoria_fecha_hora'  => '',
+                        'auditoria_ip'          => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
@@ -172,9 +172,9 @@
                 a.DOMFICEQU                     AS      tipo_equivalente,
                 a.DOMFICVAL                     AS      tipo_dominio,
                 a.DOMFICOBS                     AS      tipo_observacion,
-                a.DOMFICAUS                     AS      tipo_usuario,
-                a.DOMFICAFH                     AS      tipo_fecha_hora,
-                a.DOMFICAIP                     AS      tipo_ip,
+                a.DOMFICAUS                     AS      auditoria_usuario,
+                a.DOMFICAFH                     AS      auditoria_fecha_hora,
+                a.DOMFICAIP                     AS      auditoria_ip,
 
                 b.DOMFICCOD                     AS      tipo_estado_codigo,
                 b.DOMFICNOM                     AS      tipo_estado_nombre
@@ -195,14 +195,14 @@
                     $detalle    = array(
                         'tipo_codigo'           => $rowPGSQL['tipo_codigo'],
                         'tipo_estado_codigo'    => $rowPGSQL['tipo_estado_codigo'],
-                        'tipo_estado_nombre'    => $rowPGSQL['tipo_estado_nombre'],
-                        'tipo_nombre'           => $rowPGSQL['tipo_nombre'],
-                        'tipo_equivalente'      => $rowPGSQL['tipo_equivalente'],
-                        'tipo_dominio'          => $rowPGSQL['tipo_dominio'],
-                        'tipo_observacion'      => $rowPGSQL['tipo_observacion'],
-                        'tipo_usuario'          => $rowPGSQL['tipo_usuario'],
-                        'tipo_fecha_hora'       => $rowPGSQL['tipo_fecha_hora'],
-                        'tipo_ip'               => $rowPGSQL['tipo_ip']
+                        'tipo_estado_nombre'    => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+                        'tipo_nombre'           => strtoupper(strtolower(trim($rowPGSQL['tipo_nombre']))),
+                        'tipo_equivalente'      => strtoupper(strtolower(trim($rowPGSQL['tipo_equivalente']))),
+                        'tipo_dominio'          => strtoupper(strtolower(trim($rowPGSQL['tipo_dominio']))),
+                        'tipo_observacion'      => strtoupper(strtolower(trim($rowPGSQL['tipo_observacion']))),
+                        'auditoria_usuario'     => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
+                        'auditoria_fecha_hora'  => $rowPGSQL['auditoria_fecha_hora'],
+                        'auditoria_ip'          => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
                     );
 
                     $result[]   = $detalle;
@@ -220,9 +220,9 @@
                         'tipo_equivalente'      => '',
                         'tipo_dominio'          => '',
                         'tipo_observacion'      => '',
-                        'tipo_usuario'          => '',
-                        'tipo_fecha_hora'       => '',
-                        'tipo_ip'               => ''
+                        'auditoria_usuario'     => '',
+                        'auditoria_fecha_hora'  => '',
+                        'auditoria_ip'          => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
