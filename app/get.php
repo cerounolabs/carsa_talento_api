@@ -29,7 +29,7 @@
                 $detalle    = array(
                     'tipo_codigo'           => $rowPGSQL['tipo_codigo'],
                     'tipo_estado_codigo'    => $rowPGSQL['tipo_estado_codigo'],
-                    'tipo_estado_nombre'    => $rowPGSQL['tipo_estado_nombre'],,
+                    'tipo_estado_nombre'    => $rowPGSQL['tipo_estado_nombre'],
                     'tipo_nombre'           => $rowPGSQL['tipo_nombre'],
                     'tipo_equivalente'      => $rowPGSQL['tipo_equivalente'],
                     'tipo_dominio'          => $rowPGSQL['tipo_dominio'],
