@@ -13,18 +13,18 @@
         $val08      = $request->getParsedBody()['tipo_ip'];
 
         if (isset($val00) && isset($val01) && isset($val02) && isset($val04) && isset($val06) && isset($val07) && isset($val08)) {
-            $sql00  = "UPDATE DOMFIC SET DOMFICEST = ?, DOMFICNOM = ?, DOMFICEQU = ?, DOMFICOBS = ?, DOMFICAUS = ?, DOMFICAFH = ?, DOMFICAIP = ? WHERE DOMFICCOD = ?";
+            $sql00  = "UPDATE sistema.DOMFIC SET DOMFICEST = ?, DOMFICNOM = ?, DOMFICEQU = ?, DOMFICOBS = ?, DOMFICAUS = ?, DOMFICAFH = ?, DOMFICAIP = ? WHERE DOMFICCOD = ?";
 
             try {
-                $connMYSQL  = getConnectionMYSQL();
-                $stmtMYSQL  = $connMYSQL->prepare($sql00);
-                $stmtMYSQL->execute([$val01, $val02, $val03, $val05, $val06, $val07, $val08, $val00]); 
+                $connPGSQL  = getConnectionPGSQLv1();
+                $stmtPGSQL  = $connPGSQL->prepare($sql00);
+                $stmtPGSQL->execute([$val01, $val02, $val03, $val05, $val06, $val07, $val08, $val00]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success UPDATE', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
 
-                $stmtMYSQL->closeCursor();
-                $stmtMYSQL = null;
+                $stmtPGSQL->closeCursor();
+                $stmtPGSQL = null;
             } catch (PDOException $e) {
                 header("Content-Type: application/json; charset=utf-8");
                 $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error UPDATE: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
@@ -34,7 +34,7 @@
             $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
         }
 
-        $connMYSQL  = null;
+        $connPGSQL  = null;
         
         return $json;
     });
