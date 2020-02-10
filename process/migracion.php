@@ -113,6 +113,324 @@
         $connPGSQL  = null;
     }
 
+    function getParentesco(){
+        $DOMFICEST  = 1;
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'PERSONAPARENTESCO';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.FGPARAMNUM AS parentezco_codigo, a.FGPARAMVC AS parentezco_nombre FROM FGPARAM a WHERE a.FGPARAMDES = 'Parametros de Parentezco. TH' ORDER BY a.FGPARAMNUM";
+        $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQLv2();
+            $connPGSQL  = getConnectionPGSQLv1();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtPGSQL1 = $connPGSQL->prepare($sql01);
+            $stmtPGSQL2 = $connPGSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU  = $rowMSSQL['parentezco_codigo'];
+                $DOMFICNOM  = strtoupper(strtolower(trim($rowMSSQL['parentezco_nombre'])));
+
+                $stmtPGSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowPGSQL1 = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowPGSQL1){
+                    $stmtPGSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtPGSQL1->closeCursor();
+            $stmtPGSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtPGSQL1 = null;
+            $stmtPGSQL2 = null;
+        } catch (PDOException $e) {
+            echo "\n";
+            echo 'Error getParentesco(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connPGSQL  = null;
+    }
+
+    function getUniversidad(){
+        $DOMFICEST  = 1;
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'ACADEMICOUNIVERSIDAD';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.AyUniv AS universidad_codigo, a.AyNomb AS universidad_nombre, a.AyCort AS universidad_abreviado FROM FST037 a ORDER BY a.AyNomb";
+        $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQLv2();
+            $connPGSQL  = getConnectionPGSQLv1();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtPGSQL1 = $connPGSQL->prepare($sql01);
+            $stmtPGSQL2 = $connPGSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU  = $rowMSSQL['universidad_codigo'];
+                $DOMFICNOM  = strtoupper(strtolower(trim($rowMSSQL['universidad_nombre'])));
+
+                $stmtPGSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowPGSQL1 = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowPGSQL1){
+                    $stmtPGSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtPGSQL1->closeCursor();
+            $stmtPGSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtPGSQL1 = null;
+            $stmtPGSQL2 = null;
+        } catch (PDOException $e) {
+            echo "\n";
+            echo 'Error getUniversidad(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connPGSQL  = null;
+    }
+
+    function getCarrera(){
+        $DOMFICEST  = 1;
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'ACADEMICOCARRERA';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.aqcarr AS carrera_codigo, a.aqdesc AS carrera_nombre, a.csval8 AS carrera_abreviado FROM FST038 a ORDER BY a.aqdesc";
+        $sql01      = "SELECT * FROM DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQLv2();
+            $connPGSQL  = getConnectionPGSQLv1();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtPGSQL1 = $connPGSQL->prepare($sql01);
+            $stmtPGSQL2 = $connPGSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU  = $rowMSSQL['carrera_codigo'];
+                $DOMFICNOM  = strtoupper(strtolower(trim($rowMSSQL['carrera_nombre'])));
+
+                $stmtPGSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowPGSQL1  = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowPGSQL1){
+                    $stmtPGSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtPGSQL1->closeCursor();
+            $stmtPGSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtPGSQL1 = null;
+            $stmtPGSQL2 = null;
+        } catch (PDOException $e) {
+            echo "\n";
+            echo 'Error getCarrera(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connPGSQL  = null;
+    }
+
+    function getHobbies(){
+        $DOMFICEST  = 1;
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'PERSONAHOBBIES';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.RRHH231ID AS hobbies_codigo, a.RRHH231DSC AS hobbies_nombre FROM RRHH231 a ORDER BY a.RRHH231ID";
+        $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQLv2();
+            $connPGSQL  = getConnectionPGSQLv1();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtPGSQL1 = $connPGSQL->prepare($sql01);
+            $stmtPGSQL2 = $connPGSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU  = $rowMSSQL['hobbies_codigo'];
+                $DOMFICNOM  = strtoupper(strtolower(trim($rowMSSQL['hobbies_nombre'])));
+
+                $stmtPGSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowPGSQL1  = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowPGSQL1){
+                    $stmtPGSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtPGSQL1->closeCursor();
+            $stmtPGSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtPGSQL1 = null;
+            $stmtPGSQL2 = null;
+        } catch (PDOException $e) {
+            echo "\n";
+            echo 'Error getHobbies(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connPGSQL  = null;
+    }
+
+    function getCargo(){
+        $DOMFICEST  = 1;
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'COLABORADORCARGOOCUPADO';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.CjCar AS cargo_codigo, a.CjNom AS cargo_nombre, a.CjAbr AS cargo_abreviado FROM FST053 a ORDER BY a.CjNom";
+        $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQLv2();
+            $connPGSQL  = getConnectionPGSQLv1();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtPGSQL1 = $connPGSQL->prepare($sql01);
+            $stmtPGSQL2 = $connPGSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU  = $rowMSSQL['cargo_codigo'];
+                $DOMFICNOM  = strtoupper(strtolower(trim($rowMSSQL['cargo_nombre'])));
+
+                $stmtPGSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowPGSQL1  = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowPGSQL1){
+                    $stmtPGSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtPGSQL1->closeCursor();
+            $stmtPGSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtPGSQL1 = null;
+            $stmtPGSQL2 = null;
+        } catch (PDOException $e) {
+            echo "\n";
+            echo 'Error getCargo(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connPGSQL  = null;
+    }
+
+    function getMotivoDespido(){
+        $DOMFICEST  = 1;
+        $DOMFICNOM  = '';
+        $DOMFICEQU  = '';
+        $DOMFICVAL  = 'COLABORADORMOTIVOSALIDA';
+        $DOMFICOBS  = '';
+        $DOMFICAUS  = 'MIGRACION';
+        $DOMFICAFH  = date('Y-m-d H:i:s');
+        $DOMFICAIP  = '192.168.16.92';
+
+        $sql00      = "SELECT a.FuDesvCod AS motivo_despido_codigo, a.FuDesvDesc AS motivo_despido_nombre FROM FUMOTDESV a WHERE a.FuDesvDesc IS NOT NULL ORDER BY a.FuDesvDesc";
+        $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+
+        try {
+            $connMSSQL  = getConnectionMSSQLv2();
+            $connPGSQL  = getConnectionPGSQLv1();
+
+            $stmtMSSQL  = $connMSSQL->prepare($sql00);
+            $stmtMSSQL->execute();
+
+            $stmtPGSQL1 = $connPGSQL->prepare($sql01);
+            $stmtPGSQL2 = $connPGSQL->prepare($sql02);
+
+            while ($rowMSSQL = $stmtMSSQL->fetch()) {
+                $DOMFICEQU  = $rowMSSQL['motivo_despido_codigo'];
+                $DOMFICNOM  = strtoupper(strtolower(trim($rowMSSQL['motivo_despido_nombre'])));
+
+                $stmtPGSQL1->execute([$DOMFICEQU, $DOMFICVAL]);
+
+                $rowPGSQL1  = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
+                    
+                if (!$rowPGSQL1){
+                    $stmtPGSQL2->execute([$DOMFICEST, $DOMFICNOM, $DOMFICEQU, $DOMFICVAL, $DOMFICOBS, $DOMFICAUS, $DOMFICAIP]);
+                }
+            }
+
+            $stmtMSSQL->closeCursor();
+            $stmtPGSQL1->closeCursor();
+            $stmtPGSQL2->closeCursor();
+
+            $stmtMSSQL  = null;
+            $stmtPGSQL1 = null;
+            $stmtPGSQL2 = null;
+        } catch (PDOException $e) {
+            echo "\n";
+            echo 'Error getMotivoDespido(): '.$e;
+        }
+
+        $connMSSQL  = null;
+        $connPGSQL  = null;
+    }
+
     function getPais(){
         $LOCPAIEST  = 1;
         $LOCPAICO1  = 0;
@@ -185,6 +503,42 @@
     getTelCelPrefijo();
     echo "\n";
     echo "FIN getTelCelPrefijo() => ".date('Y-m-d H:i:s');
+
+    echo "\n";
+    echo "INICIO getParentesco() => ".date('Y-m-d H:i:s');
+    getParentesco();
+    echo "\n";
+    echo "FIN getParentesco() => ".date('Y-m-d H:i:s');
+
+    echo "\n";
+    echo "INICIO getUniversidad() => ".date('Y-m-d H:i:s');
+    getUniversidad();
+    echo "\n";
+    echo "FIN getUniversidad() => ".date('Y-m-d H:i:s');
+
+    echo "\n";
+    echo "INICIO getCarrera() => ".date('Y-m-d H:i:s');
+    getCarrera();
+    echo "\n";
+    echo "FIN getCarrera() => ".date('Y-m-d H:i:s');
+
+    echo "\n";
+    echo "INICIO getHobbies() => ".date('Y-m-d H:i:s');
+    getHobbies();
+    echo "\n";
+    echo "FIN getHobbies() => ".date('Y-m-d H:i:s');
+
+    echo "\n";
+    echo "INICIO getCargo() => ".date('Y-m-d H:i:s');
+    getCargo();
+    echo "\n";
+    echo "FIN getCargo() => ".date('Y-m-d H:i:s');
+
+    echo "\n";
+    echo "INICIO getMotivoDespido() => ".date('Y-m-d H:i:s');
+    getMotivoDespido();
+    echo "\n";
+    echo "FIN getMotivoDespido() => ".date('Y-m-d H:i:s');
 
     echo "\n";
     echo "INICIO getPais() => ".date('Y-m-d H:i:s');
