@@ -8,17 +8,18 @@
         $val03      = $request->getParsedBody()['tipo_equivalente'];
         $val04      = $request->getParsedBody()['tipo_dominio'];
         $val05      = $request->getParsedBody()['tipo_observacion'];
-        $val06      = $request->getParsedBody()['tipo_usuario'];
-        $val07      = $request->getParsedBody()['tipo_fecha_hora'];
-        $val08      = $request->getParsedBody()['tipo_ip'];
 
-        if (isset($val00) && isset($val01) && isset($val02) && isset($val04) && isset($val06) && isset($val07) && isset($val08)) {
-            $sql00  = "UPDATE sistema.DOMFIC SET DOMFICEST = ?, DOMFICNOM = ?, DOMFICEQU = ?, DOMFICOBS = ?, DOMFICAUS = ?, DOMFICAFH = ?, DOMFICAIP = ? WHERE DOMFICCOD = ?";
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        if (isset($val00) && isset($val01) && isset($val02) && isset($val04)) {
+            $sql00  = "UPDATE sistema.DOMFIC SET DOMFICEST = ?, DOMFICNOM = ?, DOMFICEQU = ?, DOMFICOBS = ?, DOMFICAUS = ?, DOMFICAFH = NOW(), DOMFICAIP = ? WHERE DOMFICCOD = ?";
 
             try {
                 $connPGSQL  = getConnectionPGSQLv1();
                 $stmtPGSQL  = $connPGSQL->prepare($sql00);
-                $stmtPGSQL->execute([$val01, $val02, $val03, $val05, $val06, $val07, $val08, $val00]); 
+                $stmtPGSQL->execute([$val01, $val02, $val03, $val05, $aud01, $aud03, $val00]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success UPDATE', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
