@@ -4,10 +4,10 @@
 
         $val00      = $request->getAttribute('codigo');
         $val01      = $request->getParsedBody()['tipo_estado_codigo'];
-        $val02      = $request->getParsedBody()['tipo_nombre'];
-        $val03      = $request->getParsedBody()['tipo_equivalente'];
-        $val04      = $request->getParsedBody()['tipo_dominio'];
-        $val05      = $request->getParsedBody()['tipo_observacion'];
+        $val02      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_nombre'])));
+        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_equivalente'])));
+        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_dominio'])));
+        $val05      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_observacion'])));
 
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
         $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
