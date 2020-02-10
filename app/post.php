@@ -287,8 +287,6 @@
         return $json;
     });
 
-    
-
     $app->post('/v1/100/campanha', function($request) {
         require __DIR__.'/../src/connect.php';
 
@@ -1166,6 +1164,46 @@
     });
 
     /*-------------------------------------------------------------------------*/
+    $app->post('/v1/000/dominio', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01      = $request->getParsedBody()['tipo_estado_codigo'];
+        $val02      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_nombre'])));
+        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_equivalente'])));
+        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_dominio'])));
+        $val05      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_observacion'])));
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        if (isset($val01) && isset($val02) && isset($val04)) {
+            $sql00  = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+
+            try {
+                $connPGSQL  = getConnectionPGSQLv1();
+                $stmtPGSQL  = $connPGSQL->prepare($sql00);
+                $stmtPGSQL->execute([$val01, $val02, $val03, $val04, $val05, $aud01, $aud03]); 
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connPGSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtPGSQL->closeCursor();
+                $stmtPGSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connPGSQL  = null;
+        
+        return $json;
+    });
+
     $app->post('/v1/200/migracion', function($request) {
         require __DIR__.'/../src/connect.php';
 
@@ -1251,46 +1289,6 @@
         }
 
         $connMSSQL  = null;
-        $connPGSQL  = null;
-        
-        return $json;
-    });
-
-    $app->post('/v1/000/dominio', function($request) {
-        require __DIR__.'/../src/connect.php';
-
-        $val01      = $request->getParsedBody()['tipo_estado_codigo'];
-        $val02      = $request->getParsedBody()['tipo_nombre'];
-        $val03      = $request->getParsedBody()['tipo_equivalente'];
-        $val04      = $request->getParsedBody()['tipo_dominio'];
-        $val05      = $request->getParsedBody()['tipo_observacion'];
-
-        $aud01      = $request->getParsedBody()['auditoria_usuario'];
-        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
-        $aud03      = $request->getParsedBody()['auditoria_ip'];
-
-        if (isset($val01) && isset($val02) && isset($val04)) {
-            $sql00  = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
-
-            try {
-                $connPGSQL  = getConnectionPGSQLv1();
-                $stmtPGSQL  = $connPGSQL->prepare($sql00);
-                $stmtPGSQL->execute([$val01, $val02, $val03, $val04, $val05, $aud01, $aud03]); 
-                
-                header("Content-Type: application/json; charset=utf-8");
-                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connPGSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-
-                $stmtPGSQL->closeCursor();
-                $stmtPGSQL = null;
-            } catch (PDOException $e) {
-                header("Content-Type: application/json; charset=utf-8");
-                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-            }
-        } else {
-            header("Content-Type: application/json; charset=utf-8");
-            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-        }
-
         $connPGSQL  = null;
         
         return $json;
