@@ -1169,11 +1169,11 @@
     $app->post('/v1/200/migracion', function($request) {
         require __DIR__.'/../src/connect.php';
 
-        $aud01  = $request->getParsedBody()['auditoria_usuario'];
-        $aud02  = $request->getParsedBody()['auditoria_fecha_hora'];
-        $aud03  = $request->getParsedBody()['auditoria_ip'];
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
         
-        $sql00  = "SELECT
+        $sql00      = "SELECT
         a.FuSexo                        AS      funcionario_sexo_codigo,
         a.ECCod                         AS      funcionario_estado_civil_codigo,
         a.FuCIC                         AS      funcionario_documento,
@@ -1191,8 +1191,8 @@
         
         WHERE a.FEst = 'A'";
 
-        $sql01  = "SELECT a.FUNFICCFU AS funcionario_codigo FROM sistema.FUNFIC a WHERE a.FUNFICCFU = ?";
-        $sql02  = "INSERT INTO sistema.FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICNAC, FUNFICCFU, FUNFICNO1, FUNFICNO2, FUNFICAP1, FUNFICAP2, FUNFICAP3, FUNFICDNU, FUNFICDVE, FUNFICFNA, FUNFICEMA, FUNFICFOT, FUNFICOBS, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONADOCUMENTO' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONASEXO' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONAESTADOCIVIL' AND DOMFICEQU = ?), (SELECT LOCPAICOD FROM sistema.LOCPAI WHERE LOCPAICO1 = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+        $sql01      = "SELECT a.FUNFICCFU AS funcionario_codigo FROM sistema.FUNFIC a WHERE a.FUNFICCFU = ?";
+        $sql02      = "INSERT INTO sistema.FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICNAC, FUNFICCFU, FUNFICNO1, FUNFICNO2, FUNFICAP1, FUNFICAP2, FUNFICAP3, FUNFICDNU, FUNFICDVE, FUNFICFNA, FUNFICEMA, FUNFICFOT, FUNFICOBS, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONADOCUMENTO' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONASEXO' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONAESTADOCIVIL' AND DOMFICEQU = ?), (SELECT LOCPAICOD FROM sistema.LOCPAI WHERE LOCPAICO1 = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
             $connMSSQL  = getConnectionMSSQLv2();
@@ -1264,17 +1264,18 @@
         $val03      = $request->getParsedBody()['tipo_equivalente'];
         $val04      = $request->getParsedBody()['tipo_dominio'];
         $val05      = $request->getParsedBody()['tipo_observacion'];
-        $val06      = $request->getParsedBody()['tipo_usuario'];
-        $val07      = $request->getParsedBody()['tipo_fecha_hora'];
-        $val08      = $request->getParsedBody()['tipo_ip'];
 
-        if (isset($val01) && isset($val02) && isset($val04) && isset($val06) && isset($val07) && isset($val08)) {
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        if (isset($val01) && isset($val02) && isset($val04)) {
             $sql00  = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
 
             try {
                 $connPGSQL  = getConnectionPGSQLv1();
                 $stmtPGSQL  = $connPGSQL->prepare($sql00);
-                $stmtPGSQL->execute([$val01, $val02, $val03, $val04, $val05, $val06, $val07, $val08]); 
+                $stmtPGSQL->execute([$val01, $val02, $val03, $val04, $val05, $aud01, $aud03]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connPGSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
