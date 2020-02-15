@@ -416,6 +416,191 @@
         return $json;
     });
 
+    $app->get('/v1/400/acceso', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+            a.LOGFUNCOD         AS          sistema_acceso_codigo,
+            a.LOGFUNDIP         AS          sistema_acceso_direccion_ip,
+            a.LOGFUNOBS         AS          sistema_acceso_observacion,
+            a.LOGFUNAUS         AS          auditoria_usuario,
+            a.LOGFUNAFH         AS          auditoria_fecha_hora,
+            a.LOGFUNAIP         AS          auditoria_ip,
+
+            b.DOMFICCOD         AS          tipo_estado_codigo,
+            b.DOMFICNOM         AS          tipo_estado_nombre,
+
+            c.FUNFICCOD         AS          funcionario_codigo,
+            c.FUNFICCFU         AS          funcionario_sistema_codigo,
+            c.FUNFICNO1         AS          funcionario_nombre_1,
+            c.FUNFICNO2         AS          funcionario_nombre_2,
+            c.FUNFICAP1         AS          funcionario_apellido_1,
+            c.FUNFICAP2         AS          funcionario_apellido_2,
+            c.FUNFICAP3         AS          funcionario_apellido_3,
+            c.FUNFICDNU         AS          funcionario_documento_numero
+
+            FROM sistema.LOGFUN a
+            INNER JOIN sistema.DOMFIC b ON a.LOGFUNEST = b.DOMFICCOD
+            INNER JOIN sistema.FUNFIC c ON a.LOGFUNFUC = c.FUNFICCOD
+
+            ORDER BY c.LOGFUNCOD";
+
+        try {
+            $connPGSQL  = getConnectionPGSQLv1();
+            $stmtPGSQL  = $connPGSQL->prepare($sql00);
+            $stmtPGSQL->execute(); 
+
+            while ($rowPGSQL = $stmtPGSQL->fetch()) {
+                $detalle    = array(
+                    'sistema_acceso_codigo'         => $rowPGSQL['sistema_acceso_codigo'],
+                    'tipo_estado_codigo'            => $rowPGSQL['tipo_estado_codigo'],
+                    'tipo_estado_nombre'            => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+                    'sistema_acceso_direccion_ip'   => strtoupper(strtolower(trim($rowPGSQL['sistema_acceso_direccion_ip']))),
+                    'sistema_acceso_observacion'    => strtoupper(strtolower(trim($rowPGSQL['sistema_acceso_observacion']))),
+                    'funcionario_codigo'            => $rowPGSQL['funcionario_codigo'],
+                    'funcionario_sistema_codigo'    => $rowPGSQL['funcionario_sistema_codigo'],
+                    'funcionario_nombre_completo'   => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
+                    'funcionario_documento_numero'  => strtoupper(strtolower(trim($rowPGSQL['funcionario_documento_numero']))),
+                    'auditoria_usuario'             => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
+                    'auditoria_fecha_hora'          => $rowPGSQL['auditoria_fecha_hora'],
+                    'auditoria_ip'                  => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'sistema_acceso_codigo'         => '',
+                    'tipo_estado_codigo'            => '',
+                    'tipo_estado_nombre'            => '',
+                    'sistema_acceso_direccion_ip'   => '',
+                    'sistema_acceso_observacion'    => '',
+                    'funcionario_codigo'            => '',
+                    'funcionario_sistema_codigo'    => '',
+                    'funcionario_nombre_completo'   => '',
+                    'funcionario_documento_numero'  => '',
+                    'auditoria_usuario'             => '',
+                    'auditoria_fecha_hora'          => '',
+                    'auditoria_ip'                  => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtPGSQL->closeCursor();
+            $stmtPGSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connPGSQL  = null;
+        
+        return $json;
+    });
+
+    $app->get('/v1/400/acceso/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+		$val01      = $request->getAttribute('codigo');
+        
+        if (isset($val01)) {
+            $sql00  = "SELECT
+                a.LOGFUNCOD         AS          sistema_acceso_codigo,
+                a.LOGFUNDIP         AS          sistema_acceso_direccion_ip,
+                a.LOGFUNOBS         AS          sistema_acceso_observacion,
+                a.LOGFUNAUS         AS          auditoria_usuario,
+                a.LOGFUNAFH         AS          auditoria_fecha_hora,
+                a.LOGFUNAIP         AS          auditoria_ip,
+
+                b.DOMFICCOD         AS          tipo_estado_codigo,
+                b.DOMFICNOM         AS          tipo_estado_nombre,
+
+                c.FUNFICCOD         AS          funcionario_codigo,
+                c.FUNFICCFU         AS          funcionario_sistema_codigo,
+                c.FUNFICNO1         AS          funcionario_nombre_1,
+                c.FUNFICNO2         AS          funcionario_nombre_2,
+                c.FUNFICAP1         AS          funcionario_apellido_1,
+                c.FUNFICAP2         AS          funcionario_apellido_2,
+                c.FUNFICAP3         AS          funcionario_apellido_3,
+                c.FUNFICDNU         AS          funcionario_documento_numero
+
+                FROM sistema.LOGFUN a
+                INNER JOIN sistema.DOMFIC b ON a.LOGFUNEST = b.DOMFICCOD
+                INNER JOIN sistema.FUNFIC c ON a.LOGFUNFUC = c.FUNFICCOD
+
+                WHERE a.LOGFUNCOD = ?
+
+                ORDER BY c.LOGFUNCOD";
+
+            try {
+                $connPGSQL  = getConnectionPGSQLv1();
+                $stmtPGSQL  = $connPGSQL->prepare($sql00);
+                $stmtPGSQL->execute([$val01]); 
+
+                while ($rowPGSQL = $stmtPGSQL->fetch()) {
+                    $detalle    = array(
+                        'sistema_acceso_codigo'         => $rowPGSQL['sistema_acceso_codigo'],
+                        'tipo_estado_codigo'            => $rowPGSQL['tipo_estado_codigo'],
+                        'tipo_estado_nombre'            => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+                        'sistema_acceso_direccion_ip'   => strtoupper(strtolower(trim($rowPGSQL['sistema_acceso_direccion_ip']))),
+                        'sistema_acceso_observacion'    => strtoupper(strtolower(trim($rowPGSQL['sistema_acceso_observacion']))),
+                        'funcionario_codigo'            => $rowPGSQL['funcionario_codigo'],
+                        'funcionario_sistema_codigo'    => $rowPGSQL['funcionario_sistema_codigo'],
+                        'funcionario_nombre_completo'   => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
+                        'funcionario_documento_numero'  => strtoupper(strtolower(trim($rowPGSQL['funcionario_documento_numero']))),
+                        'auditoria_usuario'             => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
+                        'auditoria_fecha_hora'          => $rowPGSQL['auditoria_fecha_hora'],
+                        'auditoria_ip'                  => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle = array(
+                        'sistema_acceso_codigo'         => '',
+                        'tipo_estado_codigo'            => '',
+                        'tipo_estado_nombre'            => '',
+                        'sistema_acceso_direccion_ip'   => '',
+                        'sistema_acceso_observacion'    => '',
+                        'funcionario_codigo'            => '',
+                        'funcionario_sistema_codigo'    => '',
+                        'funcionario_nombre_completo'   => '',
+                        'funcionario_documento_numero'  => '',
+                        'auditoria_usuario'             => '',
+                        'auditoria_fecha_hora'          => '',
+                        'auditoria_ip'                  => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtPGSQL->closeCursor();
+                $stmtPGSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connPGSQL  = null;
+        
+        return $json;
+    });
+
     $app->get('/v1/100', function($request) {
         require __DIR__.'/../src/connect.php';
 
