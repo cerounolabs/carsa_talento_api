@@ -444,7 +444,7 @@
             INNER JOIN sistema.DOMFIC b ON a.LOGFUNEST = b.DOMFICCOD
             INNER JOIN sistema.FUNFIC c ON a.LOGFUNFUC = c.FUNFICCOD
 
-            ORDER BY c.LOGFUNCOD";
+            ORDER BY a.LOGFUNCOD";
 
         try {
             $connPGSQL  = getConnectionPGSQLv1();
@@ -540,7 +540,7 @@
 
                 WHERE a.LOGFUNCOD = ?
 
-                ORDER BY c.LOGFUNCOD";
+                ORDER BY a.LOGFUNCOD";
 
             try {
                 $connPGSQL  = getConnectionPGSQLv1();
