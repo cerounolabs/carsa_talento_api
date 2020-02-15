@@ -437,7 +437,8 @@
             c.FUNFICAP1         AS          funcionario_apellido_1,
             c.FUNFICAP2         AS          funcionario_apellido_2,
             c.FUNFICAP3         AS          funcionario_apellido_3,
-            c.FUNFICDNU         AS          funcionario_documento_numero
+            c.FUNFICDNU         AS          funcionario_documento_numero,
+            c.FUNFICFOT         AS          funcionario_foto
 
             FROM sistema.LOGFUN a
             INNER JOIN sistema.DOMFIC b ON a.LOGFUNEST = b.DOMFICCOD
@@ -461,6 +462,7 @@
                     'funcionario_sistema_codigo'    => $rowPGSQL['funcionario_sistema_codigo'],
                     'funcionario_nombre_completo'   => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
                     'funcionario_documento_numero'  => strtoupper(strtolower(trim($rowPGSQL['funcionario_documento_numero']))),
+                    'funcionario_foto'              => $rowPGSQLstrtolower(trim(['funcionario_foto'])),
                     'auditoria_usuario'             => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
                     'auditoria_fecha_hora'          => $rowPGSQL['auditoria_fecha_hora'],
                     'auditoria_ip'                  => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
@@ -483,6 +485,7 @@
                     'funcionario_sistema_codigo'    => '',
                     'funcionario_nombre_completo'   => '',
                     'funcionario_documento_numero'  => '',
+                    'funcionario_foto'              => '',
                     'auditoria_usuario'             => '',
                     'auditoria_fecha_hora'          => '',
                     'auditoria_ip'                  => ''
@@ -528,7 +531,8 @@
                 c.FUNFICAP1         AS          funcionario_apellido_1,
                 c.FUNFICAP2         AS          funcionario_apellido_2,
                 c.FUNFICAP3         AS          funcionario_apellido_3,
-                c.FUNFICDNU         AS          funcionario_documento_numero
+                c.FUNFICDNU         AS          funcionario_documento_numero,
+                c.FUNFICFOT         AS          funcionario_foto
 
                 FROM sistema.LOGFUN a
                 INNER JOIN sistema.DOMFIC b ON a.LOGFUNEST = b.DOMFICCOD
@@ -554,6 +558,7 @@
                         'funcionario_sistema_codigo'    => $rowPGSQL['funcionario_sistema_codigo'],
                         'funcionario_nombre_completo'   => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
                         'funcionario_documento_numero'  => strtoupper(strtolower(trim($rowPGSQL['funcionario_documento_numero']))),
+                        'funcionario_foto'              => $rowPGSQLstrtolower(trim(['funcionario_foto'])),
                         'auditoria_usuario'             => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
                         'auditoria_fecha_hora'          => $rowPGSQL['auditoria_fecha_hora'],
                         'auditoria_ip'                  => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
@@ -576,6 +581,7 @@
                         'funcionario_sistema_codigo'    => '',
                         'funcionario_nombre_completo'   => '',
                         'funcionario_documento_numero'  => '',
+                        'funcionario_foto'              => '',
                         'auditoria_usuario'             => '',
                         'auditoria_fecha_hora'          => '',
                         'auditoria_ip'                  => ''
