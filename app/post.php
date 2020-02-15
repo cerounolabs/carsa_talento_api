@@ -1280,8 +1280,6 @@
                 if (!$row00_pgsql){
                     $stmtPGSQL2->execute([$FUNFICEST, $FUNFICTDC, $FUNFICTSC, $FUNFICECC, $FUNFICNAC, $FUNFICCFU, $FUNFICNO1, $FUNFICNO2, $FUNFICAP1, $FUNFICAP2, $FUNFICAP3, $FUNFICDNU, $FUNFICDVE, $FUNFICFNA, $FUNFICEMA, $FUNFICFOT, $FUNFICOBS, $FUNFICAUS, $FUNFICAIP]);
                     $stmtPGSQL3->execute([$LOGFUNEST, $LOGFUNFUC, $LOGFUNDIP, $LOGFUNOBS, $LOGFUNAUS, $LOGFUNAIP]);
-                } else {
-                    $stmtPGSQL3->execute([$LOGFUNEST, $LOGFUNFUC, $LOGFUNDIP, $LOGFUNOBS, $LOGFUNAUS, $LOGFUNAIP]);
                 }
             }
 
