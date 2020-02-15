@@ -1231,6 +1231,7 @@
 
         $sql01      = "SELECT a.FUNFICCFU AS funcionario_codigo FROM sistema.FUNFIC a WHERE a.FUNFICCFU = ?";
         $sql02      = "INSERT INTO sistema.FUNFIC (FUNFICEST, FUNFICTDC, FUNFICTSC, FUNFICECC, FUNFICNAC, FUNFICCFU, FUNFICNO1, FUNFICNO2, FUNFICAP1, FUNFICAP2, FUNFICAP3, FUNFICDNU, FUNFICDVE, FUNFICFNA, FUNFICEMA, FUNFICFOT, FUNFICOBS, FUNFICAUS, FUNFICAFH, FUNFICAIP) VALUES (?, (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONADOCUMENTO' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONASEXO' AND DOMFICEQU = ?), (SELECT DOMFICCOD FROM sistema.DOMFIC WHERE DOMFICVAL = 'PERSONAESTADOCIVIL' AND DOMFICEQU = ?), (SELECT LOCPAICOD FROM sistema.LOCPAI WHERE LOCPAICO1 = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+        $sql03      = "INSERT INTO sistema.LOGFUN (LOGFUNEST, LOGFUNFUC, LOGFUNDIP, LOGFUNOBS, LOGFUNAUS, LOGFUNAFH, LOGFUNAIP) VALUES (?, (SELECT FUNFICCOD FROM sistema.FUNFIC WHERE FUNFICCFU = ?), ?, ?, ?, NOW(), ?)";
 
         try {
             $connMSSQL  = getConnectionMSSQLv2();
@@ -1239,6 +1240,7 @@
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
             $stmtPGSQL1 = $connPGSQL->prepare($sql01);
             $stmtPGSQL2 = $connPGSQL->prepare($sql02);
+            $stmtPGSQL3 = $connPGSQL->prepare($sql03);
 
             $stmtMSSQL->execute();
             
@@ -1265,21 +1267,33 @@
                 $FUNFICAFH  = $aud02;
                 $FUNFICAIP  = strtoupper(strtolower(trim($aud03)));
 
+                $LOGFUNEST  = 1;
+                $LOGFUNFUC  = $rowMSSQL['funcionario_codigo'];;
+                $LOGFUNDIP  = '0.0.0.0';
+                $LOGFUNOBS  = NULL;
+                $LOGFUNAUS  = strtoupper(strtolower(trim($aud01)));
+                $LOGFUNAIP  = strtoupper(strtolower(trim($aud03)));
+
                 $stmtPGSQL1->execute([$FUNFICCFU]);
                 $row00_pgsql = $stmtPGSQL1->fetch(PDO::FETCH_ASSOC);
                 
                 if (!$row00_pgsql){
                     $stmtPGSQL2->execute([$FUNFICEST, $FUNFICTDC, $FUNFICTSC, $FUNFICECC, $FUNFICNAC, $FUNFICCFU, $FUNFICNO1, $FUNFICNO2, $FUNFICAP1, $FUNFICAP2, $FUNFICAP3, $FUNFICDNU, $FUNFICDVE, $FUNFICFNA, $FUNFICEMA, $FUNFICFOT, $FUNFICOBS, $FUNFICAUS, $FUNFICAIP]);
+                    $stmtPGSQL3->execute([$LOGFUNEST, $LOGFUNFUC, $LOGFUNDIP, $LOGFUNOBS, $LOGFUNAUS, $LOGFUNAIP]);
+                } else {
+                    $stmtPGSQL3->execute([$LOGFUNEST, $LOGFUNFUC, $LOGFUNDIP, $LOGFUNOBS, $LOGFUNAUS, $LOGFUNAIP]);
                 }
             }
 
             $stmtMSSQL->closeCursor();
             $stmtPGSQL1->closeCursor();
             $stmtPGSQL2->closeCursor();
+            $stmtPGSQL3->closeCursor();
             
             $stmtMSSQL  = null;
             $stmtPGSQL1 = null;
             $stmtPGSQL2 = null;
+            $stmtPGSQL3 = null;
 
             header("Content-Type: application/json; charset=utf-8");
             $json   = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success PROCESO', 'codigo' => 0), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
@@ -1314,6 +1328,45 @@
                 $connPGSQL  = getConnectionPGSQLv1();
                 $stmtPGSQL  = $connPGSQL->prepare($sql00);
                 $stmtPGSQL->execute([$val01, $val02, $val03, $val04, $val05, $aud01, $aud03]); 
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connPGSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtPGSQL->closeCursor();
+                $stmtPGSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connPGSQL  = null;
+        
+        return $json;
+    });
+
+    $app->post('/v1/400/acceso', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val01      = $request->getParsedBody()['tipo_estado_codigo'];
+        $val02      = $request->getParsedBody()['funcionario_codigo'];
+        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['sistema_acceso_direccion_ip'])));
+        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['sistema_acceso_observacion'])));
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        if (isset($val01) && isset($val02) && isset($val03)) {
+            $sql00  = "INSERT INTO sistema.LOGFUN (LOGFUNEST, LOGFUNFUC, LOGFUNDIP, LOGFUNOBS, LOGFUNAUS, LOGFUNAFH, LOGFUNAIP) VALUES (?, ?, ?, ?, ?, NOW(), ?)";
+
+            try {
+                $connPGSQL  = getConnectionPGSQLv1();
+                $stmtPGSQL  = $connPGSQL->prepare($sql00);
+                $stmtPGSQL->execute([$val01, $val02, $val03, $val04, $aud01, $aud03]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connPGSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);

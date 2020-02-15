@@ -168,3 +168,43 @@
         
         return $json;
     });
+
+    $app->post('/v1/400/acceso/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val00      = $request->getAttribute('codigo');
+        $val01      = $request->getParsedBody()['tipo_estado_codigo'];
+        $val02      = $request->getParsedBody()['funcionario_codigo'];
+        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['sistema_acceso_direccion_ip'])));
+        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['sistema_acceso_observacion'])));
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        if (isset($val00) && isset($val01) && isset($val02) && isset($val03)) {
+            $sql00  = "UPDATE sistema.LOGFUN SET LOGFUNEST = ?, LOGFUNDIP = ?, LOGFUNOBS = ?, LOGFUNAUS = ?, LOGFUNAFH = NOW(), LOGFUNAIP = ? WHERE LOGFUNCOD = ? AND LOGFUNFUC = ?";
+
+            try {
+                $connPGSQL  = getConnectionPGSQLv1();
+                $stmtPGSQL  = $connPGSQL->prepare($sql00);
+                $stmtPGSQL->execute([$val01, $val03, $val04, $aud01, $aud03, $val00, $val02]);
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success UPDATE', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtPGSQL->closeCursor();
+                $stmtPGSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error UPDATE: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connPGSQL  = null;
+        
+        return $json;
+    });
