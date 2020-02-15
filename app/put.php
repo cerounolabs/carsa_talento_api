@@ -127,3 +127,44 @@
         
         return $json;
     });
+
+    $app->put('/v1/400/sistema/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val00      = $request->getAttribute('codigo');
+        $val01      = $request->getParsedBody()['tipo_estado_codigo'];
+        $val02      = $request->getParsedBody()['tipo_conexion_codigo'];
+        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['conexion_nombre'])));
+        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['conexion_url'])));
+        $val05      = strtoupper(strtolower(trim($request->getParsedBody()['conexion_observacion'])));
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        if (isset($val01) && isset($val02) && isset($val03)) {
+            $sql00  = "UPDATE sistema.LOGFIC SET LOGFICEST = ?, LOGFICTCC = ?, LOGFICNOM = ?, LOGFICURL = ?, LOGFICOBS = ?, LOGFICAUS = ?, LOGFICAFH = NOW(), LOGFICAIP = ? WHERE LOGFICCOD = ?";
+
+            try {
+                $connPGSQL  = getConnectionPGSQLv1();
+                $stmtPGSQL  = $connPGSQL->prepare($sql00);
+                $stmtPGSQL->execute([$val01, $val02, $val03, $val04, $val05, $aud01, $aud03, $val00]); 
+                
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success UPDATE', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtPGSQL->closeCursor();
+                $stmtPGSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error UPDATE: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connPGSQL  = null;
+        
+        return $json;
+    });
