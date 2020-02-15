@@ -134,9 +134,9 @@
         $val00      = $request->getAttribute('codigo');
         $val01      = $request->getParsedBody()['tipo_estado_codigo'];
         $val02      = $request->getParsedBody()['tipo_conexion_codigo'];
-        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['conexion_nombre'])));
-        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['conexion_url'])));
-        $val05      = strtoupper(strtolower(trim($request->getParsedBody()['conexion_observacion'])));
+        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['sistema_nombre'])));
+        $val04      = strtolower(trim($request->getParsedBody()['sistema_link']));
+        $val05      = strtoupper(strtolower(trim($request->getParsedBody()['sistema_observacion'])));
 
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
         $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
