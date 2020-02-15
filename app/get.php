@@ -267,14 +267,12 @@
             INNER JOIN sistema.DOMFIC b ON a.LOGFICEST = b.DOMFICCOD
             INNER JOIN sistema.DOMFIC c ON a.LOGFICTCC = c.DOMFICCOD
 
-            WHERE a.LOGFICCOD = ?
-
             ORDER BY a.LOGFICCOD";
 
         try {
             $connPGSQL  = getConnectionPGSQLv1();
             $stmtPGSQL  = $connPGSQL->prepare($sql00);
-            $stmtPGSQL->execute([$val01]); 
+            $stmtPGSQL->execute(); 
 
             while ($rowPGSQL = $stmtPGSQL->fetch()) {
                 $detalle    = array(
