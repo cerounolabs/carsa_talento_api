@@ -9,6 +9,7 @@
         $val05      = $request->getParsedBody()['usuario_var05'];
         $val06      = $request->getParsedBody()['usuario_var06'];
         $val07      = $request->getParsedBody()['usuario_var07'];
+        $val08      = $request->getParsedBody()['usuario_var08'];
 
         if (isset($val01) && isset($val02) && isset($val03)) {
             $sql00  = "SELECT
@@ -153,9 +154,11 @@
         $val05      = $request->getParsedBody()['usuario_var05'];
         $val06      = $request->getParsedBody()['usuario_var06'];
         $val07      = $request->getParsedBody()['usuario_var07'];
+        $val08      = $request->getParsedBody()['usuario_var08'];
 
-        if (isset($val01) && isset($val02) && isset($val03)) {
-            $sql00  = "SELECT
+        if (isset($val03)) {
+            $sql00  = "SELECT b.FUNFICCFU AS codigo_funcionario FROM sistema.LOGFUN a INNER JOIN sistema.FUNFIC b ON a.LOGFUNFUC = b.FUNFICCOD WHERE a.LOGFUNDIP = ?";
+            $sql01  = "SELECT
             a.ClUsu                 AS      login_usuario,
             a.ClCon                 AS      login_contrasenha,
             a.FuCod                 AS      login_funcionario_codigo,
@@ -177,49 +180,23 @@
             FROM FSD050 a
 			INNER JOIN COLABORADOR_BASICOS b ON a.FuCod = b.COD_FUNC
 
-            WHERE a.ClUsu = ?
+            WHERE a.FuCod = ?
             
             ORDER BY a.FuCod";
 
-            $sql01  = "INSERT INTO FUNLOG (FUNLOGEST, FUNLOGUSU, FUNLOGPAS, FUNLOGDIR, FUNLOGHOS, FUNLOGAGE, FUNLOGREF, FUNLOGAFH) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
             try {
-                $connMSSQL  = getConnectionMSSQL();
-                $connMYSQL  = getConnectionMYSQL();
+                $connMSSQL  = getConnectionMSSQLv2();
+                $connPGSQL  = getConnectionPGSQLv1();
 
-                $stmtMSSQL  = $connMSSQL->prepare($sql00);
-                $stmtMYSQL  = $connMYSQL->prepare($sql01);
+                $stmtPGSQL  = $connPGSQL->prepare($sql00);
+                $stmtPGSQL->execute([$val03]);
 
-                $stmtMSSQL->execute([$val01]);
-                
-                $row_mssql  = $stmtMSSQL->fetch(PDO::FETCH_ASSOC);
+                $stmtMSSQL  = $connMSSQL->prepare($sql01);
 
-                if (!$row_mssql){
-                    $val00      = 'E';
-                    $detalle    = array(
-                        'login_usuario'             => '',
-                        'login_funcionario_codigo'  => '',
-                        'login_funcionario_nombre'  => '',
-                        'login_cargo_codigo'        => '',
-                        'login_cargo_nombre'        => '',
-                        'login_gerencia_codigo'     => '',
-                        'login_gerencia_nombre'     => '',
-                        'login_departamento_codigo' => '',
-                        'login_departamento_nombre' => '',
-                        'login_unidad_codigo'       => '',
-                        'login_unidad_nombre'       => '',
-                        'login_supervision_codigo'  => '',
-                        'login_supervision_nombre'  => '',
-                        'login_foto'                => '',
-                        'login_emai'                => ''
-                    );
+                while ($rowPGSQL = $stmtPGSQL->fetch()) {
+                    $stmtMSSQL->execute([$rowPGSQL['codigo_funcionario']]);
 
-                    header("Content-Type: application/json; charset=utf-8");
-                    $json       = json_encode(array('code' => 201, 'status' => 'Error', 'message' => 'Error LOGIN: Usuario No Existe', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-                    
-                } else {
-                    if($row_mssql['login_contrasenha'] == $val02){
-                        $val00      = 'O';
+                    while ($rowMSSQL = $stmtMSSQL->fetch()) {
                         $detalle    = array(
                             'login_usuario'             => $row_mssql['login_usuario'],
                             'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
@@ -240,38 +217,14 @@
 
                         header("Content-Type: application/json; charset=utf-8");
                         $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success LOGIN', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-                    } else {
-                        $val00      = 'I';
-                        $detalle    = array(
-                            'login_usuario'             => $row_mssql['login_usuario'],
-                            'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
-                            'login_funcionario_nombre'  => $row_mssql['login_funcionario_nombre'],
-                            'login_cargo_codigo'        => $row_mssql['login_cargo_codigo'],
-                            'login_cargo_nombre'        => $row_mssql['login_cargo_nombre'],
-                            'login_gerencia_codigo'     => $row_mssql['login_gerencia_codigo'],
-                            'login_gerencia_nombre'     => $row_mssql['login_gerencia_nombre'],
-                            'login_departamento_codigo' => $row_mssql['login_departamento_codigo'],
-                            'login_departamento_nombre' => $row_mssql['login_departamento_nombre'],
-                            'login_unidad_codigo'       => $row_mssql['login_unidad_codigo'],
-                            'login_unidad_nombre'       => $row_mssql['login_unidad_nombre'],
-                            'login_supervision_codigo'  => $row_mssql['login_supervision_codigo'],
-                            'login_supervision_nombre'  => $row_mssql['login_supervision_nombre'],
-                            'login_foto'                => $row_mssql['login_foto'],
-                            'login_emai'                => $row_mssql['login_emai'],
-                        );
-
-                        header("Content-Type: application/json; charset=utf-8");
-                        $json       = json_encode(array('code' => 201, 'status' => 'Error', 'message' => 'Error LOGIN: Usuario y/o Contraseña Incorrecto', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
                     }
                 }
 
-                $stmtMYSQL->execute([$val00, $val01, $val02, $val03, $val04, $val05, $val06, $val07]); 
-                
                 $stmtMSSQL->closeCursor();
-                $stmtMYSQL->closeCursor();
-
                 $stmtMSSQL = null;
-                $stmtMYSQL = null;
+
+                $stmtPGSQL->closeCursor();
+                $stmtPGSQL = null;
             } catch (PDOException $e) {
                 header("Content-Type: application/json; charset=utf-8");
                 $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error LOGIN: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
@@ -282,7 +235,7 @@
         }
 
         $connMSSQL  = null;
-        $connMYSQL  = null;
+        $connPGSQL  = null;
         
         return $json;
     });
