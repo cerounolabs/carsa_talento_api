@@ -416,13 +416,13 @@
         return $json;
     });
 
-    $app->get('/v1/400/acceso', function($request) {
+    $app->get('/v1/400/colaborador', function($request) {
         require __DIR__.'/../src/connect.php';
 
         $sql00  = "SELECT
-            a.LOGFUNCOD         AS          sistema_acceso_codigo,
-            a.LOGFUNDIP         AS          sistema_acceso_direccion_ip,
-            a.LOGFUNOBS         AS          sistema_acceso_observacion,
+            a.LOGFUNCOD         AS          sistema_colaborador_codigo,
+            a.LOGFUNDIP         AS          sistema_colaborador_direccion_ip,
+            a.LOGFUNOBS         AS          sistema_colaborador_observacion,
             a.LOGFUNAUS         AS          auditoria_usuario,
             a.LOGFUNAFH         AS          auditoria_fecha_hora,
             a.LOGFUNAIP         AS          auditoria_ip,
@@ -453,19 +453,19 @@
 
             while ($rowPGSQL = $stmtPGSQL->fetch()) {
                 $detalle    = array(
-                    'sistema_acceso_codigo'         => $rowPGSQL['sistema_acceso_codigo'],
-                    'tipo_estado_codigo'            => $rowPGSQL['tipo_estado_codigo'],
-                    'tipo_estado_nombre'            => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
-                    'sistema_acceso_direccion_ip'   => strtoupper(strtolower(trim($rowPGSQL['sistema_acceso_direccion_ip']))),
-                    'sistema_acceso_observacion'    => strtoupper(strtolower(trim($rowPGSQL['sistema_acceso_observacion']))),
-                    'funcionario_codigo'            => $rowPGSQL['funcionario_codigo'],
-                    'funcionario_codigo_sistema'    => $rowPGSQL['funcionario_codigo_sistema'],
-                    'funcionario_nombre_completo'   => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
-                    'funcionario_documento_numero'  => strtoupper(strtolower(trim($rowPGSQL['funcionario_documento_numero']))),
-                    'funcionario_foto'              => strtolower(trim($rowPGSQL['funcionario_foto'])),
-                    'auditoria_usuario'             => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
-                    'auditoria_fecha_hora'          => $rowPGSQL['auditoria_fecha_hora'],
-                    'auditoria_ip'                  => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
+                    'sistema_colaborador_codigo'        => $rowPGSQL['sistema_colaborador_codigo'],
+                    'tipo_estado_codigo'                => $rowPGSQL['tipo_estado_codigo'],
+                    'tipo_estado_nombre'                => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+                    'sistema_colaborador_direccion_ip'  => strtoupper(strtolower(trim($rowPGSQL['sistema_colaborador_direccion_ip']))),
+                    'sistema_colaborador_observacion'   => strtoupper(strtolower(trim($rowPGSQL['sistema_colaborador_observacion']))),
+                    'funcionario_codigo'                => $rowPGSQL['funcionario_codigo'],
+                    'funcionario_codigo_sistema'        => $rowPGSQL['funcionario_codigo_sistema'],
+                    'funcionario_nombre_completo'       => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
+                    'funcionario_documento_numero'      => strtoupper(strtolower(trim($rowPGSQL['funcionario_documento_numero']))),
+                    'funcionario_foto'                  => strtolower(trim($rowPGSQL['funcionario_foto'])),
+                    'auditoria_usuario'                 => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
+                    'auditoria_fecha_hora'              => $rowPGSQL['auditoria_fecha_hora'],
+                    'auditoria_ip'                      => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
                 );
 
                 $result[]   = $detalle;
@@ -476,19 +476,19 @@
                 $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
             } else {
                 $detalle = array(
-                    'sistema_acceso_codigo'         => '',
-                    'tipo_estado_codigo'            => '',
-                    'tipo_estado_nombre'            => '',
-                    'sistema_acceso_direccion_ip'   => '',
-                    'sistema_acceso_observacion'    => '',
-                    'funcionario_codigo'            => '',
-                    'funcionario_codigo_sistema'    => '',
-                    'funcionario_nombre_completo'   => '',
-                    'funcionario_documento_numero'  => '',
-                    'funcionario_foto'              => '',
-                    'auditoria_usuario'             => '',
-                    'auditoria_fecha_hora'          => '',
-                    'auditoria_ip'                  => ''
+                    'sistema_colaborador_codigo'        => '',
+                    'tipo_estado_codigo'                => '',
+                    'tipo_estado_nombre'                => '',
+                    'sistema_colaborador_direccion_ip'  => '',
+                    'sistema_colaborador_observacion'   => '',
+                    'funcionario_codigo'                => '',
+                    'funcionario_codigo_sistema'        => '',
+                    'funcionario_nombre_completo'       => '',
+                    'funcionario_documento_numero'      => '',
+                    'funcionario_foto'                  => '',
+                    'auditoria_usuario'                 => '',
+                    'auditoria_fecha_hora'              => '',
+                    'auditoria_ip'                      => ''
                 );
 
                 header("Content-Type: application/json; charset=utf-8");
@@ -507,16 +507,16 @@
         return $json;
     });
 
-    $app->get('/v1/400/acceso/{codigo}', function($request) {
+    $app->get('/v1/400/colaborador/{codigo}', function($request) {
         require __DIR__.'/../src/connect.php';
 
 		$val01      = $request->getAttribute('codigo');
         
         if (isset($val01)) {
             $sql00  = "SELECT
-                a.LOGFUNCOD         AS          sistema_acceso_codigo,
-                a.LOGFUNDIP         AS          sistema_acceso_direccion_ip,
-                a.LOGFUNOBS         AS          sistema_acceso_observacion,
+                a.LOGFUNCOD         AS          sistema_colaborador_codigo,
+                a.LOGFUNDIP         AS          sistema_colaborador_direccion_ip,
+                a.LOGFUNOBS         AS          sistema_colaborador_observacion,
                 a.LOGFUNAUS         AS          auditoria_usuario,
                 a.LOGFUNAFH         AS          auditoria_fecha_hora,
                 a.LOGFUNAIP         AS          auditoria_ip,
@@ -549,19 +549,19 @@
 
                 while ($rowPGSQL = $stmtPGSQL->fetch()) {
                     $detalle    = array(
-                        'sistema_acceso_codigo'         => $rowPGSQL['sistema_acceso_codigo'],
-                        'tipo_estado_codigo'            => $rowPGSQL['tipo_estado_codigo'],
-                        'tipo_estado_nombre'            => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
-                        'sistema_acceso_direccion_ip'   => strtoupper(strtolower(trim($rowPGSQL['sistema_acceso_direccion_ip']))),
-                        'sistema_acceso_observacion'    => strtoupper(strtolower(trim($rowPGSQL['sistema_acceso_observacion']))),
-                        'funcionario_codigo'            => $rowPGSQL['funcionario_codigo'],
-                        'funcionario_codigo_sistema'    => $rowPGSQL['funcionario_codigo_sistema'],
-                        'funcionario_nombre_completo'   => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
-                        'funcionario_documento_numero'  => strtoupper(strtolower(trim($rowPGSQL['funcionario_documento_numero']))),
-                        'funcionario_foto'              => strtolower(trim($rowPGSQL['funcionario_foto'])),
-                        'auditoria_usuario'             => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
-                        'auditoria_fecha_hora'          => $rowPGSQL['auditoria_fecha_hora'],
-                        'auditoria_ip'                  => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
+                        'sistema_colaborador_codigo'        => $rowPGSQL['sistema_colaborador_codigo'],
+                        'tipo_estado_codigo'                => $rowPGSQL['tipo_estado_codigo'],
+                        'tipo_estado_nombre'                => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+                        'sistema_colaborador_direccion_ip'  => strtoupper(strtolower(trim($rowPGSQL['sistema_colaborador_direccion_ip']))),
+                        'sistema_colaborador_observacion'   => strtoupper(strtolower(trim($rowPGSQL['sistema_colaborador_observacion']))),
+                        'funcionario_codigo'                => $rowPGSQL['funcionario_codigo'],
+                        'funcionario_codigo_sistema'        => $rowPGSQL['funcionario_codigo_sistema'],
+                        'funcionario_nombre_completo'       => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
+                        'funcionario_documento_numero'      => strtoupper(strtolower(trim($rowPGSQL['funcionario_documento_numero']))),
+                        'funcionario_foto'                  => strtolower(trim($rowPGSQL['funcionario_foto'])),
+                        'auditoria_usuario'                 => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
+                        'auditoria_fecha_hora'              => $rowPGSQL['auditoria_fecha_hora'],
+                        'auditoria_ip'                      => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip'])))
                     );
 
                     $result[]   = $detalle;
@@ -572,19 +572,19 @@
                     $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
                 } else {
                     $detalle = array(
-                        'sistema_acceso_codigo'         => '',
-                        'tipo_estado_codigo'            => '',
-                        'tipo_estado_nombre'            => '',
-                        'sistema_acceso_direccion_ip'   => '',
-                        'sistema_acceso_observacion'    => '',
-                        'funcionario_codigo'            => '',
-                        'funcionario_codigo_sistema'    => '',
-                        'funcionario_nombre_completo'   => '',
-                        'funcionario_documento_numero'  => '',
-                        'funcionario_foto'              => '',
-                        'auditoria_usuario'             => '',
-                        'auditoria_fecha_hora'          => '',
-                        'auditoria_ip'                  => ''
+                        'sistema_colaborador_codigo'        => '',
+                        'tipo_estado_codigo'                => '',
+                        'tipo_estado_nombre'                => '',
+                        'sistema_colaborador_direccion_ip'  => '',
+                        'sistema_colaborador_observacion'   => '',
+                        'funcionario_codigo'                => '',
+                        'funcionario_codigo_sistema'        => '',
+                        'funcionario_nombre_completo'       => '',
+                        'funcionario_documento_numero'      => '',
+                        'funcionario_foto'                  => '',
+                        'auditoria_usuario'                 => '',
+                        'auditoria_fecha_hora'              => '',
+                        'auditoria_ip'                      => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");

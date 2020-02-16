@@ -1346,13 +1346,13 @@
         return $json;
     });
 
-    $app->post('/v1/400/acceso', function($request) {
+    $app->post('/v1/400/colaborador', function($request) {
         require __DIR__.'/../src/connect.php';
 
         $val01      = $request->getParsedBody()['tipo_estado_codigo'];
         $val02      = $request->getParsedBody()['funcionario_codigo'];
-        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['sistema_acceso_direccion_ip'])));
-        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['sistema_acceso_observacion'])));
+        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['sistema_colaborador_direccion_ip'])));
+        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['sistema_colaborador_observacion'])));
 
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
         $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
