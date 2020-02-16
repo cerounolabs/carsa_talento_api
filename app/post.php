@@ -68,7 +68,7 @@
                         'login_supervision_codigo'  => '',
                         'login_supervision_nombre'  => '',
                         'login_foto'                => '',
-                        'login_emai'                => ''
+                        'login_email'               => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
@@ -92,7 +92,7 @@
                             'login_supervision_codigo'  => $row_mssql['login_supervision_codigo'],
                             'login_supervision_nombre'  => $row_mssql['login_supervision_nombre'],
                             'login_foto'                => $row_mssql['login_foto'],
-                            'login_emai'                => $row_mssql['login_emai'],
+                            'login_email'               => $row_mssql['login_email'],
                         );
 
                         header("Content-Type: application/json; charset=utf-8");
@@ -114,7 +114,7 @@
                             'login_supervision_codigo'  => $row_mssql['login_supervision_codigo'],
                             'login_supervision_nombre'  => $row_mssql['login_supervision_nombre'],
                             'login_foto'                => $row_mssql['login_foto'],
-                            'login_emai'                => $row_mssql['login_emai'],
+                            'login_email'               => $row_mssql['login_email'],
                         );
 
                         header("Content-Type: application/json; charset=utf-8");
@@ -212,7 +212,7 @@
                             'login_supervision_codigo'  => $rowMSSQL['login_supervision_codigo'],
                             'login_supervision_nombre'  => $rowMSSQL['login_supervision_nombre'],
                             'login_foto'                => $rowMSSQL['login_foto'],
-                            'login_emai'                => $rowMSSQL['login_emai'],
+                            'login_email'               => $rowMSSQL['login_email'],
                         );
 
                         header("Content-Type: application/json; charset=utf-8");
