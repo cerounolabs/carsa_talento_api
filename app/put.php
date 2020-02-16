@@ -169,7 +169,7 @@
         return $json;
     });
 
-    $app->post('/v1/400/acceso/{codigo}', function($request) {
+    $app->put('/v1/400/acceso/{codigo}', function($request) {
         require __DIR__.'/../src/connect.php';
 
         $val00      = $request->getAttribute('codigo');
