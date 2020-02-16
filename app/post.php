@@ -198,21 +198,21 @@
 
                     while ($rowMSSQL = $stmtMSSQL->fetch()) {
                         $detalle    = array(
-                            'login_usuario'             => $row_mssql['login_usuario'],
-                            'login_funcionario_codigo'  => $row_mssql['login_funcionario_codigo'],
-                            'login_funcionario_nombre'  => $row_mssql['login_funcionario_nombre'],
-                            'login_cargo_codigo'        => $row_mssql['login_cargo_codigo'],
-                            'login_cargo_nombre'        => $row_mssql['login_cargo_nombre'],
-                            'login_gerencia_codigo'     => $row_mssql['login_gerencia_codigo'],
-                            'login_gerencia_nombre'     => $row_mssql['login_gerencia_nombre'],
-                            'login_departamento_codigo' => $row_mssql['login_departamento_codigo'],
-                            'login_departamento_nombre' => $row_mssql['login_departamento_nombre'],
-                            'login_unidad_codigo'       => $row_mssql['login_unidad_codigo'],
-                            'login_unidad_nombre'       => $row_mssql['login_unidad_nombre'],
-                            'login_supervision_codigo'  => $row_mssql['login_supervision_codigo'],
-                            'login_supervision_nombre'  => $row_mssql['login_supervision_nombre'],
-                            'login_foto'                => $row_mssql['login_foto'],
-                            'login_emai'                => $row_mssql['login_emai'],
+                            'login_usuario'             => $rowMSSQL['login_usuario'],
+                            'login_funcionario_codigo'  => $rowMSSQL['login_funcionario_codigo'],
+                            'login_funcionario_nombre'  => $rowMSSQL['login_funcionario_nombre'],
+                            'login_cargo_codigo'        => $rowMSSQL['login_cargo_codigo'],
+                            'login_cargo_nombre'        => $rowMSSQL['login_cargo_nombre'],
+                            'login_gerencia_codigo'     => $rowMSSQL['login_gerencia_codigo'],
+                            'login_gerencia_nombre'     => $rowMSSQL['login_gerencia_nombre'],
+                            'login_departamento_codigo' => $rowMSSQL['login_departamento_codigo'],
+                            'login_departamento_nombre' => $rowMSSQL['login_departamento_nombre'],
+                            'login_unidad_codigo'       => $rowMSSQL['login_unidad_codigo'],
+                            'login_unidad_nombre'       => $rowMSSQL['login_unidad_nombre'],
+                            'login_supervision_codigo'  => $rowMSSQL['login_supervision_codigo'],
+                            'login_supervision_nombre'  => $rowMSSQL['login_supervision_nombre'],
+                            'login_foto'                => $rowMSSQL['login_foto'],
+                            'login_emai'                => $rowMSSQL['login_emai'],
                         );
 
                         header("Content-Type: application/json; charset=utf-8");
