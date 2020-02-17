@@ -313,15 +313,15 @@
         require __DIR__.'/../src/connect.php';
 
         $sql00  = "SELECT
-        MONTH(a.FUNFICFHA)          AS      funcionario_mes_codigo,
-        COUNT(*)                    AS      funcionario_mes_cantidad
+		EXTRACT(MONTH FROM FUNFICFNA)::INTEGER  AS      funcionario_mes_codigo,
+        COUNT(*)                                AS      funcionario_mes_cantidad
         
         FROM sistema.FUNFIC a
 
         WHERE a.FUNFICEST = 1
         
-        GROUP BY MONTH(a.FUNFICFHA)
-        ORDER BY MONTH(a.FUNFICFHA)";
+        GROUP BY EXTRACT(MONTH FROM FUNFICFNA)::INTEGER
+        ORDER BY EXTRACT(MONTH FROM FUNFICFNA)::INTEGER";
 
         try {
             $connPGSQL  = getConnectionPGSQLv1();
