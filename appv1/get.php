@@ -265,7 +265,7 @@
         ORDER BY a.FUNFICECC, a.FUNFICTSC, b.DOMFICNOM, c.DOMFICNOM";
 
         try {
-            $connPGSQL  = getConnectionPGSQL();
+            $connPGSQL  = getConnectionPGSQLv1();
             $stmtPGSQL  = $connPGSQL->prepare($sql00);
             $stmtPGSQL->execute(); 
 
@@ -324,7 +324,7 @@
         ORDER BY MONTH(a.FUNFICFHA)";
 
         try {
-            $connPGSQL  = getConnectionPGSQL();
+            $connPGSQL  = getConnectionPGSQLv1();
             $stmtPGSQL  = $connPGSQL->prepare($sql00);
             $stmtPGSQL->execute(); 
 
