@@ -1157,7 +1157,7 @@
         return $json;
     });
 
-    $app->post('/v1/200/migracion', function($request) {
+    $app->post('/v1/100/migracion', function($request) {
         require __DIR__.'/../src/connect.php';
 
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
