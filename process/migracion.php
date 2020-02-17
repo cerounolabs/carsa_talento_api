@@ -16,7 +16,7 @@
         $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
-            $connMSSQL  = getConnectionMSSQLv2();
+            $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
@@ -69,7 +69,7 @@
         $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
-            $connMSSQL  = getConnectionMSSQLv2();
+            $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
@@ -128,7 +128,7 @@
         $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
-            $connMSSQL  = getConnectionMSSQLv2();
+            $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
@@ -181,7 +181,7 @@
         $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
-            $connMSSQL  = getConnectionMSSQLv2();
+            $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
@@ -234,7 +234,7 @@
         $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
-            $connMSSQL  = getConnectionMSSQLv2();
+            $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
@@ -287,7 +287,7 @@
         $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
-            $connMSSQL  = getConnectionMSSQLv2();
+            $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
@@ -340,7 +340,7 @@
         $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
-            $connMSSQL  = getConnectionMSSQLv2();
+            $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
@@ -393,7 +393,7 @@
         $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
-            $connMSSQL  = getConnectionMSSQLv2();
+            $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
@@ -447,7 +447,7 @@
         $sql02      = "INSERT INTO sistema.LOCPAI (LOCPAIEST, LOCPAICO1, LOCPAINOM, LOCPAIBCP, LOCPAIGEN, LOCPAIOBS, LOCPAIAUS, LOCPAIAFH, LOCPAIAIP) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
-            $connMSSQL  = getConnectionMSSQLv2();
+            $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);

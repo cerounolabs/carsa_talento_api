@@ -185,7 +185,7 @@
             ORDER BY a.FuCod";
 
             try {
-                $connMSSQL  = getConnectionMSSQLv2();
+                $connMSSQL  = getConnectionMSSQLv1();
                 $connPGSQL  = getConnectionPGSQLv1();
 
                 $stmtPGSQL  = $connPGSQL->prepare($sql00);
@@ -1187,7 +1187,7 @@
         $sql03      = "INSERT INTO sistema.LOGFUN (LOGFUNEST, LOGFUNFUC, LOGFUNDIP, LOGFUNOBS, LOGFUNAUS, LOGFUNAFH, LOGFUNAIP) VALUES (?, (SELECT FUNFICCOD FROM sistema.FUNFIC WHERE FUNFICCFU = ?), ?, ?, ?, NOW(), ?)";
 
         try {
-            $connMSSQL  = getConnectionMSSQLv2();
+            $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
 
             $stmtMSSQL  = $connMSSQL->prepare($sql00);
