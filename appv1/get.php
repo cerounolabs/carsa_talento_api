@@ -318,7 +318,7 @@
         
         FROM sistema.FUNFIC a
 
-        WHERE a.FUNFICEST = 'A'
+        WHERE a.FUNFICEST = 1
         
         GROUP BY MONTH(a.FUNFICFHA)
         ORDER BY MONTH(a.FUNFICFHA)";
