@@ -1199,7 +1199,7 @@
             
             while ($rowMSSQL = $stmtMSSQL->fetch()) {
                 $FUNFICCOD  = 0;
-                $FUNFICEST  = 1;
+                $FUNFICEST  = 866;
                 $FUNFICTDC  = 1;
                 $FUNFICTSC  = strtoupper(strtolower(trim($rowMSSQL['funcionario_sexo_codigo'])));
                 $FUNFICECC  = $rowMSSQL['funcionario_estado_civil_codigo'];
