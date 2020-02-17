@@ -245,6 +245,306 @@
         return $json;
     });
 
+    $app->get('/v1/100/colaborador', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $sql00  = "SELECT
+        a.FUNFICCOD         AS          funcionario_codigo,
+        a.FUNFICCFU         AS          funcionario_codigo_sistema,
+        a.FUNFICNO1         AS          funcionario_nombre_1,
+        a.FUNFICNO2         AS          funcionario_nombre_2,
+        a.FUNFICAP1         AS          funcionario_apellido_1,
+        a.FUNFICAP2         AS          funcionario_apellido_2,
+        a.FUNFICAP3         AS          funcionario_apellido_3,
+        a.FUNFICFNA         AS          funcionario_fecha_nacimiento_1,
+        a.FUNFICEMA         AS          funcionario_email,
+        a.FUNFICFOT         AS          funcionario_foto,
+        a.FUNFICOBS         AS          funcionario_observacion,
+        a.FUNFICAUS         AS          auditoria_usuario,
+        a.FUNFICAFH         AS          auditoria_fecha_hora,
+        a.FUNFICAIP         AS          auditoria_ip,
+
+        b.DOMFICCOD         AS          tipo_estado_codigo,
+        b.DOMFICNOM         AS          tipo_estado_nombre,
+
+        c.DOMFICCOD         AS          tipo_documento_codigo,
+        c.DOMFICNOM         AS          tipo_documento_nombre,
+        a.FUNFICDNU         AS          tipo_documento_numero,
+        a.FUNFICDVE         AS          tipo_documento_vencimiento_1,
+
+        d.DOMFICCOD         AS          tipo_sexo_codigo,
+        d.DOMFICNOM         AS          tipo_sexo_nombre,
+
+        e.DOMFICCOD         AS          tipo_estado_civil_codigo,
+        e.DOMFICNOM         AS          tipo_estado_civil_nombre,
+
+        f.LOCPAICOD         AS          pais_codigo,
+        f.LOCPAINOM         AS          pais_nombre,
+        f.LOCPAIGEN         AS          pais_gentilicio
+
+        FROM sistema.FUNFIC a
+        INNER JOIN sistema.DOMFIC b ON a.FUNFICEST = b.DOMFICCOD
+        INNER JOIN sistema.DOMFIC c ON a.FUNFICTDC = c.DOMFICCOD
+        INNER JOIN sistema.DOMFIC d ON a.FUNFICTSC = d.DOMFICCOD
+        INNER JOIN sistema.DOMFIC e ON a.FUNFICECC = e.DOMFICCOD
+        INNER JOIN sistema.LOCPAI f ON a.FUNFICNAC = f.LOCPAICOD
+        
+        ORDER BY a.FUNFICCOD";
+
+        try {
+            $connPGSQL  = getConnectionPGSQLv1();
+            $stmtPGSQL  = $connPGSQL->prepare($sql00);
+            $stmtPGSQL->execute(); 
+
+            while ($rowPGSQL = $stmtPGSQL->fetch()) {
+                $detalle    = array(
+                    'funcionario_codigo'                => $rowPGSQL['funcionario_codigo'],
+                    'funcionario_codigo_sistema'        => $rowPGSQL['funcionario_codigo_sistema'],
+                    'funcionario_nombre_completo'       => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
+                    'funcionario_nombre_1'              => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))),
+                    'funcionario_nombre_2'              => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))),
+                    'funcionario_apellido_1'            => strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))),
+                    'funcionario_apellido_2'            => strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
+                    'funcionario_apellido_3'            => strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_3']))),
+                    'funcionario_fecha_nacimiento_1'    => $rowPGSQL['funcionario_fecha_nacimiento_1'],
+                    'funcionario_fecha_nacimiento_2'    => date("d/m/Y", strtotime($rowPGSQL['funcionario_fecha_nacimiento_1'])),
+                    'funcionario_email'                 => strtolower(trim($rowPGSQL['funcionario_email'])),
+                    'funcionario_foto'                  => strtolower(trim($rowPGSQL['funcionario_foto'])),
+                    'funcionario_observacion'           => strtoupper(strtolower(trim($rowPGSQL['funcionario_observacion']))),
+                    'auditoria_usuario'                 => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
+                    'auditoria_fecha_hora'              => $rowPGSQL['auditoria_fecha_hora'],
+                    'auditoria_ip'                      => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip']))),
+
+                    'tipo_estado_codigo'                => $rowPGSQL['tipo_estado_codigo'],
+                    'tipo_estado_nombre'                => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+
+                    'tipo_documento_codigo'             => $rowPGSQL['tipo_documento_codigo'],
+                    'tipo_documento_nombre'             => strtoupper(strtolower(trim($rowPGSQL['tipo_documento_nombre']))),
+                    'tipo_documento_numero'             => strtoupper(strtolower(trim($rowPGSQL['tipo_documento_numero']))),
+                    'tipo_documento_vencimiento_1'      => $rowPGSQL['tipo_documento_vencimiento_1'],
+                    'tipo_documento_vencimiento_2'      => date("d/m/Y", strtotime($rowPGSQL['tipo_documento_vencimiento_1'])),
+
+                    'tipo_sexo_codigo'                  => $rowPGSQL['tipo_sexo_codigo'],
+                    'tipo_sexo_nombre'                  => strtoupper(strtolower(trim($rowPGSQL['tipo_sexo_nombre']))),
+
+                    'tipo_estado_civil_codigo'          => $rowPGSQL['tipo_estado_civil_codigo'],
+                    'tipo_estado_civil_nombre'          => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_civil_nombre']))),
+
+                    'pais_codigo'                       => $rowPGSQL['pais_codigo'],
+                    'pais_nombre'                       => strtoupper(strtolower(trim($rowPGSQL['pais_nombre']))),
+                    'pais_gentilicio'                   => strtoupper(strtolower(trim($rowPGSQL['pais_gentilicio'])))
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'funcionario_codigo'                => '',
+                    'funcionario_codigo_sistema'        => '',
+                    'funcionario_nombre_completo'       => '',
+                    'funcionario_nombre_1'              => '',
+                    'funcionario_nombre_2'              => '',
+                    'funcionario_apellido_1'            => '',
+                    'funcionario_apellido_2'            => '',
+                    'funcionario_apellido_3'            => '',
+                    'funcionario_fecha_nacimiento_1'    => '',
+                    'funcionario_fecha_nacimiento_2'    => '',
+                    'funcionario_email'                 => '',
+                    'funcionario_foto'                  => '',
+                    'funcionario_observacion'           => '',
+                    'auditoria_usuario'                 => '',
+                    'auditoria_fecha_hora'              => '',
+                    'auditoria_ip'                      => '',
+                    'tipo_estado_codigo'                => '',
+                    'tipo_estado_nombre'                => '',
+                    'tipo_documento_codigo'             => '',
+                    'tipo_documento_nombre'             => '',
+                    'tipo_documento_numero'             => '',
+                    'tipo_documento_vencimiento_1'      => '',
+                    'tipo_documento_vencimiento_2'      => '',
+                    'tipo_sexo_codigo'                  => '',
+                    'tipo_sexo_nombre'                  => '',
+                    'tipo_estado_civil_codigo'          => '',
+                    'tipo_estado_civil_nombre'          => '',
+                    'pais_codigo'                       => '',
+                    'pais_nombre'                       => '',
+                    'pais_gentilicio'                   => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtPGSQL->closeCursor();
+            $stmtPGSQL = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connPGSQL  = null;
+        
+        return $json;
+    });
+
+    $app->get('/v1/100/colaborador/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+        $val01      = $request->getAttribute('codigo');
+        
+        if (isset($val01)) {
+            $sql00  = "SELECT
+            a.FUNFICCOD         AS          funcionario_codigo,
+            a.FUNFICCFU         AS          funcionario_codigo_sistema,
+            a.FUNFICNO1         AS          funcionario_nombre_1,
+            a.FUNFICNO2         AS          funcionario_nombre_2,
+            a.FUNFICAP1         AS          funcionario_apellido_1,
+            a.FUNFICAP2         AS          funcionario_apellido_2,
+            a.FUNFICAP3         AS          funcionario_apellido_3,
+            a.FUNFICFNA         AS          funcionario_fecha_nacimiento_1,
+            a.FUNFICEMA         AS          funcionario_email,
+            a.FUNFICFOT         AS          funcionario_foto,
+            a.FUNFICOBS         AS          funcionario_observacion,
+            a.FUNFICAUS         AS          auditoria_usuario,
+            a.FUNFICAFH         AS          auditoria_fecha_hora,
+            a.FUNFICAIP         AS          auditoria_ip,
+
+            b.DOMFICCOD         AS          tipo_estado_codigo,
+            b.DOMFICNOM         AS          tipo_estado_nombre,
+
+            c.DOMFICCOD         AS          tipo_documento_codigo,
+            c.DOMFICNOM         AS          tipo_documento_nombre,
+            a.FUNFICDNU         AS          tipo_documento_numero,
+            a.FUNFICDVE         AS          tipo_documento_vencimiento_1,
+
+            d.DOMFICCOD         AS          tipo_sexo_codigo,
+            d.DOMFICNOM         AS          tipo_sexo_nombre,
+
+            e.DOMFICCOD         AS          tipo_estado_civil_codigo,
+            e.DOMFICNOM         AS          tipo_estado_civil_nombre,
+
+            f.LOCPAICOD         AS          pais_codigo,
+            f.LOCPAINOM         AS          pais_nombre,
+            f.LOCPAIGEN         AS          pais_gentilicio
+
+            FROM sistema.FUNFIC a
+            INNER JOIN sistema.DOMFIC b ON a.FUNFICEST = b.DOMFICCOD
+            INNER JOIN sistema.DOMFIC c ON a.FUNFICTDC = c.DOMFICCOD
+            INNER JOIN sistema.DOMFIC d ON a.FUNFICTSC = d.DOMFICCOD
+            INNER JOIN sistema.DOMFIC e ON a.FUNFICECC = e.DOMFICCOD
+            INNER JOIN sistema.LOCPAI f ON a.FUNFICNAC = f.LOCPAICOD
+            
+            WHERE a.FUNFICCOD = ?
+
+            ORDER BY a.FUNFICCOD";
+
+            try {
+                $connPGSQL  = getConnectionPGSQLv1();
+                $stmtPGSQL  = $connPGSQL->prepare($sql00);
+                $stmtPGSQL->execute([$val01]); 
+
+                while ($rowPGSQL = $stmtPGSQL->fetch()) {
+                    $detalle    = array(
+                        'funcionario_codigo'                => $rowPGSQL['funcionario_codigo'],
+                        'funcionario_codigo_sistema'        => $rowPGSQL['funcionario_codigo_sistema'],
+                        'funcionario_nombre_completo'       => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))).' '.strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
+                        'funcionario_nombre_1'              => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_1']))),
+                        'funcionario_nombre_2'              => strtoupper(strtolower(trim($rowPGSQL['funcionario_nombre_2']))),
+                        'funcionario_apellido_1'            => strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_1']))),
+                        'funcionario_apellido_2'            => strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_2']))),
+                        'funcionario_apellido_3'            => strtoupper(strtolower(trim($rowPGSQL['funcionario_apellido_3']))),
+                        'funcionario_fecha_nacimiento_1'    => $rowPGSQL['funcionario_fecha_nacimiento_1'],
+                        'funcionario_fecha_nacimiento_2'    => date("d/m/Y", strtotime($rowPGSQL['funcionario_fecha_nacimiento_1'])),
+                        'funcionario_email'                 => strtolower(trim($rowPGSQL['funcionario_email'])),
+                        'funcionario_foto'                  => strtolower(trim($rowPGSQL['funcionario_foto'])),
+                        'funcionario_observacion'           => strtoupper(strtolower(trim($rowPGSQL['funcionario_observacion']))),
+                        'auditoria_usuario'                 => strtoupper(strtolower(trim($rowPGSQL['auditoria_usuario']))),
+                        'auditoria_fecha_hora'              => $rowPGSQL['auditoria_fecha_hora'],
+                        'auditoria_ip'                      => strtoupper(strtolower(trim($rowPGSQL['auditoria_ip']))),
+
+                        'tipo_estado_codigo'                => $rowPGSQL['tipo_estado_codigo'],
+                        'tipo_estado_nombre'                => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+
+                        'tipo_documento_codigo'             => $rowPGSQL['tipo_documento_codigo'],
+                        'tipo_documento_nombre'             => strtoupper(strtolower(trim($rowPGSQL['tipo_documento_nombre']))),
+                        'tipo_documento_numero'             => strtoupper(strtolower(trim($rowPGSQL['tipo_documento_numero']))),
+                        'tipo_documento_vencimiento_1'      => $rowPGSQL['tipo_documento_vencimiento_1'],
+                        'tipo_documento_vencimiento_2'      => date("d/m/Y", strtotime($rowPGSQL['tipo_documento_vencimiento_1'])),
+
+                        'tipo_sexo_codigo'                  => $rowPGSQL['tipo_sexo_codigo'],
+                        'tipo_sexo_nombre'                  => strtoupper(strtolower(trim($rowPGSQL['tipo_sexo_nombre']))),
+
+                        'tipo_estado_civil_codigo'          => $rowPGSQL['tipo_estado_civil_codigo'],
+                        'tipo_estado_civil_nombre'          => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_civil_nombre']))),
+
+                        'pais_codigo'                       => $rowPGSQL['pais_codigo'],
+                        'pais_nombre'                       => strtoupper(strtolower(trim($rowPGSQL['pais_nombre']))),
+                        'pais_gentilicio'                   => strtoupper(strtolower(trim($rowPGSQL['pais_gentilicio'])))
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle = array(
+                        'funcionario_codigo'                => '',
+                        'funcionario_codigo_sistema'        => '',
+                        'funcionario_nombre_completo'       => '',
+                        'funcionario_nombre_1'              => '',
+                        'funcionario_nombre_2'              => '',
+                        'funcionario_apellido_1'            => '',
+                        'funcionario_apellido_2'            => '',
+                        'funcionario_apellido_3'            => '',
+                        'funcionario_fecha_nacimiento_1'    => '',
+                        'funcionario_fecha_nacimiento_2'    => '',
+                        'funcionario_email'                 => '',
+                        'funcionario_foto'                  => '',
+                        'funcionario_observacion'           => '',
+                        'auditoria_usuario'                 => '',
+                        'auditoria_fecha_hora'              => '',
+                        'auditoria_ip'                      => '',
+                        'tipo_estado_codigo'                => '',
+                        'tipo_estado_nombre'                => '',
+                        'tipo_documento_codigo'             => '',
+                        'tipo_documento_nombre'             => '',
+                        'tipo_documento_numero'             => '',
+                        'tipo_documento_vencimiento_1'      => '',
+                        'tipo_documento_vencimiento_2'      => '',
+                        'tipo_sexo_codigo'                  => '',
+                        'tipo_sexo_nombre'                  => '',
+                        'tipo_estado_civil_codigo'          => '',
+                        'tipo_estado_civil_nombre'          => '',
+                        'pais_codigo'                       => '',
+                        'pais_nombre'                       => '',
+                        'pais_gentilicio'                   => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtPGSQL->closeCursor();
+                $stmtPGSQL = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connPGSQL  = null;
+        
+        return $json;
+    });
+
     $app->get('/v1/100/estadocivil', function($request) {
         require __DIR__.'/../src/connect.php';
 
@@ -1261,138 +1561,6 @@
                     'campanha_usuario'          => '',
                     'campanha_fecha_hora'       => '',
                     'campanha_ip'               => ''
-                );
-
-                header("Content-Type: application/json; charset=utf-8");
-                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-            }
-
-            $stmtMYSQL->closeCursor();
-            $stmtMYSQL = null;
-        } catch (PDOException $e) {
-            header("Content-Type: application/json; charset=utf-8");
-            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-        }
-
-        $connMYSQL  = null;
-        
-        return $json;
-    });
-
-    $app->get('/v1/200', function($request) {
-        require __DIR__.'/../src/connect.php';
-
-        $sql00  = "SELECT
-        a.FUNFICCOD                     AS      funcionario_codigo,
-        a.FUNFICEST                     AS      funcionario_estado_codigo,
-
-        b.DOMFICCOD                     AS      funcionario_documento_codigo,
-        b.DOMFICNOM                     AS      funcionario_documento_nombre,
-        a.FUNFICDOC                     AS      funcionario_documento_numero,
-
-        c.DOMFICCOD                     AS      funcionario_sexo_codigo,
-        c.DOMFICNOM                     AS      funcionario_sexo_nombre,
-
-        d.DOMFICCOD                     AS      funcionario_estado_civil_codigo,
-        d.DOMFICNOM                     AS      funcionario_estado_civil_nombre,
-
-        a.FUNFICCFU                     AS      funcionario_codigo_sistema,
-        a.FUNFICNOM                     AS      funcionario_nombre,
-        a.FUNFICAPE                     AS      funcionario_apellido,
-        a.FUNFICFHA                     AS      funcionario_fecha_nacimiento,
-        a.FUNFICEMA                     AS      funcionario_email,
-        a.FUNFICFOT                     AS      funcionario_foto,
-        a.FUNFICOBS                     AS      funcionario_observacion,
-        a.FUNFICAUS                     AS      funcionario_usuario,
-        a.FUNFICAFH                     AS      funcionario_fecha_hora,
-        a.FUNFICAIP                     AS      funcionario_ip
-
-        FROM FUNFIC a
-        INNER JOIN DOMFIC b ON a.FUNFICTDC = b.DOMFICCOD
-        INNER JOIN DOMFIC c ON a.FUNFICTSC = c.DOMFICCOD
-        INNER JOIN DOMFIC d ON a.FUNFICECC = d.DOMFICCOD
-        
-        ORDER BY a.FUNFICCOD";
-
-        try {
-            $connMYSQL  = getConnectionMYSQL();
-            $stmtMYSQL  = $connMYSQL->prepare($sql00);
-            $stmtMYSQL->execute(); 
-
-            while ($rowMYSQL = $stmtMYSQL->fetch()) {
-                switch ($rowMYSQL['funcionario_estado_codigo']) {
-                    case 'A':
-                        $funcionario_estado_nombre = 'ACTIVO';
-                        break;
-
-                    case 'I':
-                        $funcionario_estado_nombre = 'INACTIVO';
-                        break;
-
-                    case 'P':
-                        $funcionario_estado_nombre = 'PENDIENTE';
-                        break;
-                    
-                    default:
-                        $funcionario_estado_nombre = 'SIN ESTADO';
-                        break;
-                }
-
-                $detalle    = array(
-                    'funcionario_codigo'                => $rowMYSQL['funcionario_codigo'],
-                    'funcionario_estado_codigo'         => $rowMYSQL['funcionario_estado_codigo'],
-                    'funcionario_estado_nombre'         => $funcionario_estado_nombre,
-                    'funcionario_documento_codigo'      => $rowMYSQL['funcionario_documento_codigo'],
-                    'funcionario_documento_nombre'      => $rowMYSQL['funcionario_documento_nombre'],
-                    'funcionario_documento_numero'      => $rowMYSQL['funcionario_documento_numero'],
-                    'funcionario_sexo_codigo'           => $rowMYSQL['funcionario_sexo_codigo'],
-                    'funcionario_sexo_nombre'           => $rowMYSQL['funcionario_sexo_nombre'],
-                    'funcionario_estado_civil_codigo'   => $rowMYSQL['funcionario_estado_civil_codigo'],
-                    'funcionario_estado_civil_nombre'   => $rowMYSQL['funcionario_estado_civil_nombre'],
-                    'funcionario_codigo_sistema'        => $rowMYSQL['funcionario_codigo_sistema'],
-                    'funcionario_nombre'                => $rowMYSQL['funcionario_nombre'],
-                    'funcionario_apellido'              => $rowMYSQL['funcionario_apellido'],
-                    'funcionario_persona'               => $rowMYSQL['funcionario_nombre'].' '.$rowMYSQL['funcionario_apellido'],
-                    'funcionario_fecha_nacimiento'      => $rowMYSQL['funcionario_fecha_nacimiento'],
-                    'funcionario_fecha_nacimiento_2'    => date("d/m/Y", strtotime($rowMYSQL['funcionario_fecha_nacimiento'])),
-                    'funcionario_email'                 => $rowMYSQL['funcionario_email'],
-                    'funcionario_foto'                  => $rowMYSQL['funcionario_foto'],
-                    'funcionario_observacion'           => $rowMYSQL['funcionario_observacion'],
-                    'funcionario_usuario'               => $rowMYSQL['funcionario_usuario'],
-                    'funcionario_fecha_hora'            => $rowMYSQL['funcionario_fecha_hora'],
-                    'funcionario_ip'                    => $rowMYSQL['funcionario_ip']
-                );
-
-                $result[]   = $detalle;
-            }
-
-            if (isset($result)){
-                header("Content-Type: application/json; charset=utf-8");
-                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-            } else {
-                $detalle = array(
-                    'funcionario_codigo'                => '',
-                    'funcionario_estado_codigo'         => '',
-                    'funcionario_estado_nombre'         => '',
-                    'funcionario_documento_codigo'      => '',
-                    'funcionario_documento_nombre'      => '',
-                    'funcionario_documento_numero'      => '',
-                    'funcionario_sexo_codigo'           => '',
-                    'funcionario_sexo_nombre'           => '',
-                    'funcionario_estado_civil_codigo'   => '',
-                    'funcionario_estado_civil_nombre'   => '',
-                    'funcionario_codigo_sistema'        => '',
-                    'funcionario_nombre'                => '',
-                    'funcionario_apellido'              => '',
-                    'funcionario_persona'               => '',
-                    'funcionario_fecha_nacimiento'      => '',
-                    'funcionario_fecha_nacimiento_2'    => '',
-                    'funcionario_email'                 => '',
-                    'funcionario_foto'                  => '',
-                    'funcionario_observacion'           => '',
-                    'funcionario_usuario'               => '',
-                    'funcionario_fecha_hora'            => '',
-                    'funcionario_ip'                    => ''
                 );
 
                 header("Content-Type: application/json; charset=utf-8");
