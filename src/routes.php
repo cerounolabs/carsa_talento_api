@@ -1,5 +1,5 @@
 <?php
-	require __DIR__.'/../app/produccion/get.php';			//SOLICITUD GET
-	require __DIR__.'/../app/produccion/post.php';			//SOLICITUD POST
-	require __DIR__.'/../app/produccion/put.php';			//SOLICITUD PUT
-	require __DIR__.'/../app/produccion/delete.php';		//SOLICITUD DELETE
+	require __DIR__.'/../appv1/get.php';			//SOLICITUD GET
+	require __DIR__.'/../appv1/post.php';			//SOLICITUD POST
+	require __DIR__.'/../appv1/put.php';			//SOLICITUD PUT
+	require __DIR__.'/../appv1/delete.php';			//SOLICITUD DELETE
