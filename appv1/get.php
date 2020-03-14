@@ -4,6 +4,7 @@
         
         $sql00  = "SELECT
         a.DOMFICCOD                     AS      tipo_codigo,
+        a.DOMFICORD                     AS      tipo_orden,
         a.DOMFICNOM                     AS      tipo_nombre,
         a.DOMFICEQU                     AS      tipo_equivalente,
         a.DOMFICVAL                     AS      tipo_dominio,
@@ -18,7 +19,7 @@
         FROM sistema.DOMFIC a
         INNER JOIN sistema.DOMFIC b ON a.DOMFICEST = b.DOMFICCOD
 
-        ORDER BY a.DOMFICNOM";
+        ORDER BY a.DOMFICORD, a.DOMFICNOM";
 
         try {
             $connPGSQL  = getConnectionPGSQLv1();
@@ -30,6 +31,7 @@
                     'tipo_codigo'           => $rowPGSQL['tipo_codigo'],
                     'tipo_estado_codigo'    => $rowPGSQL['tipo_estado_codigo'],
                     'tipo_estado_nombre'    => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+                    'tipo_orden'            => $rowPGSQL['tipo_orden'],
                     'tipo_nombre'           => strtoupper(strtolower(trim($rowPGSQL['tipo_nombre']))),
                     'tipo_equivalente'      => strtoupper(strtolower(trim($rowPGSQL['tipo_equivalente']))),
                     'tipo_dominio'          => strtoupper(strtolower(trim($rowPGSQL['tipo_dominio']))),
@@ -50,6 +52,7 @@
                     'tipo_codigo'           => '',
                     'tipo_estado_codigo'    => '',
                     'tipo_estado_nombre'    => '',
+                    'tipo_orden'            => '',
                     'tipo_nombre'           => '',
                     'tipo_equivalente'      => '',
                     'tipo_dominio'          => '',
@@ -83,6 +86,7 @@
         if (isset($val01)) {
             $sql00  = "SELECT
                 a.DOMFICCOD                     AS      tipo_codigo,
+                a.DOMFICORD                     AS      tipo_orden,
                 a.DOMFICNOM                     AS      tipo_nombre,
                 a.DOMFICEQU                     AS      tipo_equivalente,
                 a.DOMFICVAL                     AS      tipo_dominio,
@@ -99,7 +103,7 @@
 
                 WHERE a.DOMFICCOD = ?
 
-                ORDER BY a.DOMFICNOM";
+                ORDER BY a.DOMFICORD, a.DOMFICNOM";
 
             try {
                 $connPGSQL  = getConnectionPGSQLv1();
@@ -111,6 +115,7 @@
                         'tipo_codigo'           => $rowPGSQL['tipo_codigo'],
                         'tipo_estado_codigo'    => $rowPGSQL['tipo_estado_codigo'],
                         'tipo_estado_nombre'    => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+                        'tipo_orden'            => $rowPGSQL['tipo_orden'],
                         'tipo_nombre'           => strtoupper(strtolower(trim($rowPGSQL['tipo_nombre']))),
                         'tipo_equivalente'      => strtoupper(strtolower(trim($rowPGSQL['tipo_equivalente']))),
                         'tipo_dominio'          => strtoupper(strtolower(trim($rowPGSQL['tipo_dominio']))),
@@ -131,6 +136,7 @@
                         'tipo_codigo'           => '',
                         'tipo_estado_codigo'    => '',
                         'tipo_estado_nombre'    => '',
+                        'tipo_orden'            => '',
                         'tipo_nombre'           => '',
                         'tipo_equivalente'      => '',
                         'tipo_dominio'          => '',
@@ -168,6 +174,7 @@
         if (isset($val01)) {
             $sql00  = "SELECT
                 a.DOMFICCOD                     AS      tipo_codigo,
+                a.DOMFICORD                     AS      tipo_orden,
                 a.DOMFICNOM                     AS      tipo_nombre,
                 a.DOMFICEQU                     AS      tipo_equivalente,
                 a.DOMFICVAL                     AS      tipo_dominio,
@@ -196,6 +203,7 @@
                         'tipo_codigo'           => $rowPGSQL['tipo_codigo'],
                         'tipo_estado_codigo'    => $rowPGSQL['tipo_estado_codigo'],
                         'tipo_estado_nombre'    => strtoupper(strtolower(trim($rowPGSQL['tipo_estado_nombre']))),
+                        'tipo_orden'            => $rowPGSQL['tipo_orden'],
                         'tipo_nombre'           => strtoupper(strtolower(trim($rowPGSQL['tipo_nombre']))),
                         'tipo_equivalente'      => strtoupper(strtolower(trim($rowPGSQL['tipo_equivalente']))),
                         'tipo_dominio'          => strtoupper(strtolower(trim($rowPGSQL['tipo_dominio']))),
@@ -216,6 +224,7 @@
                         'tipo_codigo'           => '',
                         'tipo_estado_codigo'    => '',
                         'tipo_estado_nombre'    => '',
+                        'tipo_orden'            => '',
                         'tipo_nombre'           => '',
                         'tipo_equivalente'      => '',
                         'tipo_dominio'          => '',

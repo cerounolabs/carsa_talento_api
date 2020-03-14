@@ -4,22 +4,23 @@
 
         $val00      = $request->getAttribute('codigo');
         $val01      = $request->getParsedBody()['tipo_estado_codigo'];
-        $val02      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_nombre'])));
-        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_equivalente'])));
-        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_dominio'])));
-        $val05      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_observacion'])));
+        $val02      = $request->getParsedBody()['tipo_orden'];
+        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_nombre'])));
+        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_equivalente'])));
+        $val05      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_dominio'])));
+        $val06      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_observacion'])));
 
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
         $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
         $aud03      = $request->getParsedBody()['auditoria_ip'];
 
-        if (isset($val00) && isset($val01) && isset($val02) && isset($val04)) {
-            $sql00  = "UPDATE sistema.DOMFIC SET DOMFICEST = ?, DOMFICNOM = ?, DOMFICEQU = ?, DOMFICOBS = ?, DOMFICAUS = ?, DOMFICAFH = NOW(), DOMFICAIP = ? WHERE DOMFICCOD = ?";
+        if (isset($val00) && isset($val01) && isset($val03) && isset($val05)) {
+            $sql00  = "UPDATE sistema.DOMFIC SET DOMFICEST = ?, DOMFICORD = ?, DOMFICNOM = ?, DOMFICEQU = ?, DOMFICOBS = ?, DOMFICAUS = ?, DOMFICAFH = NOW(), DOMFICAIP = ? WHERE DOMFICCOD = ?";
 
             try {
                 $connPGSQL  = getConnectionPGSQLv1();
                 $stmtPGSQL  = $connPGSQL->prepare($sql00);
-                $stmtPGSQL->execute([$val01, $val02, $val03, $val05, $aud01, $aud03, $val00]); 
+                $stmtPGSQL->execute([$val01, $val02, $val03, $val04, $val06, $aud01, $aud03, $val00]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success UPDATE', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);

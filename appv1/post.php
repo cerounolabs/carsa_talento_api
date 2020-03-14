@@ -1121,22 +1121,23 @@
         require __DIR__.'/../src/connect.php';
 
         $val01      = $request->getParsedBody()['tipo_estado_codigo'];
-        $val02      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_nombre'])));
-        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_equivalente'])));
-        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_dominio'])));
-        $val05      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_observacion'])));
+        $val02      = $request->getParsedBody()['tipo_orden'];
+        $val03      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_nombre'])));
+        $val04      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_equivalente'])));
+        $val05      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_dominio'])));
+        $val06      = strtoupper(strtolower(trim($request->getParsedBody()['tipo_observacion'])));
 
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
         $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
         $aud03      = $request->getParsedBody()['auditoria_ip'];
 
-        if (isset($val01) && isset($val02) && isset($val04)) {
-            $sql00  = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+        if (isset($val01) && isset($val03) && isset($val05)) {
+            $sql00  = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICORD, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
 
             try {
                 $connPGSQL  = getConnectionPGSQLv1();
                 $stmtPGSQL  = $connPGSQL->prepare($sql00);
-                $stmtPGSQL->execute([$val01, $val02, $val03, $val04, $val05, $aud01, $aud03]); 
+                $stmtPGSQL->execute([$val01, $val02, $val03, $val04, $val05, $val06, $aud01, $aud03]); 
                 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => $connPGSQL->lastInsertId()), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
