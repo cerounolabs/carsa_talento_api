@@ -73,12 +73,12 @@ CREATE TRIGGER LOGFIC_trigger_after
     FOR EACH ROW
     EXECUTE PROCEDURE auditoria.LOGFIC_functions();
 
-INSERT INTO sistema.logfic(LOGFICCOD, LOGFICEST, LOGFICTCC, LOGFICNOM, LOGFICURL, LOGFICOBS, LOGFICAUS, LOGFICAFH, LOGFICAIP)
+INSERT INTO sistema.logfic(LOGFICEST, LOGFICTCC, LOGFICNOM, LOGFICURL, LOGFICOBS, LOGFICAUS, LOGFICAFH, LOGFICAIP)
 VALUES 
-(1, 1, 13, 'MÓDULO TALENTO HUMANO',          'talentohumano.carsa.com.py',         NULL, 'MIGRACION', NOW(), '192.168.16.9'),
-(2, 1, 12, 'MÓDULO CAMPAÑA',                 'campanha.carsa.com.py',              NULL, 'MIGRACION', NOW(), '192.168.16.9'),
-(3, 1, 12, 'MÓDULO CAPACITONES',             NULL,                                 NULL, 'MIGRACION', NOW(), '192.168.16.9'),
-(4, 1, 12, 'MÓDULO SALARIO VARIABLE',        'productividadenlinea.carsa.com.py',  NULL, 'MIGRACION', NOW(), '192.168.16.9'),
-(5, 1, 13, 'MÓDULO DETENCIÓN DE NOVEDADES',  NULL,                                 NULL, 'MIGRACION', NOW(), '192.168.16.9'),
-(6, 1, 13, 'MÓDULO LICENCIA',                NULL,                                 NULL, 'MIGRACION', NOW(), '192.168.16.9'),
-(7, 1, 12, 'MÓDULO DOCUMENTACIÓN',           NULL,                                 NULL, 'MIGRACION', NOW(), '192.168.16.9');
+(1, 13, 'MÓDULO TALENTO HUMANO',          'talentohumano.carsa.com.py',         NULL, 'MIGRACION', NOW(), '192.168.16.9'),
+(1, 12, 'MÓDULO CAMPAÑA',                 'campanha.carsa.com.py',              NULL, 'MIGRACION', NOW(), '192.168.16.9'),
+(1, 12, 'MÓDULO CAPACITONES',             NULL,                                 NULL, 'MIGRACION', NOW(), '192.168.16.9'),
+(1, 12, 'MÓDULO SALARIO VARIABLE',        'productividadenlinea.carsa.com.py',  NULL, 'MIGRACION', NOW(), '192.168.16.9'),
+(1, 13, 'MÓDULO DETENCIÓN DE NOVEDADES',  NULL,                                 NULL, 'MIGRACION', NOW(), '192.168.16.9'),
+(1, 13, 'MÓDULO LICENCIA',                NULL,                                 NULL, 'MIGRACION', NOW(), '192.168.16.9'),
+(1, 12, 'MÓDULO DOCUMENTACIÓN',           NULL,                                 NULL, 'MIGRACION', NOW(), '192.168.16.9');
