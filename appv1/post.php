@@ -1222,7 +1222,7 @@
                 $FUNFICAIP  = strtoupper(strtolower(trim($aud03)));
 
                 $LOGFUNEST  = 1;
-                $LOGFUNFUC  = $rowMSSQL['funcionario_codigo'];;
+                $LOGFUNFUC  = $rowMSSQL['funcionario_codigo'];
                 $LOGFUNDIP  = '0.0.0.0';
                 $LOGFUNOBS  = NULL;
                 $LOGFUNAUS  = strtoupper(strtolower(trim($aud01)));
