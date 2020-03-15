@@ -497,52 +497,53 @@
     getEstadoCivil();
     echo "\n";
     echo "FIN getEstadoCivil() => ".date('Y-m-d H:i:s');
-
     echo "\n";
+
     echo "INICIO getTelCelPrefijo() => ".date('Y-m-d H:i:s');
     getTelCelPrefijo();
     echo "\n";
     echo "FIN getTelCelPrefijo() => ".date('Y-m-d H:i:s');
-
     echo "\n";
+
     echo "INICIO getParentesco() => ".date('Y-m-d H:i:s');
     getParentesco();
     echo "\n";
     echo "FIN getParentesco() => ".date('Y-m-d H:i:s');
-
     echo "\n";
+
     echo "INICIO getUniversidad() => ".date('Y-m-d H:i:s');
     getUniversidad();
     echo "\n";
     echo "FIN getUniversidad() => ".date('Y-m-d H:i:s');
-
     echo "\n";
+
     echo "INICIO getCarrera() => ".date('Y-m-d H:i:s');
     getCarrera();
     echo "\n";
     echo "FIN getCarrera() => ".date('Y-m-d H:i:s');
-
     echo "\n";
+
     echo "INICIO getHobbies() => ".date('Y-m-d H:i:s');
     getHobbies();
     echo "\n";
     echo "FIN getHobbies() => ".date('Y-m-d H:i:s');
-
     echo "\n";
+
     echo "INICIO getCargo() => ".date('Y-m-d H:i:s');
     getCargo();
     echo "\n";
     echo "FIN getCargo() => ".date('Y-m-d H:i:s');
-
     echo "\n";
+
     echo "INICIO getMotivoDespido() => ".date('Y-m-d H:i:s');
     getMotivoDespido();
     echo "\n";
     echo "FIN getMotivoDespido() => ".date('Y-m-d H:i:s');
-
     echo "\n";
+
     echo "INICIO getPais() => ".date('Y-m-d H:i:s');
     getPais();
     echo "\n";
     echo "FIN getPais() => ".date('Y-m-d H:i:s');
+    echo "\n";
 ?>
