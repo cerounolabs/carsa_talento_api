@@ -13,7 +13,7 @@
 
         $sql00      = "SELECT a.ECCod AS estado_civil_codigo, a.ECDsc AS estado_civil_nombre FROM ESTCIV a ORDER BY a.ECDsc";
         $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
-        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICORD, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, 0, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
             $connMSSQL  = getConnectionMSSQLv1();
@@ -66,7 +66,7 @@
 
         $sql00      = "SELECT a.CelLBId AS prefijo_codigo, a.CelLB AS prefijo_numero, a.CelLBTipo AS prefijo_tipo FROM PrefCelLB a ORDER BY a.CelLBTipo";
         $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
-        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICORD, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, 0, ?, ?, ?, ?, ?, NOW(), ?)";
 
         try {
             $connMSSQL  = getConnectionMSSQLv1();
@@ -125,8 +125,8 @@
 
         $sql00      = "SELECT a.FGPARAMNUM AS parentezco_codigo, a.FGPARAMVC AS parentezco_nombre FROM FGPARAM a WHERE a.FGPARAMDES = 'Parametros de Parentezco. TH' ORDER BY a.FGPARAMNUM";
         $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
-        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
-
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICORD, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, 0, ?, ?, ?, ?, ?, NOW(), ?)";
+        
         try {
             $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
@@ -178,8 +178,8 @@
 
         $sql00      = "SELECT a.AyUniv AS universidad_codigo, a.AyNomb AS universidad_nombre, a.AyCort AS universidad_abreviado FROM FST037 a ORDER BY a.AyNomb";
         $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
-        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
-
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICORD, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, 0, ?, ?, ?, ?, ?, NOW(), ?)";
+        
         try {
             $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
@@ -231,8 +231,8 @@
 
         $sql00      = "SELECT a.aqcarr AS carrera_codigo, a.aqdesc AS carrera_nombre, a.csval8 AS carrera_abreviado FROM FST038 a ORDER BY a.aqdesc";
         $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
-        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
-
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICORD, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, 0, ?, ?, ?, ?, ?, NOW(), ?)";
+        
         try {
             $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
@@ -284,8 +284,8 @@
 
         $sql00      = "SELECT a.RRHH231ID AS hobbies_codigo, a.RRHH231DSC AS hobbies_nombre FROM RRHH231 a ORDER BY a.RRHH231ID";
         $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
-        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
-
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICORD, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, 0, ?, ?, ?, ?, ?, NOW(), ?)";
+        
         try {
             $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
@@ -337,8 +337,8 @@
 
         $sql00      = "SELECT a.CjCar AS cargo_codigo, a.CjNom AS cargo_nombre, a.CjAbr AS cargo_abreviado FROM FST053 a ORDER BY a.CjNom";
         $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
-        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
-
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICORD, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, 0, ?, ?, ?, ?, ?, NOW(), ?)";
+        
         try {
             $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
@@ -390,8 +390,8 @@
 
         $sql00      = "SELECT a.FuDesvCod AS motivo_despido_codigo, a.FuDesvDesc AS motivo_despido_nombre FROM FUMOTDESV a WHERE a.FuDesvDesc IS NOT NULL ORDER BY a.FuDesvDesc";
         $sql01      = "SELECT * FROM sistema.DOMFIC WHERE DOMFICEQU = ? AND DOMFICVAL = ?";
-        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)";
-
+        $sql02      = "INSERT INTO sistema.DOMFIC (DOMFICEST, DOMFICORD, DOMFICNOM, DOMFICEQU, DOMFICVAL, DOMFICOBS, DOMFICAUS, DOMFICAFH, DOMFICAIP) VALUES (?, 0, ?, ?, ?, ?, ?, NOW(), ?)";
+        
         try {
             $connMSSQL  = getConnectionMSSQLv1();
             $connPGSQL  = getConnectionPGSQLv1();
