@@ -98,9 +98,9 @@
     function getConnectionPGSQLv1(){
         $serverName = "127.0.0.1";
         $serverPort = "5432";
-        $serverDb   = "thholox_v10";
-        $serverUser = "user_thholox";
-        $serverPass = "ns3r_thh0l0x";
+        $serverDb   = "sfholox_v10";
+        $serverUser = "user_sfholox";
+        $serverPass = "ns3r_sfh0l0x";
         
         try {
             $conn = new PDO("pgsql:host=$serverName;port=$serverPort;dbname=$serverDb", $serverUser, $serverPass,
@@ -121,9 +121,9 @@
     function getConnectionPGSQLv2(){
         $serverName = "localhost";
         $serverPort = "5432";
-        $serverDb   = "thholox_v20";
-        $serverUser = "user_thholox";
-        $serverPass = "ns3r_thh0l0x";
+        $serverDb   = "sfholox_v20";
+        $serverUser = "user_sfholox";
+        $serverPass = "ns3r_sfh0l0x";
         
         try {
             $conn = new PDO("pgsql:host=$serverName;port=$serverPort;dbname=$serverDb", $serverUser, $serverPass,
