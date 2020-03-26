@@ -19,7 +19,7 @@
 	$app = new \Slim\App($settings);
 	require __DIR__.'/../src/dependencies.php';
 
-	$app->add(new Tuupola\Middleware\HttpBasicAuthentication([
+	$app->add(new \Tuupola\Middleware\HttpBasicAuthentication([
 		"users" => [
 			"th_admin" => "th_admin2020"
 		]
