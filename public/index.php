@@ -11,7 +11,7 @@
 
 	use \Psr\Http\Message\ServerRequestInterface as Request;
 	use \Psr\Http\Message\ResponseInterface as Response;
-	use Slim\Middleware\HttpBasicAuthentication;
+	use Tuupola\Middleware\HttpBasicAuthentication;
 
 	require __DIR__.'/../vendor/autoload.php';
 	$settings = require __DIR__.'/../src/settings.php';
@@ -19,7 +19,7 @@
 	$app = new \Slim\App($settings);
 	require __DIR__.'/../src/dependencies.php';
 
-	$app->add(new Slim\Middleware\HttpBasicAuthentication([
+	$app->add(new Tuupola\Middleware\HttpBasicAuthentication([
 		"users" => [
 			"th_admin" => "th_admin2020"
 		]
