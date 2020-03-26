@@ -80,5 +80,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-vendor/*
+vendor/
+
 # End of https://www.gitignore.io/api/linux,macos,windows,visualstudiocode
