@@ -11,7 +11,7 @@
 
 	use \Psr\Http\Message\ServerRequestInterface as Request;
 	use \Psr\Http\Message\ResponseInterface as Response;
-	use Tuupola\Middleware\HttpBasicAuthentication;
+	use \Tuupola\Middleware\HttpBasicAuthentication;
 
 	require __DIR__.'/../vendor/autoload.php';
 	$settings = require __DIR__.'/../src/settings.php';
