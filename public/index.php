@@ -28,7 +28,6 @@
 	//ROUTES
 	require __DIR__.'/../src/routes.php';
 
-	$app->group('', function() use ($app) {
 		$app->get('/v1/000/dominio', function($request) {
 			require __DIR__.'/../src/connect.php';
 			
@@ -106,7 +105,6 @@
 			$connPGSQL  = null;
 			
 			return $json;
-		});
-	})->add(basicAuth());
+		})->add(basicAuth());
 	
 	$app->run();
