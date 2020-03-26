@@ -22,7 +22,7 @@
 		"path" => "/v1",
     	"realm" => "Protected",
 		"users" => [
-			"th_admin" => "$2y$10$5GkGdzIdL3wUYrqP6fRkROaO.N/JPtuJQEgxYMIwS9ffzf3Or1Y7q"
+			"th_admin" => "th_admin2020"
 		]
 	]));
 
