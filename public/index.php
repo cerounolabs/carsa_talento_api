@@ -18,6 +18,14 @@
 	$app = new \Slim\App($settings);
 	require __DIR__.'/../src/dependencies.php';
 
+	$app->add(new Tuupola\Middleware\HttpBasicAuthentication([
+		"path" => "/v1",
+    	"realm" => "Protected",
+		"users" => [
+			"th_admin" => "$2y$10$5GkGdzIdL3wUYrqP6fRkROaO.N/JPtuJQEgxYMIwS9ffzf3Or1Y7q"
+		]
+	]));
+
 	//ROUTES
 	require __DIR__.'/../src/routes.php';
 	
