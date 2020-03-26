@@ -19,8 +19,6 @@
 	require __DIR__.'/../src/dependencies.php';
 
 	$app->add(new Tuupola\Middleware\HttpBasicAuthentication([
-		"path" => "/v1",
-    	"realm" => "Protected",
 		"users" => [
 			"th_admin" => "th_admin2020"
 		]
