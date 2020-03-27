@@ -22,7 +22,10 @@
 	$app->add(new \Tuupola\Middleware\HttpBasicAuthentication([
 		"users" => [
 			"th_admin" => "th_admin2020"
-		]
+		],
+		"error" => function($response, $args) {
+			return $response->getBody()->write("error");
+		}
 	]));
 
 	//ROUTES
