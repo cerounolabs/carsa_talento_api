@@ -25,8 +25,16 @@
 		],
 		"error" => function($response, $args) {
 			header("Content-Type: application/json; charset=utf-8");
-            $json = json_encode(array('code' => 401, 'status' => 'failure', 'message' => 'Error NO AUTORIZADO', 'data' => NULL), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-			return $json;
+
+			$data			= [];
+			$data['code']	= 401;
+			$data['status'] = 'failure';
+			$data['message']= 'Error NO AUTORIZADO';
+	
+			$body = $response->getBody();
+			$body->write(json_encode($data, JSON_UNESCAPED_SLASHES));
+	
+			return $response->withBody($body);
 		}
 	]));
 
