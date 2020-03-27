@@ -30,10 +30,5 @@
 
 	//ROUTES
 	require __DIR__.'/../src/routes.php';
-
-		$app->get('/v1/000/dominio', function($request) {	
-			header("Content-Type: application/json; charset=utf-8");
-        	$json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => 'result'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-		});
 	
 	$app->run();
