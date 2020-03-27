@@ -19,6 +19,7 @@
 	require __DIR__.'/../src/dependencies.php';
 
 	$app->add(new Tuupola\Middleware\HttpBasicAuthentication([
+		"secure"=> false,
 		"users" => [
 			"th_admin" => "th_admin2020"
 		],
