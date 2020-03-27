@@ -24,7 +24,9 @@
 			"th_admin" => "th_admin2020"
 		],
 		"error" => function($response, $args) {
-			return $response->getBody()->write("error");
+			header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 401, 'status' => 'failure', 'message' => 'Error NO AUTORIZADO', 'data' => NULL), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+			return $json;
 		}
 	]));
 
